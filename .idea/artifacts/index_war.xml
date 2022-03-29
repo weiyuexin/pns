@@ -1,0 +1,16 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="index:war">
+    <output-path>$PROJECT_DIR$/index/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <exploded>false</exploded>
+        <module>index</module>
+        <packaging>war</packaging>
+        <unpackNestedArchives>false</unpackNestedArchives>
+      </options>
+    </properties>
+    <root id="archive" name="index-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="index:war exploded" />
+    </root>
+  </artifact>
+</component>
