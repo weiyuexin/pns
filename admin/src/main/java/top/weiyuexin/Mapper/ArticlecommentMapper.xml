@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.weiyuexin.Mapper.ArticlecommentMapper">
+  <resultMap id="BaseResultMap" type="top.weiyuexin.Entity.Articlecomment">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="articleId" jdbcType="INTEGER" property="articleid" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="authorId" jdbcType="INTEGER" property="authorid" />
+    <result column="time" jdbcType="TIMESTAMP" property="time" />
+    <result column="star" jdbcType="INTEGER" property="star" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, articleId, content, authorId, time, star
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from articlecomment
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from articlecomment
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="top.weiyuexin.Entity.Articlecomment">
+    insert into articlecomment (id, articleId, content, 
+      authorId, time, star
+      )
+    values (#{id,jdbcType=INTEGER}, #{articleid,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, 
+      #{authorid,jdbcType=INTEGER}, #{time,jdbcType=TIMESTAMP}, #{star,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="top.weiyuexin.Entity.Articlecomment">
+    insert into articlecomment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="articleid != null">
+        articleId,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="authorid != null">
+        authorId,
+      </if>
+      <if test="time != null">
+        time,
+      </if>
+      <if test="star != null">
+        star,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="articleid != null">
+        #{articleid,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="authorid != null">
+        #{authorid,jdbcType=INTEGER},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="star != null">
+        #{star,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="top.weiyuexin.Entity.Articlecomment">
+    update articlecomment
+    <set>
+      <if test="articleid != null">
+        articleId = #{articleid,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="authorid != null">
+        authorId = #{authorid,jdbcType=INTEGER},
+      </if>
+      <if test="time != null">
+        time = #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="star != null">
+        star = #{star,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="top.weiyuexin.Entity.Articlecomment">
+    update articlecomment
+    set articleId = #{articleid,jdbcType=INTEGER},
+      content = #{content,jdbcType=VARCHAR},
+      authorId = #{authorid,jdbcType=INTEGER},
+      time = #{time,jdbcType=TIMESTAMP},
+      star = #{star,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
