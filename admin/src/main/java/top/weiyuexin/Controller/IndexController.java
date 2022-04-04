@@ -9,16 +9,8 @@ import java.util.Map;
 
 @Controller
 public class IndexController {
-    @RequestMapping("/springboot/say")
-    @ResponseBody
-    public String say(){
-        return "Hello,SpringBoot!";
-    }
-    @RequestMapping("/mapvalue")
-    @ResponseBody
-    public Map<String,Object> mapvalue(){
-        Map<String,Object> map = new HashMap<String ,Object>();
-        map.put("message","Spring Boot");
-        return map;
+    @RequestMapping("/")
+    public String index(){
+        return "index";
     }
 }
