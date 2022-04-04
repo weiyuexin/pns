@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="top.weiyuexin.Mapper.ArticlecommentMapper">
-  <resultMap id="BaseResultMap" type="top.weiyuexin.Entity.Articlecomment">
+<mapper namespace="top.weiyuexin.mapper.ArticlecommentMapper">
+  <resultMap id="BaseResultMap" type="top.weiyuexin.entity.Articlecomment">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="articleId" jdbcType="INTEGER" property="articleid" />
     <result column="content" jdbcType="VARCHAR" property="content" />
@@ -22,7 +22,7 @@
     delete from articlecomment
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="top.weiyuexin.Entity.Articlecomment">
+  <insert id="insert" parameterType="top.weiyuexin.entity.Articlecomment">
     insert into articlecomment (id, articleId, content, 
       authorId, time, star
       )
@@ -30,7 +30,7 @@
       #{authorid,jdbcType=INTEGER}, #{time,jdbcType=TIMESTAMP}, #{star,jdbcType=INTEGER}
       )
   </insert>
-  <insert id="insertSelective" parameterType="top.weiyuexin.Entity.Articlecomment">
+  <insert id="insertSelective" parameterType="top.weiyuexin.entity.Articlecomment">
     insert into articlecomment
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -73,7 +73,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="top.weiyuexin.Entity.Articlecomment">
+  <update id="updateByPrimaryKeySelective" parameterType="top.weiyuexin.entity.Articlecomment">
     update articlecomment
     <set>
       <if test="articleid != null">
@@ -94,7 +94,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="top.weiyuexin.Entity.Articlecomment">
+  <update id="updateByPrimaryKey" parameterType="top.weiyuexin.entity.Articlecomment">
     update articlecomment
     set articleId = #{articleid,jdbcType=INTEGER},
       content = #{content,jdbcType=VARCHAR},

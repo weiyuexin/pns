@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="top.weiyuexin.Mapper.ArticleMapper">
-  <resultMap id="BaseResultMap" type="top.weiyuexin.Entity.Article">
+<mapper namespace="top.weiyuexin.mapper.ArticleMapper">
+  <resultMap id="BaseResultMap" type="top.weiyuexin.entity.Article">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="author" jdbcType="VARCHAR" property="author" />
     <result column="type" jdbcType="VARCHAR" property="type" />
@@ -11,7 +11,7 @@
     <result column="commentNum" jdbcType="INTEGER" property="commentnum" />
     <result column="readNum" jdbcType="INTEGER" property="readnum" />
   </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="top.weiyuexin.Entity.Article">
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="top.weiyuexin.entity.Article">
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
   </resultMap>
   <sql id="Base_Column_List">
@@ -32,7 +32,7 @@
     delete from article
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="top.weiyuexin.Entity.Article">
+  <insert id="insert" parameterType="top.weiyuexin.entity.Article">
     insert into article (id, author, type, 
       title, time, star, 
       commentNum, readNum, content
@@ -42,7 +42,7 @@
       #{commentnum,jdbcType=INTEGER}, #{readnum,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="top.weiyuexin.Entity.Article">
+  <insert id="insertSelective" parameterType="top.weiyuexin.entity.Article">
     insert into article
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -103,7 +103,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="top.weiyuexin.Entity.Article">
+  <update id="updateByPrimaryKeySelective" parameterType="top.weiyuexin.entity.Article">
     update article
     <set>
       <if test="author != null">
@@ -133,7 +133,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="top.weiyuexin.Entity.Article">
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="top.weiyuexin.entity.Article">
     update article
     set author = #{author,jdbcType=VARCHAR},
       type = #{type,jdbcType=VARCHAR},
@@ -145,7 +145,7 @@
       content = #{content,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="top.weiyuexin.Entity.Article">
+  <update id="updateByPrimaryKey" parameterType="top.weiyuexin.entity.Article">
     update article
     set author = #{author,jdbcType=VARCHAR},
       type = #{type,jdbcType=VARCHAR},

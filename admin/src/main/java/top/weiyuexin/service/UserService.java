@@ -1,6 +1,6 @@
-package top.weiyuexin.Service;
+package top.weiyuexin.service;
 
-import top.weiyuexin.Entity.User;
+import top.weiyuexin.entity.User;
 
 public interface UserService {
     /*

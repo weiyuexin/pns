@@ -1,4 +1,4 @@
-package top.weiyuexin.Entity;
+package top.weiyuexin.entity;
 
 import java.util.Date;
 

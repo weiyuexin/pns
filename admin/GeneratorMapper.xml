@@ -20,7 +20,7 @@
         </jdbcConnection>
         <!-- 生成  model类，targetPackage指定  model类的包名，   targetProject指定
         生成的  model放在  eclipse的哪个工程下面-->
-        <javaModelGenerator targetPackage="top.weiyuexin.Entity"
+        <javaModelGenerator targetPackage="top.weiyuexin.entity"
                             targetProject="src/main/java">
             <property name="enableSubPackages" value="false"/>
             <property name="trimStrings" value="false"/>
@@ -28,7 +28,7 @@
 
         <!-- 生成  MyBatis的  Mapper.xml文件，targetPackage指定  mapper.xml文件的
         包名，   targetProject指定生成的  mapper.xml放在  eclipse的哪个工程下面    -->
-        <sqlMapGenerator targetPackage="top.weiyuexin.Mapper"
+        <sqlMapGenerator targetPackage="top.weiyuexin.mapper"
                          targetProject="src/main/java">
             <property name="enableSubPackages" value="false"/>
         </sqlMapGenerator>
@@ -36,7 +36,7 @@
         <!-- 生成  MyBatis的  Mapper接口类文件,targetPackage指定  Mapper接口类的包
         名，   targetProject指定生成的  Mapper接口放在  eclipse的哪个工程下面    -->
         <javaClientGenerator type="XMLMAPPER"
-                             targetPackage="top.weiyuexin.Mapper"
+                             targetPackage="top.weiyuexin.mapper"
                              targetProject="src/main/java">
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>

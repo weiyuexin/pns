@@ -1,7 +1,6 @@
-package top.weiyuexin.Mapper;
+package top.weiyuexin.mapper;
 
-import org.apache.ibatis.annotations.Mapper;
-import top.weiyuexin.Entity.User;
+import top.weiyuexin.entity.User;
 //@Mapper  //扫描DAO接口到spring容器
 public interface UserMapper {
     int deleteByPrimaryKey(Integer id);
