@@ -2,6 +2,7 @@ package top.weiyuexin.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import top.weiyuexin.Entity.User;
@@ -10,12 +11,13 @@ import top.weiyuexin.Service.UserService;
 @Controller
 public class UserController {
 
+    //注入服务
     @Autowired
     private UserService userService;
 
-    @RequestMapping("/user")
+    @RequestMapping("/user/{id}")
     @ResponseBody
-    public Object queryUserById(Integer id){
+    public Object queryUserById(@PathVariable("id") Integer id){
 
         User user = userService.queryUserById(id);
 

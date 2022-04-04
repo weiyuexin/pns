@@ -5,8 +5,9 @@ import org.springframework.stereotype.Service;
 import top.weiyuexin.Entity.User;
 import top.weiyuexin.Mapper.UserMapper;
 import top.weiyuexin.Service.UserService;
-@Service
+@Service  //标记为服务层组件
 public class UserServiceImpl implements UserService {
+    //注入持久层
     @Autowired
     private UserMapper userMapper;
 
