@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
-    <!-- 指定连接数据库的  JDBC驱动包所在位置，指定到你本机的完整路径    -->
+    <!-- 指定连接数据库的  JDBC驱动包所在位置，，，，指定到你本机的完整路径    -->
     <classPathEntry location="mysql-connector-java-8.0.22.jar"/>
     <!-- 配置  table表信息内容体，targetRuntime指定采用  MyBatis3的版本    -->
     <context id="tables" targetRuntime="MyBatis3">
