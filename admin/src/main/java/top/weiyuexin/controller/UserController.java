@@ -11,7 +11,7 @@ import top.weiyuexin.service.UserService;
 @Controller
 public class UserController {
 
-    //注入服务
+    //注入服 务
     @Autowired
     private UserService userService;
 
