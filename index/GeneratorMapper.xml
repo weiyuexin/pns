@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <!-- 指定连接数据库的  JDBC驱动包所在位置，指定到你本机的完整路径    -->
+    <classPathEntry location="mysql-connector-java-8.0.22.jar"/>
+    <!-- 配置  table表信息内容体，targetRuntime指定采用  MyBatis3的版本    -->
+    <context id="tables" targetRuntime="MyBatis3">
+        <!-- 抑制生成注释，由于生成的注释都是英文的，可以不让它生成    -->
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+        <!-- 配置数据库连接信息    -->
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/pns?serverTimezone=UTC&amp;characterEncoding=utf8&amp;allowPublicKeyRetrieval=true&amp;useUnicode=true&amp;useSSL=false"
+                        userId="root"
+                        password="root">
+            <property name="nullCatalogMeansCurrent" value="true"/>
+        </jdbcConnection>
+        <!-- 生成  model类，targetPackage指定  model类的包名，   targetProject指定
+        生成的  model放在  eclipse的哪个工程下面-->
+        <javaModelGenerator targetPackage="top.weiyuexin.entity"
+                            targetProject="src/main/java">
+            <property name="enableSubPackages" value="false"/>
+            <property name="trimStrings" value="false"/>
+        </javaModelGenerator>
+
+        <!-- 生成  MyBatis的  Mapper.xml文件，targetPackage指定  mapper.xml文件的
+        包名，   targetProject指定生成的  mapper.xml放在  eclipse的哪个工程下面    -->
+        <sqlMapGenerator targetPackage="top.weiyuexin.mapper"
+                         targetProject="src/main/java">
+            <property name="enableSubPackages" value="false"/>
+        </sqlMapGenerator>
+
+        <!-- 生成  MyBatis的  Mapper接口类文件,targetPackage指定  Mapper接口类的包
+        名，   targetProject指定生成的  Mapper接口放在  eclipse的哪个工程下面    -->
+        <javaClientGenerator type="XMLMAPPER"
+                             targetPackage="top.weiyuexin.mapper"
+                             targetProject="src/main/java">
+            <property name="enableSubPackages" value="false"/>
+        </javaClientGenerator>
+        <!-- 数据库表名及对应的  Java模型类名    -->
+        <table tableName="user" domainObjectName="User"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false"/>
+        <table tableName="article" domainObjectName="Article"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false"/>
+        <table tableName="resource" domainObjectName="Resource"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false">
+            <columnOverride column="content" jdbcType="VARCHAR" />
+        </table>
+        <table tableName="articlecomment" domainObjectName="ArticleComment"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false"/>
+        <table tableName="resourcecomment" domainObjectName="ResourceComment"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false"/>
+
+    </context>
+</generatorConfiguration>
