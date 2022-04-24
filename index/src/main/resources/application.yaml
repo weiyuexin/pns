@@ -23,6 +23,9 @@ spring:
     multipart:
       max-file-size: 20MB
       max-request-size: 100MB
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
 
 pagehelper:
   helper-dialect: mysql

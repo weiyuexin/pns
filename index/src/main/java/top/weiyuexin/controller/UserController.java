@@ -9,4 +9,6 @@ public class UserController {
     public String loginPage(){
         return "user/login";
     }
+
+
 }
