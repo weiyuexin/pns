@@ -12,6 +12,7 @@ spring:
     url: jdbc:mysql://localhost:3306/pns?useUnicode=true&characterEncoding=UTF-8&useJDBC49CompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8
     username: root
     password: root
+    type: com.alibaba.druid.pool.DruidDataSource  #修改数据库连接池为druid
   tencent:
     secretId: AKIDFJ6dtsb3GCrFMCl34oIWTAajcEZdRzHI
     secretKey: lFTQ5TbSu50e17vTkjRu61e18yXprc6I

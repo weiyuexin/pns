@@ -1,7 +1,8 @@
 package top.weiyuexin.mapper;
 
+import org.apache.ibatis.annotations.Mapper;
 import top.weiyuexin.entity.Resource;
-
+@Mapper
 public interface ResourceMapper {
     int deleteByPrimaryKey(Integer id);
 
