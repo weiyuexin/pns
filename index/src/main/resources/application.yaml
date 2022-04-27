@@ -33,6 +33,14 @@ pagehelper:
   reasonable: true
   supportMethodsArguments: true
 
+# mp配置
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: auto
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  #日志打印到控制台
+
 
 
 
