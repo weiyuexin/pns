@@ -17,9 +17,12 @@ public class FileController {
     @Autowired
     private FileServer fileServer;
 
-    /*
+    /**
      * 上传到腾讯云OSS
-     * */
+     * @param file
+     * @param session
+     * @return
+     */
     @PostMapping(value = "/upload")
     @ResponseBody
     public Object Upload(@RequestParam(value = "file") MultipartFile file, HttpSession session){

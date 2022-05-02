@@ -1,18 +1,10 @@
 package top.weiyuexin.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import top.weiyuexin.entity.User;
+
 @Mapper
-public interface UserMapper {
-    int deleteByPrimaryKey(Integer id);
+public interface UserMapper extends BaseMapper<User> {
 
-    int insert(User record);
-
-    int insertSelective(User record);
-
-    User selectByPrimaryKey(Integer id);
-
-    int updateByPrimaryKeySelective(User record);
-
-    int updateByPrimaryKey(User record);
 }

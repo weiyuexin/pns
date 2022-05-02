@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class IUserServiceTestCase {
     @Autowired
-    private IUserService userService;
+    private UserService userService;
 
     @Test
     void testGetById(){
