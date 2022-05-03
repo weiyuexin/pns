@@ -10,6 +10,7 @@ import com.qcloud.cos.region.Region;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import top.weiyuexin.entity.vo.R;
 import top.weiyuexin.entity.vo.UploadMsg;
 import top.weiyuexin.service.FileServer;
 
@@ -33,8 +34,13 @@ public class FileServerImpl implements FileServer {
     @Value("${spring.tencent.qianzui}")
     private String qianzui;
 
+    /**
+     * 上传图片到腾讯云cos实现方法
+     * @param file
+     * @return
+     */
     @Override
-    public UploadMsg upload(MultipartFile file) {
+    public R upload(MultipartFile file) {
         String oldFileName = file.getOriginalFilename();
         String eName = oldFileName.substring(oldFileName.lastIndexOf("."));
         String newFileName = UUID.randomUUID()+eName;
@@ -61,9 +67,10 @@ public class FileServerImpl implements FileServer {
             String key = "/"+this.qianzui+"/"+year+"/"+month+"/"+day+"/"+year+month+day+newFileName;
             PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, key, localFile);
             PutObjectResult putObjectResult = cosclient.putObject(putObjectRequest);
-            return new UploadMsg(1,"上传成功",this.path + putObjectRequest.getKey());
+
+            return new R(true,this.path + putObjectRequest.getKey(),"图片上传成功！");
         } catch (IOException e) {
-            return new UploadMsg(-1,e.getMessage(),null);
+            return new R(false,"图片上传失败!");
         }finally {
             // 关闭客户端(关闭后台线程)
             cosclient.shutdown();

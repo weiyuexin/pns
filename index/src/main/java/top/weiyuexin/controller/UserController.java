@@ -1,12 +1,13 @@
 package top.weiyuexin.controller;
 
 import cn.hutool.crypto.digest.DigestUtil;
-import org.apache.commons.codec.digest.DigestUtils;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import top.weiyuexin.entity.User;
 import top.weiyuexin.entity.vo.R;
+import top.weiyuexin.mapper.UserMapper;
 import top.weiyuexin.service.UserService;
 
 import javax.servlet.http.HttpSession;
@@ -20,6 +21,8 @@ public class UserController {
     //注入服务
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserMapper userMapper;
 
     /**
      * 登录页面
@@ -28,6 +31,38 @@ public class UserController {
     @GetMapping("/login")
     public String loginPage(){
         return "user/login";
+    }
+
+    /**
+     * 执行登录操作
+     * @param username
+     * @param password
+     * @param session
+     * @return
+     */
+    @GetMapping("/login.do/{username}/{password}")
+    @ResponseBody
+    public Object login(@PathVariable("username") String username,
+                        @PathVariable("password") String password,
+                        HttpSession session){
+        R r = new R();
+        //对密码进行md5加密处理
+        password = DigestUtil.md5Hex(password);
+        LambdaQueryWrapper<User> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(User::getUsername,username).eq(User::getPassword,password);
+        User user = userMapper.selectOne(lqw);
+        //判断时候查到用户
+        if(user!=null){ //查询到了用户
+            //更新状态码
+            r.setFlag(true);
+            r.setMsg("登录成功");
+            //登录成功，讲用户信息保存到session
+            session.setAttribute("user",user);
+        }else {  //没有查询到用户
+            r.setFlag(false);
+            r.setMsg("账号或密码错误，请重试!");
+        }
+        return r;
     }
 
 
