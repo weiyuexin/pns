@@ -5,12 +5,14 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import top.weiyuexin.entity.User;
 import top.weiyuexin.entity.vo.R;
 import top.weiyuexin.mapper.UserMapper;
 import top.weiyuexin.service.UserService;
 
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
 
 /**
  * @author wyx
@@ -129,6 +131,30 @@ public class UserController {
         }
 
         return r;
+    }
+
+    /**
+     * 根据id查询文章作者信息
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    @ResponseBody
+    public ModelAndView getById(@PathVariable("id") Integer id){
+        ModelAndView modelAndView = new ModelAndView();
+        //查询用户
+        User user = userService.getById(id);
+
+        //格式化时间
+        SimpleDateFormat time=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date = time.format(user.getTime());
+        //设置试图
+        modelAndView.setViewName("/user/author");
+        //设置内容
+        modelAndView.addObject("user",user);
+        modelAndView.addObject("date",date);
+
+        return modelAndView;
     }
 
     /**

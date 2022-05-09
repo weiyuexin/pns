@@ -33,6 +33,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         LambdaQueryWrapper<Article> lqw = new LambdaQueryWrapper<>();
         //查询条件:文章显示标志为1
         lqw.like(Article::getIsShow,1);
+        lqw.orderByDesc(Article::getTime);
         IPage<Article> page = new Page<>(currentPage,pageSize);
         articleMapper.selectPage(page,lqw);
         return page;
