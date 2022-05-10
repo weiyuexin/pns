@@ -144,6 +144,12 @@ public class ArticleController {
                 content=content.substring(0,160);
             }
             articles.get(i).setContent(content);
+            //根据作者id查询作者
+            User user = userService.getById(articles.get(i).getAuthorId());
+            if(user!=null){
+                System.out.println(user.getUsername());
+                articles.get(i).setAuthorName(user.getUsername());
+            }
         }
         page.setRecords(articles);
         return new R(true,page);

@@ -14,9 +14,6 @@ import top.weiyuexin.service.UserService;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 
-/**
- * @author wyx
- */
 @Controller
 @RequestMapping("/user")
 public class UserController {
@@ -26,10 +23,7 @@ public class UserController {
     @Autowired
     private UserMapper userMapper;
 
-    /**
-     * 登录页面
-     * @return
-     */
+    //登录页面
     @GetMapping("/login")
     public String loginPage(){
         return "user/login";
@@ -68,7 +62,6 @@ public class UserController {
     }
 
 
-
     /**
      * 注册页面
      * @return
@@ -79,31 +72,36 @@ public class UserController {
     }
 
     /**
-     * 执行注册操作
-     * @param email
-     * @param username
-     * @param password
+     * 注册
+     * @param user
+     * @param code
+     * @param session
      * @return
      */
-    @PostMapping("/register.do/{email}/{username}/{password}")
+    @PostMapping ("/register.do/{code}")
     @ResponseBody
-    public Object register(@PathVariable("email") String email,
-                           @PathVariable("username") String username,
-                           @PathVariable("password") String password){
+    public Object register(@RequestBody User user,
+                           @PathVariable("code") Integer code,
+                           HttpSession session){
         R r = new R();
         //对密码进行md5加密处理
-        password =DigestUtil.md5Hex(password);
-        //保存到数据库
-        User user = new User();
-        user.setEmail(email);
-        user.setUsername(username);
-        user.setPassword(password);
-        if(userService.save(user)){
-            r.setFlag(true);
-            r.setMsg("注册成功!");
-        }else {
-            r.setFlag(true);
-            r.setMsg("注册失败,请重试!");
+        user.setPassword(DigestUtil.md5Hex(user.getPassword()));
+        //验证验证码是否输入正确
+        System.out.println(code+" " +session.getAttribute("code"));
+        if(!code.equals(session.getAttribute("code"))){
+            r.setMsg("验证码错误，请重试!");
+        }else{
+            //保存到数据库
+            user.setEmail(user.getEmail());
+            user.setUsername(user.getUsername());
+            user.setPassword(user.getPassword());
+            if(userService.save(user)){
+                r.setFlag(true);
+                r.setMsg("注册成功!");
+            }else {
+                r.setFlag(true);
+                r.setMsg("注册失败,请重试!");
+            }
         }
         return r;
     }

@@ -18,37 +18,25 @@ $(function () {
         var val = $(".input-val").val().toLowerCase();
         var num = show_num.join("");
         if (val == '') {
-            alert('请输入验证码！');
+            layer.msg('请输入验证码！');
         } else if (val == num) {
             var username = $("#username").val();
             var password = $("#password").val();
 
             /*发送验证码请求*/
             $.ajax({
-                url: "login",//请求地址
+                url: "/user/login.do/"+username+"/"+password,//请求地址
                 dataType: "json",//数据格式
-                type: "POST",//请求方式
+                type: "GET",//请求方式
                 async: false,//是否异步请求
-                data: {
-                    "username": username,
-                    "password": password,
-                    "method":"password"
-                },
                 success: function (data) {   //如何发送成功
-                    //layer.msg(data.msg);
-                    // console.log(data);
-                    //$(location).attr("href", "login");
-                   // layer.msg("正在跳转到首页。。。");
-                    /* window.setTimeout(function () {
-                         location.href = "login";
-                     }, 3000);*/
-                    if(data.code==200){//登录成功
+                    if(data.flag){//登录成功
                         layer.msg(data.msg);
                         layer.msg("正在跳转到首页。。。");
                         window.setTimeout(function () {
-                            location.href = "/pns";
+                            location.href = "/";
                         }, 3000);
-                    }else if(data.code==201){
+                    }else {
                         layer.msg(data.msg);
                     }
                 },
@@ -57,7 +45,7 @@ $(function () {
                 }
             });
         } else {
-            alert('验证码错误！请重新输入！');
+            layer.msg('验证码错误！请重新输入！');
             $(".input-val").val('');
             draw(show_num);
         }
@@ -68,7 +56,7 @@ $(function () {
         var email = $("#email").val();
         /*发送验证码请求*/
         $.ajax({
-            url: "sendEmailCode",//请求地址
+            url: "/email/send/",//请求地址
             dataType: "json",//数据格式
             type: "post",//请求方式
             async: true,//是否异步请求
@@ -78,7 +66,7 @@ $(function () {
                 layer.msg(data.msg);
             },
             error: function (data) {
-                layer.msg("服务器异常，请联系管理员222!");
+                layer.msg("服务器异常，请联系管理员!");
             }
         })
     });

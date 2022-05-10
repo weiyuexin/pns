@@ -40,6 +40,6 @@ $(document).ready(function () {
     var authorName = $(".authorName").html();//用户名
     var authorLogo = "";//头像
     var signature = "";
-   
+
 
 });

@@ -58,21 +58,21 @@
             </div>
             <div class="toolbar-container-right layui-col-md4">
                 <ul class="layui-nav">
-                    <li class="layui-nav-item">
+                    <li class="layui-nav-item create">
                         <a href=""><i class="el-icon-circle-plus"></i>&nbsp;创作</a>
                         <dl class="layui-nav-child">
                             <dd><a th:href="@{/write}"><i class="layui-icon layui-icon-edit"></i>&nbsp;写文章</a></dd>
                             <dd><a th:href="@{/addRes}"><i class="el-icon-upload"></i>&nbsp;上传资源</a></dd>
                         </dl>
                     </li>
-                    <li class="layui-nav-item">
+                    <li class="layui-nav-item message">
                         <a href=""><i class="layui-icon layui-icon-notice"></i>消息
                             <!--                            <span class="layui-badge">9</span>-->
                         </a>
                     </li>
                     <li class="layui-nav-item account">
                         <a href="">
-                            <img src="" class="layui-nav-img">
+                            <img th:src="@{/img/head.png}" class="layui-nav-img">
                             <span>我</span>
                         </a>
                         <dl class="layui-nav-child">
@@ -251,7 +251,7 @@
     </div>
 </div>
 <div class="footer layui-col-md12">
-    Copyright © 2021 编程导航. All Rights Reserved MIT Licensed
+    Copyright © 2022 编程导航. All Rights Reserved MIT Licensed
 </div>
 <!--返回顶部按钮-->
 <div class="toTop">
