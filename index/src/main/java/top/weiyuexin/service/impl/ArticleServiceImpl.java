@@ -10,6 +10,8 @@ import top.weiyuexin.entity.Article;
 import top.weiyuexin.mapper.ArticleMapper;
 import top.weiyuexin.service.ArticleService;
 
+import java.util.List;
+
 //文章服务实现类
 @Service
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements ArticleService {
@@ -37,6 +39,21 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         IPage<Article> page = new Page<>(currentPage,pageSize);
         articleMapper.selectPage(page,lqw);
         return page;
+    }
+    /**
+     * 查询热门文章实现
+     * @param num
+     * @return
+     */
+    @Override
+    public List<Article> getTopArticle(Integer num) {
+        LambdaQueryWrapper<Article> lqw = new LambdaQueryWrapper<>();
+        //查询条件
+        lqw.orderByDesc(Article::getReadNum);
+        lqw.orderByDesc(Article::getCommentNum);
+        lqw.last("limit "+num);
+        List<Article> articles = articleMapper.selectList(lqw);
+        return articles;
     }
 
 }

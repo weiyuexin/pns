@@ -154,7 +154,42 @@ public class ArticleController {
         page.setRecords(articles);
         return new R(true,page);
     }
-
+    /**
+     * 查询热门文章
+     * @param num
+     * @return
+     */
+    @GetMapping("/article/topArticle/{num}")
+    @ResponseBody
+    public R getTopArticle(@PathVariable("num") Integer num){
+        R r = new R();
+        List<Article> articles = articleService.getTopArticle(5);
+        //过滤html标签
+        for(int i=0;i<articles.size();i++){
+            String content = articles.get(i).getContent();
+            OutHtml outHtml = new OutHtml();
+            content = outHtml.delHTMLTag(content);
+            if(content.length()>20){
+                content=content.substring(0,20);
+            }
+            articles.get(i).setContent(content);
+            //根据作者id查询作者
+            User user = userService.getById(articles.get(i).getAuthorId());
+            if(user!=null){
+                System.out.println(user.getUsername());
+                articles.get(i).setAuthorName(user.getUsername());
+            }
+        }
+        if(articles!=null){
+            r.setFlag(true);
+            r.setData(articles);
+            r.setMsg("查询成功");
+        }else {
+            r.setFlag(false);
+            r.setMsg("查询失败，请稍后重试!");
+        }
+        return r;
+    }
 
 
 
