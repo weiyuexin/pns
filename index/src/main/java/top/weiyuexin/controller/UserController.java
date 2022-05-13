@@ -13,6 +13,7 @@ import top.weiyuexin.service.UserService;
 
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 @Controller
 @RequestMapping("/user")
@@ -166,6 +167,29 @@ public class UserController {
         session.invalidate();
         //重新加载首页
         return "redirect:/";
+    }
+
+
+    /**
+     * 获取用户积分排行
+     * @param num
+     * @return
+     */
+    @GetMapping("/topUser/{num}")
+    @ResponseBody
+    public R getTopUser(@PathVariable("num") Integer num){
+        R r = new R();
+        List<User> users = userService.getTopUser(num);
+        if(users!=null){
+            r.setFlag(true);
+            r.setData(users);
+            r.setMsg("查询成功");
+        }else {
+            r.setFlag(false);
+            r.setMsg("查询失败，请稍后重试!");
+        }
+
+        return r;
     }
 
 
