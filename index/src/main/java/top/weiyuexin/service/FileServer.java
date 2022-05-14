@@ -7,9 +7,15 @@ import top.weiyuexin.entity.vo.UploadMsg;
 
 public interface FileServer {
     /**
-     * 文件上传接口
+     * 图片上传接口
      * @param file
      * @return
      */
     R upload(MultipartFile file);
+    /**
+     * 文件上传接口
+     * @param file
+     * @return
+     */
+    R uploadFile(MultipartFile file);
 }

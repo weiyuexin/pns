@@ -37,6 +37,26 @@ public class FileController {
             return fileServer.upload(file);
         }
     }
+    /**
+     * 上传文件到腾讯云cos
+     * @param file
+     * @param session
+     * @return
+     */
+    @PostMapping(value = "/uploadfile")
+    @ResponseBody
+    public Object UploadFile(@RequestParam(value = "file") MultipartFile file, HttpSession session){
+        R r = new R();
+        //判断文件是否为空
+        if(file == null){
+            r.setFlag(false);
+            r.setMsg("文件上传失败,请重试!");
+        }else {
+            //发挥的类型是R
+            return fileServer.uploadFile(file);
+        }
+        return r;
+    }
 
     /**
      * 专门给Ueditor使用的上传服务

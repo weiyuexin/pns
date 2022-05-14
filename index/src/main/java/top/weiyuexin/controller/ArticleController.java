@@ -42,7 +42,7 @@ public class ArticleController {
      */
     @PostMapping("/article/write.do")
     @ResponseBody
-    public Object write(Article article,HttpSession session) throws ParseException {
+    public R write(Article article,HttpSession session) throws ParseException {
         R r = new R();
         User user = (User) session.getAttribute("user");
         //判断用户是否登录

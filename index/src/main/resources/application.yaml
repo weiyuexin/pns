@@ -20,6 +20,7 @@ spring:
     bucketName: wyx-1303917755
     path: https://wyx-1303917755.cos.ap-beijing.myqcloud.com
     qianzui: img
+    qianzui-file: file
   servlet:
     multipart:
       max-file-size: 20MB
