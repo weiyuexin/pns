@@ -163,7 +163,7 @@ public class ArticleController {
     @ResponseBody
     public R getTopArticle(@PathVariable("num") Integer num){
         R r = new R();
-        List<Article> articles = articleService.getTopArticle(5);
+        List<Article> articles = articleService.getTopArticle(num);
         //过滤html标签
         for(int i=0;i<articles.size();i++){
             String content = articles.get(i).getContent();

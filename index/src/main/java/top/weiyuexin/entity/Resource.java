@@ -19,6 +19,8 @@ public class Resource {
 
     private Integer star;
 
+    private Integer readNum;
+
     private Date time;
 
     private String icon;

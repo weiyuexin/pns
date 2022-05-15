@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequestMapping("/resource")
@@ -34,6 +35,13 @@ public class ResourceController {
         return "resource/addres";
     }
 
+    /**
+     * 保存资源接口
+     * @param resource
+     * @param session
+     * @return
+     * @throws ParseException
+     */
     @PostMapping("/add.do")
     @ResponseBody
     public R addResources(Resource resource, HttpSession session) throws ParseException {
@@ -79,6 +87,22 @@ public class ResourceController {
         modelAndView.addObject("date",date);
         modelAndView.setViewName("resource/resource");
         return modelAndView;
+    }
+
+    @GetMapping("/topResource/{num}")
+    @ResponseBody
+    public R getTopResource(@PathVariable("num") Integer num){
+        R r = new R();
+        List<Resource> resources = resourceServer.getTopResource(num);
+        if(resources!=null){
+            r.setFlag(true);
+            r.setData(resources);
+            r.setMsg("资源查询成功!");
+        }else {
+            r.setFlag(false);
+            r.setMsg("资源查询失败，请稍后再试!");
+        }
+        return r;
     }
 
 }

@@ -1,7 +1,7 @@
 $(document).ready(function () {
     /*
-   * 判断用户是否登录
-   * */
+        * 判断用户是否登录
+        * */
     $.ajax({
         url: "/user/check",  //请求地址
         dataType: "json",  //数据格式
@@ -36,10 +36,6 @@ $(document).ready(function () {
 
     });
 
-    //首先需要根据作者的id查询到作者的信息
-    var authorName = $(".authorName").html();//用户名
-    var authorLogo = "";//头像
-    var signature = "";
 
     /*发送获取热门文章请求*/
     $.ajax({
@@ -121,4 +117,5 @@ $(document).ready(function () {
             layer.msg("服务器异常，请联系管理员!");
         }
     });
+
 });

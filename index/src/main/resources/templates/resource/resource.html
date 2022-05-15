@@ -47,8 +47,8 @@
                     <li class="layui-nav-item">
                         <a href=""><i class="el-icon-circle-plus"></i>&nbsp;创作</a>
                         <dl class="layui-nav-child">
-                            <dd><a th:href="@{/write}"><i class="layui-icon layui-icon-edit"></i>&nbsp;写文章</a></dd>
-                            <dd><a th:href="@{/addRes}"><i class="el-icon-upload"></i>&nbsp;上传资源</a></dd>
+                            <dd><a th:href="@{/article/write}"><i class="layui-icon layui-icon-edit"></i>&nbsp;写文章</a></dd>
+                            <dd><a th:href="@{/resource/add}"><i class="el-icon-upload"></i>&nbsp;上传资源</a></dd>
                         </dl>
                     </li>
                     <li class="layui-nav-item">
@@ -116,11 +116,11 @@
         <div class="home-right layui-col-md3">
             <div class="author layui-col-md12">
                 <div class="layui-col-md12">
-                    <a class="articleAuthorLink" th:href="@{'/user/'+${author.id}}" target="_blank"><img class="articleAuthorLogo"
-                                                                      src=""></a>
-                    <br><br><a class="articleAuthorLink" href="" target="_blank">
+                    <a class="articleAuthorLink" th:href="@{'/user/'+${author.id}}" target="_blank">
+                        <img class="articleAuthorLogo" th:src="${author.photo}"></a>
+                    <br><br><a class="articleAuthorLink" th:href="@{'/user/'+${author.id}}" target="_blank">
                     <span class="authorName" th:text="${author.username}"></span></a><br>
-                    <span class="geyan">好好学习，天天向上</span><br>文章 :
+                    <span class="geyan" th:text="${author.signature}"></span><br>文章 :
                     <span>23</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;资源:<span>22</span>
                 </div>
             </div>
