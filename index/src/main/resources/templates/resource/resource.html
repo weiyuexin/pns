@@ -103,11 +103,11 @@
                 </li>
                 <li>
                     <span class="resLeft">发布时间:</span>
-                    <span class="resRight" th:text="${res.time}">2021-02-25 23:46</span>
+                    <span class="resRight" th:text="${date}"></span>
                 </li>
                 <li>
                     <span class="resLeft">发&nbsp;&nbsp;布&nbsp;者:</span>
-                    <span class="resRight authorName" th:text="${res.author}"></span>
+                    <span class="resRight authorName" th:text="${author.username}"></span>
                 </li>
             </ul>
 
@@ -116,10 +116,10 @@
         <div class="home-right layui-col-md3">
             <div class="author layui-col-md12">
                 <div class="layui-col-md12">
-                    <a class="articleAuthorLink" target="_blank"><img class="articleAuthorLogo"
+                    <a class="articleAuthorLink" th:href="@{'/user/'+${author.id}}" target="_blank"><img class="articleAuthorLogo"
                                                                       src=""></a>
-                    <br><br><a class="articleAuthorLink" href="" target="_blank"><span class="authorName"
-                                                                                       th:text="${res.author}"></span></a><br>
+                    <br><br><a class="articleAuthorLink" href="" target="_blank">
+                    <span class="authorName" th:text="${author.username}"></span></a><br>
                     <span class="geyan">好好学习，天天向上</span><br>文章 :
                     <span>23</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;资源:<span>22</span>
                 </div>

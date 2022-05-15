@@ -3,10 +3,8 @@ package top.weiyuexin.controller;
 import cn.hutool.core.date.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import top.weiyuexin.entity.Resource;
 import top.weiyuexin.entity.User;
 import top.weiyuexin.entity.vo.R;
@@ -59,6 +57,28 @@ public class ResourceController {
         }
 
         return r;
+    }
+
+    /**
+     * 根据id查询显示资源
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    public ModelAndView getResById(@PathVariable("id") Integer id){
+        ModelAndView modelAndView = new ModelAndView();
+        Resource resource = resourceServer.getById(id);
+        //根据作者id查询作者信息
+        User user = userService.getById(resource.getAuthorId());
+        //格式化时间
+        SimpleDateFormat time=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date = time.format(resource.getTime());
+
+        modelAndView.addObject("res",resource);
+        modelAndView.addObject("author",user);
+        modelAndView.addObject("date",date);
+        modelAndView.setViewName("resource/resource");
+        return modelAndView;
     }
 
 }
