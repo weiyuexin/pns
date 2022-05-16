@@ -74,13 +74,13 @@ $(document).ready(function () {
                             "                                                </div>\n" +
                             "                                                <div class=\"star layui-col-md2\">\n" +
                             "                                                    <a href=\"\">\n" +
-                            "                                                        <img src=\"https://cdn.jsdelivr.net/gh/weiyuexin/blogimg@latest/img/202205091201606.png\">\n" +
+                            "                                                        <img src=\"https://wyx-1303917755.cos.ap-beijing.myqcloud.com/img/2022/5/16/202251685dc978a-452b-4d24-8a84-eea3baad667f.png\">\n" +
                             "                                                        <p><span>" + item.star + "</span>赞</p>\n" +
                             "                                                    </a>\n" +
                             "                                                </div>\n" +
                             "                                                <div class=\"unstar layui-col-md1\">\n" +
                             "                                                    <a href=\"\"><img\n" +
-                            "                                                            src=\"https://cdn.jsdelivr.net/gh/weiyuexin/blogimg@latest/img/202205091206240.png\">\n" +
+                            "                                                            src=\"https://wyx-1303917755.cos.ap-beijing.myqcloud.com/img/2022/5/16/202251675fa9c81-539b-4635-b532-69dcc4b83d34.png\">\n" +
                             "                                                        <p>评论</p>\n" +
                             "                                                    </a>\n" +
                             "                                                </div>\n" +
@@ -183,4 +183,73 @@ $(document).ready(function () {
         }
     });
 
+
+});
+
+$(function () {
+//注意：选项卡 依赖 element 模块，否则无法进行功能性操作
+    layui.use('element', function () {
+        var element = layui.element;
+        //点击Java选项卡时的操作
+        $("#Java").click(function () {
+            /*发送保存文章请求*/
+            $.ajax({
+                url: "/article/Java/1/10",//请求地址
+                dataType: "json",//数据格式
+                type: "GET",//请求方式
+                async: true,//是否异步请求
+                success: function (data) {   //如何发送成功
+                    console.log(data);
+                    var html = "";
+                    for (var i = 0; i < data.data.records.length; i++) {
+                        //定义文章链接
+                        var articleUrl = window.location.href + "article/" + data.data.records[i].id;
+                        html += " <li>\n" +
+                            "                                    <div class=\"article\">\n" +
+                            "                                        <div class=\"articleTitle layui-col-md12\">\n" +
+                            "                                            <a href=\"" + articleUrl + "\" target='_blank'>\n" +
+                            "                                                <h2>" + data.data.records[i].title + "</h2>\n" +
+                            "                                            </a>\n" +
+                            "                                        </div>\n" +
+                            "                                        <div class=\"articleContent layui-col-md12\">\n" +
+                            "                                            <div class=\"articleDesc layui-col-md12\">\n" +
+                            "                                                <a href=\"" + articleUrl + "\" target='_blank'>\n" +
+                            "                                                    <p>" + data.data.records[i].content + "</p>\n" +
+                            "                                                </a>\n" +
+                            "                                            </div>\n" +
+                            "                                            <div class=\"articleOperation layui-col-md12\">\n" +
+                            "                                                <div class=\"author layui-col-md2\">\n" +
+                            "                                                    <a href=\"/pns/user/author/"+data.data.records[i].authorId+"\" target='_blank'>" + data.data.records[i].authorName + "</a>\n" +
+                            "                                                </div>\n" +
+                            "                                                <div class=\"star layui-col-md2\">\n" +
+                            "                                                    <a href=\"\">\n" +
+                            "                                                        <img src=\"https://wyx-1303917755.cos.ap-beijing.myqcloud.com/img/2022/5/16/202251685dc978a-452b-4d24-8a84-eea3baad667f.png\">\n" +
+                            "                                                        <p><span>" + data.data.records[i].star + "</span>赞</p>\n" +
+                            "                                                    </a>\n" +
+                            "                                                </div>\n" +
+                            "                                                <div class=\"unstar layui-col-md1\">\n" +
+                            "                                                    <a href=\"\"><img\n" +
+                            "                                                            src=\"https://wyx-1303917755.cos.ap-beijing.myqcloud.com/img/2022/5/16/202251675fa9c81-539b-4635-b532-69dcc4b83d34.png\">\n" +
+                            "                                                        <p>踩</p>\n" +
+                            "                                                    </a>\n" +
+                            "                                                </div>\n" +
+                            "                                                <div class=\"more layui-col-md1\">\n" +
+                            "                                                    <i class=\"layui-icon layui-icon-more\"></i>\n" +
+                            "                                                </div>\n" +
+                            "                                            </div>\n" +
+                            "                                        </div>\n" +
+                            "                                    </div>\n" +
+                            "                                    <hr>\n" +
+                            "                                </li>";
+                    }
+                    $(".Java").html(html);
+                    // console.log(data)
+                },
+                error: function (data) {
+                    layer.msg("服务器异常，请联系管理员!");
+                }
+            });
+        })
+
+    });
 });
