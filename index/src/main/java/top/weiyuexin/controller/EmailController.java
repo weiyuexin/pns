@@ -29,6 +29,7 @@ public class EmailController {
     @ResponseBody
     public Object send(@PathVariable("email") String email, HttpSession session){
         R r = emailService.send(email);
+        System.out.println(r.toString());
         //判断验证码是否发送成功
         if(r.getFlag()){
             //将验证码保存到session

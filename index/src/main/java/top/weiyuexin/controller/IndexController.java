@@ -13,4 +13,13 @@ public class IndexController {
     public String index(){
         return "index";
     }
+
+    /**
+     * 资源列表
+     * @return
+     */
+    @RequestMapping("/resources")
+    public String resourcesPage(){
+        return "resource/resources";
+    }
 }

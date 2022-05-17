@@ -1,6 +1,8 @@
 package top.weiyuexin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,5 +27,16 @@ public class ResourceServerImpl extends ServiceImpl<ResourceMapper, Resource> im
         lqw.last("limit "+num);
         List<Resource> resources = resourceMapper.selectList(lqw);
         return resources;
+    }
+
+    @Override
+    public IPage<Resource> getPageByType(Integer currentPage, Integer pageSize, String type, Resource resource) {
+        LambdaQueryWrapper<Resource> lqw = new LambdaQueryWrapper<>();
+        //查询条件:文章显示标志为1
+        lqw.eq(Resource::getType,type);
+        lqw.orderByDesc(Resource::getTime);
+        IPage<Resource> page = new Page<>(currentPage,pageSize);
+        resourceMapper.selectPage(page,lqw);
+        return page;
     }
 }

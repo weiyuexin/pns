@@ -1,6 +1,7 @@
 package top.weiyuexin.controller;
 
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -89,6 +90,11 @@ public class ResourceController {
         return modelAndView;
     }
 
+    /**
+     * 热门资源
+     * @param num
+     * @return
+     */
     @GetMapping("/topResource/{num}")
     @ResponseBody
     public R getTopResource(@PathVariable("num") Integer num){
@@ -103,6 +109,18 @@ public class ResourceController {
             r.setMsg("资源查询失败，请稍后再试!");
         }
         return r;
+    }
+
+    @GetMapping("/{type}/{currentPage}/{pageSize}")
+    @ResponseBody
+    public R getPageByType(@PathVariable("type") String type,
+                           @PathVariable("currentPage") Integer currentPage,
+                           @PathVariable("pageSize") Integer pageSize,Resource resource){
+        IPage<Resource> page = resourceServer.getPageByType(currentPage,pageSize,type,resource);
+        if(currentPage>page.getPages()){
+            page = resourceServer.getPageByType(currentPage,pageSize,type,resource);
+        }
+        return new R(true,page);
     }
 
 }
