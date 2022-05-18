@@ -7,8 +7,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import top.weiyuexin.entity.Article;
+import top.weiyuexin.entity.ArticleComment;
 import top.weiyuexin.entity.User;
 import top.weiyuexin.entity.vo.R;
+import top.weiyuexin.service.ArticleCommentService;
 import top.weiyuexin.service.ArticleService;
 import top.weiyuexin.service.UserService;
 import top.weiyuexin.utils.OutHtml;
@@ -16,9 +18,7 @@ import top.weiyuexin.utils.OutHtml;
 import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class ArticleController {
@@ -27,6 +27,8 @@ public class ArticleController {
     private ArticleService articleService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private ArticleCommentService articleCommentService;
 
     //写文章页面
     @GetMapping("/article/write")
@@ -231,6 +233,55 @@ public class ArticleController {
         return new R(true,page);
     }
 
+    /**
+     * 评论文章
+     * @param articleComment
+     * @param session
+     * @return
+     */
+    @PostMapping("/article/comment/add")
+    @ResponseBody
+    public R addComment(ArticleComment articleComment,HttpSession session) throws ParseException {
+        R r = new R();
+        User user = (User) session.getAttribute("user");
+        if(user!=null){
+            articleComment.setAuthorId(user.getId());
+            //设置发布时间
+            java.text.SimpleDateFormat formatter = new SimpleDateFormat( "yyyy-MM-dd");
+            String s= DateUtil.now();
+            Date date =  formatter.parse(s);
+            articleComment.setTime(date);
+            r.setFlag(articleCommentService.save(articleComment));
+            if(r.getFlag()){
+                r.setMsg("评论成功!");
+            }else {
+                r.setMsg("评论失败，请稍后重试!");
+            }
+        }else {
+            r.setFlag(false);
+            r.setMsg("请登录后再来评论");
+        }
+        return r;
+    }
+
+    /**
+     * 查询评论
+     * @param articleId
+     * @return
+     */
+    @GetMapping("/article/comment/{articleId}")
+    @ResponseBody
+    public R getComments(@PathVariable("articleId") Integer articleId){
+        List<ArticleComment> articleComments = articleCommentService.getCommentById(articleId);
+        List<User> authors = new ArrayList<>();
+        for(int i=0;i<articleComments.size();i++){
+            authors.add(userService.getById(articleComments.get(i).getAuthorId()));
+        }
+        Map<String,Object> map = new HashMap<>();
+        map.put("comments",articleComments);
+        map.put("authors",authors);
+        return new R(true,map);
+    }
 
 
 }
