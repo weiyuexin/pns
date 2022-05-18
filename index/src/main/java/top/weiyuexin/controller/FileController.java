@@ -34,7 +34,7 @@ public class FileController {
             return new R(false,"图片上传失败,请重试!");
         }else {
             //发挥的类型是R
-            return fileServer.upload(file);
+            return fileServer.upload(file,session);
         }
     }
     /**
@@ -65,12 +65,12 @@ public class FileController {
      */
     @PostMapping("/uploadimage")
     @ResponseBody
-    public Map<String, Object> uploadNewsImg(@RequestParam(value="upfile",required=false) MultipartFile file) {
+    public Map<String, Object> uploadNewsImg(@RequestParam(value="upfile",required=false) MultipartFile file,HttpSession session) {
         R r = new R();
         if(file == null){
             new R(false,"图片上传失败,请重试!");
         }else {
-            r = fileServer.upload(file);
+            r = fileServer.upload(file,session);
         }
         Map<String, Object> result = new HashMap<String,Object>();
         result.put("state", "SUCCESS");

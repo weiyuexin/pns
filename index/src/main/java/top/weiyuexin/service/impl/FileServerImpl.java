@@ -7,13 +7,18 @@ import com.qcloud.cos.auth.COSCredentials;
 import com.qcloud.cos.model.PutObjectRequest;
 import com.qcloud.cos.model.PutObjectResult;
 import com.qcloud.cos.region.Region;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import top.weiyuexin.entity.Image;
+import top.weiyuexin.entity.User;
 import top.weiyuexin.entity.vo.R;
 import top.weiyuexin.entity.vo.UploadMsg;
 import top.weiyuexin.service.FileServer;
+import top.weiyuexin.service.ImageService;
 
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
@@ -38,13 +43,16 @@ public class FileServerImpl implements FileServer {
     @Value("${spring.tencent.qianzui-file}")
     private String qianzui_file;
 
+    @Autowired
+    private ImageService imageService;
+
     /**
      * 上传图片到腾讯云cos实现方法
      * @param file
      * @return
      */
     @Override
-    public R upload(MultipartFile file) {
+    public R upload(MultipartFile file,HttpSession session) {
         String oldFileName = file.getOriginalFilename();
         String eName = oldFileName.substring(oldFileName.lastIndexOf("."));
         String newFileName = UUID.randomUUID()+eName;
@@ -71,6 +79,17 @@ public class FileServerImpl implements FileServer {
             String key = "/"+this.qianzui+"/"+year+"/"+month+"/"+day+"/"+year+month+day+newFileName;
             PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, key, localFile);
             PutObjectResult putObjectResult = cosclient.putObject(putObjectRequest);
+
+            //将图片信息保存到数据库
+            Image image = new Image();
+            image.setOriginName(oldFileName);
+            image.setUrl(this.path + putObjectRequest.getKey());
+            image.setTime(year+"年"+month+"月"+day+"日");
+            User user = (User) session.getAttribute("user");
+            if(user!=null){
+                image.setAuthorId(user.getId());
+            }
+            imageService.save(image);
 
             return new R(true,this.path + putObjectRequest.getKey(),"图片上传成功！");
         } catch (IOException e) {

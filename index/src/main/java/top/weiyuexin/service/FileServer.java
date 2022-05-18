@@ -4,6 +4,8 @@ import org.springframework.web.multipart.MultipartFile;
 import top.weiyuexin.entity.vo.R;
 import top.weiyuexin.entity.vo.UploadMsg;
 
+import javax.servlet.http.HttpSession;
+
 
 public interface FileServer {
     /**
@@ -11,7 +13,7 @@ public interface FileServer {
      * @param file
      * @return
      */
-    R upload(MultipartFile file);
+    R upload(MultipartFile file, HttpSession session);
     /**
      * 文件上传接口
      * @param file
