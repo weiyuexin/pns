@@ -78,7 +78,7 @@ $(document).ready(function () {
             var html = "";
             for (i = 0; i < data.data.length; i++) {
                 if(data.data[i].photo==""){
-                    data.data[i].photo="https://cdn.jsdelivr.net/gh/weiyuexin/blogimg@latest/img/202112222148419.png";
+                    data.data[i].photo="https://wyx-1303917755.cos.ap-beijing.myqcloud.com/img/2022/5/18/2022518f0f23093-5b30-4c45-8e54-cdd71683020a.png";
                 }
                 html += "<li class=\"layui-col-md12\">\n" +
                     "                            <div class=\"mark-list-logo layui-col-md3\">\n" +

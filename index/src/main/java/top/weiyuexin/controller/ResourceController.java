@@ -6,17 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import top.weiyuexin.entity.Resource;
-import top.weiyuexin.entity.User;
+import top.weiyuexin.entity.*;
 import top.weiyuexin.entity.vo.R;
+import top.weiyuexin.service.ResourceCommentService;
 import top.weiyuexin.service.ResourceServer;
 import top.weiyuexin.service.UserService;
 
 import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/resource")
@@ -26,6 +25,8 @@ public class ResourceController {
     private ResourceServer resourceServer;
     @Autowired
     private UserService userService;
+    @Autowired
+    private ResourceCommentService resourceCommentService;
 
     /**
      * 发布资源页面
@@ -87,6 +88,11 @@ public class ResourceController {
         modelAndView.addObject("author",user);
         modelAndView.addObject("date",date);
         modelAndView.setViewName("resource/resource");
+
+        //资源浏览量加一
+        resource.setReadNum(resource.getReadNum()+1);
+        resourceServer.updateById(resource);
+
         return modelAndView;
     }
 
@@ -131,4 +137,65 @@ public class ResourceController {
         return new R(true,page);
     }
 
+    /**
+     * 评论资源
+     * @param resourceComment
+     * @param session
+     * @return
+     * @throws ParseException
+     */
+    @PostMapping("/comment/add")
+    @ResponseBody
+    public R addComment(ResourceComment resourceComment, HttpSession session) throws ParseException {
+        R r = new R();
+        User user = (User) session.getAttribute("user");
+        if(user!=null){
+            resourceComment.setAuthorId(user.getId());
+            //设置发布时间
+            java.text.SimpleDateFormat formatter = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss");
+            String s= DateUtil.now();
+            Date date =  formatter.parse(s);
+            resourceComment.setTime(date);
+            r.setFlag(resourceCommentService.save(resourceComment));
+            //设置评论数加一
+            Resource resource = resourceServer.getById(resourceComment.getResourceId());
+            resource.setCommentNum(resource.getCommentNum()+1);
+            resourceServer.updateById(resource);
+
+            if(r.getFlag()){
+                r.setMsg("评论成功!");
+            }else {
+                r.setMsg("评论失败，请稍后重试!");
+            }
+        }else {
+            r.setFlag(false);
+            r.setMsg("请登录后再来评论");
+        }
+        return r;
+    }
+
+    /**
+     * 根据资源id查询评论
+     * @param resourceId
+     * @return
+     */
+    @GetMapping("/comment/{resourceId}")
+    @ResponseBody
+    public R getComments(@PathVariable("resourceId") Integer resourceId){
+        List<ResourceComment> resourceComments = resourceCommentService.getResourceCommentsByResourceId(resourceId);
+        List<User> authors = new ArrayList<>();
+        List<String> dates = new ArrayList<>();
+        for(int i=0;i<resourceComments.size();i++){
+            authors.add(userService.getById(resourceComments.get(i).getAuthorId()));
+            //格式化时间
+            SimpleDateFormat time=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            dates.add((String)time.format(resourceComments.get(i).getTime()));
+        }
+
+        Map<String,Object> map = new HashMap<>();
+        map.put("comments",resourceComments);
+        map.put("authors",authors);
+        map.put("dates",dates);
+        return new R(true,map);
+    }
 }

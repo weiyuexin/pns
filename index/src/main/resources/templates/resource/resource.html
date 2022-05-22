@@ -6,7 +6,7 @@
     <link type="favicon" rel="shortcut icon" th:href="@{/img/pns.png}">
     <link rel="stylesheet" th:href="@{/css/main.css}">
     <link rel="stylesheet" th:href="@{/css/article.css}">
-    <link rel="stylesheet" th:href="@{/css/addres.css}">
+    <link rel="stylesheet" th:href="@{/css/res.css}">
     <!-- 引入Font Awesome图标  -->
     <link rel="stylesheet" th:href="@{/font-awesome/css/font-awesome.min.css}">
     <!-- 引入Jquery  -->
@@ -44,28 +44,26 @@
             </div>
             <div class="toolbar-container-right layui-col-md4">
                 <ul class="layui-nav">
-                    <li class="layui-nav-item">
+                    <li class="layui-nav-item create">
                         <a href=""><i class="el-icon-circle-plus"></i>&nbsp;创作</a>
                         <dl class="layui-nav-child">
                             <dd><a th:href="@{/article/write}"><i class="layui-icon layui-icon-edit"></i>&nbsp;写文章</a></dd>
                             <dd><a th:href="@{/resource/add}"><i class="el-icon-upload"></i>&nbsp;上传资源</a></dd>
                         </dl>
                     </li>
-                    <li class="layui-nav-item">
+                    <li class="layui-nav-item message">
                         <a href=""><i class="layui-icon layui-icon-notice"></i>消息
-<!--                            <span class="layui-badge">9</span>-->
+                            <!--                            <span class="layui-badge">9</span>-->
                         </a>
                     </li>
                     <li class="layui-nav-item account">
-                        <a href=""><img
-                                src=""
-                                class="layui-nav-img">我</a>
+                        <a href=""><img th:src="@{/img/head.png}" class="layui-nav-img">我</a>
                         <dl class="layui-nav-child">
-                            <dd><a th:href="@{/user/account(account)}"><i class="fa fa-universal-access"
-                                                                          aria-hidden="true"></i>&nbsp;账号管理</a></dd>
+                            <dd><a th:href="@{/user/account(account)}">
+                                <i class="fa fa-universal-access" aria-hidden="true"></i>&nbsp;账号管理</a></dd>
                             <dd><a th:href="@{/user/account(article)}"><i class="fa fa-arrows-alt"></i>&nbsp;我的博客</a>
                             </dd>
-                            <dd><a th:href="@{/user/account(res)}"><i class="fa fa-database"></i>&nbsp;我的分享</a></dd>
+                            <dd><a th:href="@{/user/account(res)}"><i class="fa fa-ase"></i>&nbsp;我的分享</a></dd>
                             <dd><a th:href="@{/user/logout}"><i class="fa fa-sign-out"
                                                                 aria-hidden="true"></i>&nbsp;退出</a></dd>
                         </dl>
@@ -82,7 +80,10 @@
 <div class="home layui-col-md12">
     <div class="layui-container">
         <div class="article-content layui-col-md9">
-            <ul>
+            <ul class="list">
+                <li>
+                    <input th:value="${res.id}" style="display: none" id="resourceId"></input>
+                </li>
                 <li class="resLogo">
                     <img th:src="${res.icon}">
                 </li>
@@ -106,11 +107,40 @@
                     <span class="resRight" th:text="${date}"></span>
                 </li>
                 <li>
+                    <span class="resLeft">访&nbsp;&nbsp;问&nbsp;量:</span>
+                    <span class="resRight authorName" th:text="${res.readNum}"></span>
+                </li>
+                <li>
                     <span class="resLeft">发&nbsp;&nbsp;布&nbsp;者:</span>
-                    <span class="resRight authorName" th:text="${author.username}"></span>
+                    <a th:href="@{'/user/'+${author.id}}" target="_blank">
+                        <span class="resRight authorName" th:text="${author.username}"></span>
+                    </a>
                 </li>
             </ul>
 
+            <div class="comment layui-col-md12">
+                <div class="comment_input  layui-col-md12">
+                    <div class="comment_author_logo layui-col-md1 layui-form">
+                        <a href=""><img src="" alt=""></a>
+                    </div>
+                    <div class="comment_content">
+                        <div class="layui-input-block">
+                             <textarea name="comment" id="comment" placeholder="提问和评论都可以，用心的回复会被更多人看到和认可"
+                                       class="layui-textarea"></textarea>
+                        </div>
+                        <button class="layui-btn comment_submit_btn">立即提交</button>
+                    </div>
+                </div>
+                <div class=" layui-col-md12 comment-num">
+                    <span class="quanbupinglun">全部评论</span>
+                    <span class="comment_number"></span>
+                </div>
+                <div class="comment_list layui-col-md12">
+                    <ul>
+
+                    </ul>
+                </div>
+            </div>
 
         </div>
         <div class="home-right layui-col-md3">

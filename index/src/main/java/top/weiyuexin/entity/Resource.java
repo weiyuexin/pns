@@ -21,6 +21,8 @@ public class Resource {
 
     private Integer readNum;
 
+    private Integer commentNum;
+
     private Date time;
 
     private String icon;

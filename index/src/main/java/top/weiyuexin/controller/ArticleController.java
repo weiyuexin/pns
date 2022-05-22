@@ -52,7 +52,7 @@ public class ArticleController {
             //设置作者的id
             article.setAuthorId(user.getId());
             //设置发布时间
-            java.text.SimpleDateFormat formatter = new SimpleDateFormat( "yyyy-MM-dd");
+            java.text.SimpleDateFormat formatter = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss");
             String s= DateUtil.now();
             Date date =  formatter.parse(s);
             article.setTime(date);
@@ -115,6 +115,10 @@ public class ArticleController {
         modelAndView.addObject("article",article);
         modelAndView.addObject("author",user);
         modelAndView.addObject("date",date);
+
+        //文章的阅读量加一
+        article.setReadNum(article.getReadNum()+1);
+        articleService.updateById(article);
 
         return modelAndView;
     }
@@ -247,7 +251,7 @@ public class ArticleController {
         if(user!=null){
             articleComment.setAuthorId(user.getId());
             //设置发布时间
-            java.text.SimpleDateFormat formatter = new SimpleDateFormat( "yyyy-MM-dd");
+            java.text.SimpleDateFormat formatter = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss");
             String s= DateUtil.now();
             Date date =  formatter.parse(s);
             articleComment.setTime(date);
@@ -279,12 +283,18 @@ public class ArticleController {
     public R getComments(@PathVariable("articleId") Integer articleId){
         List<ArticleComment> articleComments = articleCommentService.getCommentById(articleId);
         List<User> authors = new ArrayList<>();
+        List<String> dates = new ArrayList<>();
         for(int i=0;i<articleComments.size();i++){
             authors.add(userService.getById(articleComments.get(i).getAuthorId()));
+            //格式化时间
+            SimpleDateFormat time=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            dates.add((String)time.format(articleComments.get(i).getTime()));
         }
+
         Map<String,Object> map = new HashMap<>();
         map.put("comments",articleComments);
         map.put("authors",authors);
+        map.put("dates",dates);
         return new R(true,map);
     }
 
