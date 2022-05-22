@@ -252,6 +252,11 @@ public class ArticleController {
             Date date =  formatter.parse(s);
             articleComment.setTime(date);
             r.setFlag(articleCommentService.save(articleComment));
+            //设置评论数加一
+            Article article = articleService.getById(articleComment.getArticleId());
+            article.setCommentNum(article.getCommentNum()+1);
+            articleService.updateById(article);
+
             if(r.getFlag()){
                 r.setMsg("评论成功!");
             }else {
@@ -281,6 +286,30 @@ public class ArticleController {
         map.put("comments",articleComments);
         map.put("authors",authors);
         return new R(true,map);
+    }
+
+    /**
+     * 点赞文章
+     * @param article
+     * @param session
+     * @return
+     */
+    @PostMapping("/article/star")
+    @ResponseBody
+    public R starArticle(Article article,HttpSession session){
+        R r = new R();
+        if((User)session.getAttribute("user")!=null){
+            //点赞数加一
+            article=articleService.getById(article.getId());
+            article.setStar(article.getStar()+1);
+            //保存
+            r.setFlag(articleService.updateById(article));
+            r.setMsg("点赞成功!");
+        }else {
+            r.setFlag(false);
+            r.setMsg("请登录后再来点赞!");
+        }
+        return r;
     }
 
 

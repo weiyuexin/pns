@@ -111,6 +111,14 @@ public class ResourceController {
         return r;
     }
 
+    /**
+     * 根据类型查询资源
+     * @param type
+     * @param currentPage
+     * @param pageSize
+     * @param resource
+     * @return
+     */
     @GetMapping("/{type}/{currentPage}/{pageSize}")
     @ResponseBody
     public R getPageByType(@PathVariable("type") String type,

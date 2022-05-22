@@ -188,68 +188,184 @@ $(document).ready(function () {
 
 $(function () {
 //注意：选项卡 依赖 element 模块，否则无法进行功能性操作
-    layui.use('element', function () {
+    layui.use(['element','flow'], function () {
         var element = layui.element;
+        var $ = layui.jquery; //不用额外加载jQuery，flow模块本身是有依赖jQuery的，直接用即可。
+        var flow = layui.flow;
         //点击Java选项卡时的操作
         $("#Java").click(function () {
-            /*发送保存文章请求*/
-            $.ajax({
-                url: "/article/Java/1/10",//请求地址
-                dataType: "json",//数据格式
-                type: "GET",//请求方式
-                async: true,//是否异步请求
-                success: function (data) {   //如何发送成功
-                    console.log(data);
-                    var html = "";
-                    for (var i = 0; i < data.data.records.length; i++) {
-                        //定义文章链接
-                        var articleUrl = window.location.href + "article/" + data.data.records[i].id;
-                        html += " <li>\n" +
-                            "                                    <div class=\"article\">\n" +
-                            "                                        <div class=\"articleTitle layui-col-md12\">\n" +
-                            "                                            <a href=\"" + articleUrl + "\" target='_blank'>\n" +
-                            "                                                <h2>" + data.data.records[i].title + "</h2>\n" +
-                            "                                            </a>\n" +
-                            "                                        </div>\n" +
-                            "                                        <div class=\"articleContent layui-col-md12\">\n" +
-                            "                                            <div class=\"articleDesc layui-col-md12\">\n" +
-                            "                                                <a href=\"" + articleUrl + "\" target='_blank'>\n" +
-                            "                                                    <p>" + data.data.records[i].content + "</p>\n" +
-                            "                                                </a>\n" +
-                            "                                            </div>\n" +
-                            "                                            <div class=\"articleOperation layui-col-md12\">\n" +
-                            "                                                <div class=\"author layui-col-md2\">\n" +
-                            "                                                    <a href=\"/pns/user/author/"+data.data.records[i].authorId+"\" target='_blank'>" + data.data.records[i].authorName + "</a>\n" +
-                            "                                                </div>\n" +
-                            "                                                <div class=\"star layui-col-md2\">\n" +
-                            "                                                    <a href=\"\">\n" +
-                            "                                                        <img src=\"https://wyx-1303917755.cos.ap-beijing.myqcloud.com/img/2022/5/16/202251685dc978a-452b-4d24-8a84-eea3baad667f.png\">\n" +
-                            "                                                        <p><span>" + data.data.records[i].star + "</span>赞</p>\n" +
-                            "                                                    </a>\n" +
-                            "                                                </div>\n" +
-                            "                                                <div class=\"unstar layui-col-md1\">\n" +
-                            "                                                    <a href=\"\"><img\n" +
-                            "                                                            src=\"https://wyx-1303917755.cos.ap-beijing.myqcloud.com/img/2022/5/16/202251675fa9c81-539b-4635-b532-69dcc4b83d34.png\">\n" +
-                            "                                                        <p>踩</p>\n" +
-                            "                                                    </a>\n" +
-                            "                                                </div>\n" +
-                            "                                                <div class=\"more layui-col-md1\">\n" +
-                            "                                                    <i class=\"layui-icon layui-icon-more\"></i>\n" +
-                            "                                                </div>\n" +
-                            "                                            </div>\n" +
-                            "                                        </div>\n" +
-                            "                                    </div>\n" +
-                            "                                    <hr>\n" +
-                            "                                </li>";
-                    }
-                    $(".Java").html(html);
-                    // console.log(data)
-                },
-                error: function (data) {
-                    layer.msg("服务器异常，请联系管理员!");
+            flow.load({
+                elem: '#JavaList' //指定列表容器
+                , isAuto: false      //到底页面底端自动加载下一页，设为false则点击'加载更多'才会加载
+                ,done: function(page, next){ //到达临界点（默认滚动触发），触发下一页
+                    var lis = [];
+                    //以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
+                    $.get('/article/Java/'+page+'/10', function(res){
+                        //假设你的列表返回在data集合中
+                        layui.each(res.data.records, function(index, item){
+                            //定义文章链接
+                            var articleUrl = window.location.href + "article/" + item.id;
+                            lis.push(" <li>\n" +
+                                "                                    <div class=\"article\">\n" +
+                                "                                        <div class=\"articleTitle layui-col-md12\">\n" +
+                                "                                            <a href=\"" + articleUrl + "\" target='_blank'>\n" +
+                                "                                                <h2>" + item.title + "</h2>\n" +
+                                "                                            </a>\n" +
+                                "                                        </div>\n" +
+                                "                                        <div class=\"articleContent layui-col-md12\">\n" +
+                                "                                            <div class=\"articleDesc layui-col-md12\">\n" +
+                                "                                                <a href=\"" + articleUrl + "\" target='_blank'>\n" +
+                                "                                                    <p>" + item.content + "</p>\n" +
+                                "                                                </a>\n" +
+                                "                                            </div>\n" +
+                                "                                            <div class=\"articleOperation layui-col-md12\">\n" +
+                                "                                                <div class=\"author layui-col-md2\">\n" +
+                                "                                                    <a href=\"/user/"+item.authorId+"\" target='_blank'>" + item.authorName + "</a>\n" +
+                                "                                                </div>\n" +
+                                "                                                <div class=\"star layui-col-md2\">\n" +
+                                "                                                    <a href=\"\">\n" +
+                                "                                                        <img src=\"https://wyx-1303917755.cos.ap-beijing.myqcloud.com/img/2022/5/16/202251685dc978a-452b-4d24-8a84-eea3baad667f.png\">\n" +
+                                "                                                        <p><span>" + item.star + "</span>赞</p>\n" +
+                                "                                                    </a>\n" +
+                                "                                                </div>\n" +
+                                "                                                <div class=\"unstar layui-col-md1\">\n" +
+                                "                                                    <a href=\"\"><img\n" +
+                                "                                                            src=\"https://wyx-1303917755.cos.ap-beijing.myqcloud.com/img/2022/5/16/202251675fa9c81-539b-4635-b532-69dcc4b83d34.png\">\n" +
+                                "                                                        <p>评论</p>\n" +
+                                "                                                    </a>\n" +
+                                "                                                </div>\n" +
+                                "                                                <div class=\"more layui-col-md1\">\n" +
+                                "                                                    <i class=\"layui-icon layui-icon-more\"></i>\n" +
+                                "                                                </div>\n" +
+                                "                                            </div>\n" +
+                                "                                        </div>\n" +
+                                "                                    </div>\n" +
+                                "                                    <hr>\n" +
+                                "                                </li>");
+                        });
+
+                        //执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
+                        //pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
+                        next(lis.join(''), page < res.data.pages);
+                    });
                 }
             });
         })
+        $("#qianduan").click(function () {
+            flow.load({
+                elem: '#qianduanList' //指定列表容器
+                , isAuto: false      //到底页面底端自动加载下一页，设为false则点击'加载更多'才会加载
+                ,done: function(page, next){ //到达临界点（默认滚动触发），触发下一页
+                    var lis = [];
+                    //以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
+                    $.get('/article/前端/'+page+'/10', function(res){
+                        //假设你的列表返回在data集合中
+                        layui.each(res.data.records, function(index, item){
+                            //定义文章链接
+                            var articleUrl = window.location.href + "article/" + item.id;
+                            lis.push(" <li>\n" +
+                                "                                    <div class=\"article\">\n" +
+                                "                                        <div class=\"articleTitle layui-col-md12\">\n" +
+                                "                                            <a href=\"" + articleUrl + "\" target='_blank'>\n" +
+                                "                                                <h2>" + item.title + "</h2>\n" +
+                                "                                            </a>\n" +
+                                "                                        </div>\n" +
+                                "                                        <div class=\"articleContent layui-col-md12\">\n" +
+                                "                                            <div class=\"articleDesc layui-col-md12\">\n" +
+                                "                                                <a href=\"" + articleUrl + "\" target='_blank'>\n" +
+                                "                                                    <p>" + item.content + "</p>\n" +
+                                "                                                </a>\n" +
+                                "                                            </div>\n" +
+                                "                                            <div class=\"articleOperation layui-col-md12\">\n" +
+                                "                                                <div class=\"author layui-col-md2\">\n" +
+                                "                                                    <a href=\"/user/"+item.authorId+"\" target='_blank'>" + item.authorName + "</a>\n" +
+                                "                                                </div>\n" +
+                                "                                                <div class=\"star layui-col-md2\">\n" +
+                                "                                                    <a href=\"\">\n" +
+                                "                                                        <img src=\"https://wyx-1303917755.cos.ap-beijing.myqcloud.com/img/2022/5/16/202251685dc978a-452b-4d24-8a84-eea3baad667f.png\">\n" +
+                                "                                                        <p><span>" + item.star + "</span>赞</p>\n" +
+                                "                                                    </a>\n" +
+                                "                                                </div>\n" +
+                                "                                                <div class=\"unstar layui-col-md1\">\n" +
+                                "                                                    <a href=\"\"><img\n" +
+                                "                                                            src=\"https://wyx-1303917755.cos.ap-beijing.myqcloud.com/img/2022/5/16/202251675fa9c81-539b-4635-b532-69dcc4b83d34.png\">\n" +
+                                "                                                        <p>评论</p>\n" +
+                                "                                                    </a>\n" +
+                                "                                                </div>\n" +
+                                "                                                <div class=\"more layui-col-md1\">\n" +
+                                "                                                    <i class=\"layui-icon layui-icon-more\"></i>\n" +
+                                "                                                </div>\n" +
+                                "                                            </div>\n" +
+                                "                                        </div>\n" +
+                                "                                    </div>\n" +
+                                "                                    <hr>\n" +
+                                "                                </li>");
+                        });
 
+                        //执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
+                        //pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
+                        next(lis.join(''), page < res.data.pages);
+                    });
+                }
+            });
+        })
+        $("#cpp").click(function () {
+            flow.load({
+                elem: '#CPPList' //指定列表容器
+                , isAuto: false      //到底页面底端自动加载下一页，设为false则点击'加载更多'才会加载
+                ,done: function(page, next){ //到达临界点（默认滚动触发），触发下一页
+                    var lis = [];
+                    //以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
+                    $.get('/article/Cpp/'+page+'/10', function(res){
+                        //假设你的列表返回在data集合中
+                        layui.each(res.data.records, function(index, item){
+                            //定义文章链接
+                            var articleUrl = window.location.href + "article/" + item.id;
+                            lis.push(" <li>\n" +
+                                "                                    <div class=\"article\">\n" +
+                                "                                        <div class=\"articleTitle layui-col-md12\">\n" +
+                                "                                            <a href=\"" + articleUrl + "\" target='_blank'>\n" +
+                                "                                                <h2>" + item.title + "</h2>\n" +
+                                "                                            </a>\n" +
+                                "                                        </div>\n" +
+                                "                                        <div class=\"articleContent layui-col-md12\">\n" +
+                                "                                            <div class=\"articleDesc layui-col-md12\">\n" +
+                                "                                                <a href=\"" + articleUrl + "\" target='_blank'>\n" +
+                                "                                                    <p>" + item.content + "</p>\n" +
+                                "                                                </a>\n" +
+                                "                                            </div>\n" +
+                                "                                            <div class=\"articleOperation layui-col-md12\">\n" +
+                                "                                                <div class=\"author layui-col-md2\">\n" +
+                                "                                                    <a href=\"/user/"+item.authorId+"\" target='_blank'>" + item.authorName + "</a>\n" +
+                                "                                                </div>\n" +
+                                "                                                <div class=\"star layui-col-md2\">\n" +
+                                "                                                    <a href=\"\">\n" +
+                                "                                                        <img src=\"https://wyx-1303917755.cos.ap-beijing.myqcloud.com/img/2022/5/16/202251685dc978a-452b-4d24-8a84-eea3baad667f.png\">\n" +
+                                "                                                        <p><span>" + item.star + "</span>赞</p>\n" +
+                                "                                                    </a>\n" +
+                                "                                                </div>\n" +
+                                "                                                <div class=\"unstar layui-col-md1\">\n" +
+                                "                                                    <a href=\"\"><img\n" +
+                                "                                                            src=\"https://wyx-1303917755.cos.ap-beijing.myqcloud.com/img/2022/5/16/202251675fa9c81-539b-4635-b532-69dcc4b83d34.png\">\n" +
+                                "                                                        <p>评论</p>\n" +
+                                "                                                    </a>\n" +
+                                "                                                </div>\n" +
+                                "                                                <div class=\"more layui-col-md1\">\n" +
+                                "                                                    <i class=\"layui-icon layui-icon-more\"></i>\n" +
+                                "                                                </div>\n" +
+                                "                                            </div>\n" +
+                                "                                        </div>\n" +
+                                "                                    </div>\n" +
+                                "                                    <hr>\n" +
+                                "                                </li>");
+                        });
+
+                        //执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
+                        //pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
+                        next(lis.join(''), page < res.data.pages);
+                    });
+                }
+            });
+        })
     });
 });

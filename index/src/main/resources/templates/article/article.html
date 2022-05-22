@@ -108,7 +108,7 @@
                     <span><b class="commentNumber" th:text="${article.commentNum}"></b>评论</span>
                 </div>
                 <div class="strong starNum">
-                    <a onclick="starArticle()"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
+                    <a id="star"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
                     <span><b class="star-num" th:text="${article.star}"></b>赞</span>
                 </div>
             </div>
@@ -128,9 +128,7 @@
                 </div>
                 <div class=" layui-col-md12 comment-num">
                     <span class="quanbupinglun">全部评论</span>
-                    <span class="comment_number">(</span>
-                    <sapn class="comment_number" th:text="${article.commentNum}"></sapn>
-                    <span class="comment_number">)</span>
+                    <span class="comment_number"></span>
                 </div>
                 <div class="comment_list layui-col-md12">
                     <ul>
@@ -144,12 +142,11 @@
         <div class="home-right layui-col-md3">
             <div class="author layui-col-md12">
                 <div class="layui-col-md12">
-                    <a class="articleAuthorLink" target="_blank">
-                        <img class="articleAuthorLogo" th:src="@{/img/head.png}"></a>
-                    <br><br>
-                    <a class="articleAuthorLink" href="" target="_blank">
-                        <span class="authorName" th:text="${author.username}"></span></a><br>
-                    <span class="geyan">好好学习，天天向上</span><br>文章 :
+                    <a class="articleAuthorLink" th:href="@{'/user/'+${author.id}}" target="_blank">
+                        <img class="articleAuthorLogo" th:src="${author.photo}"></a>
+                    <br><br><a class="articleAuthorLink" th:href="@{'/user/'+${author.id}}" target="_blank">
+                    <span class="authorName" th:text="${author.username}"></span></a><br>
+                    <span class="geyan" th:text="${author.signature}"></span><br>文章 :
                     <span>23</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;资源:<span>22</span>
                 </div>
             </div>

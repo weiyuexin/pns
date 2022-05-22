@@ -128,6 +128,10 @@ $(document).ready(function () {
     getComment();
     addComment();
 
+    //点赞文章
+    $("#star").click(function (){
+        starArticle();
+    });
 });
 /*评论*/
 function addComment() {
@@ -199,8 +203,9 @@ function getComment() {
         type: "GET",//请求方式
         async: false,//是否异步请求
         success: function (data) {   //如何发送成功
+            $(".comment_number").html("(" + data.data.comments.length + ")");
+            console.log(data);
             if (data.data.comments.length > 0) {
-                $(".comment_number").html("(" + data.data.comments.length + ")");
                 //展示评论
                 var html = "";
                 for (var i = 0; i < data.data.comments.length; i++) {
@@ -230,3 +235,29 @@ function getComment() {
         }
     });
 };
+//点赞当前文章
+function starArticle() {
+    //获取文章的id
+    var articleId = $("#articleId").val();
+    $.ajax({
+        url: "/article/star",//请求地址
+        dataType: "json",//数据格式
+        type: "POST",//请求方式
+        data:{
+            "id":articleId,
+        },
+        async: false,//是否异步请求
+        success: function (data) {   //如何点赞成功
+            if (data.flag) {//点赞成功
+                layer.msg(data.msg);
+                $(".star-num").text(parseInt($(".star-num").html()) + 1)
+                $(".fa-thumbs-up").css("color", "#3e71f6");
+            } else {
+                layer.msg(data.msg);
+            }
+        },
+        error: function (data) {
+            layer.msg("服务器异常，请联系管理员!");
+        }
+    });
+}
