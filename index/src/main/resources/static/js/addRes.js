@@ -137,10 +137,10 @@ $(function() {
                         dataType: "json",  //数据格式
                         type: "POST",  //请求方式
                         async: false,
-                        data:{"title":tag,
+                        data:{"title":title,
                             "content":resIntro,
                             "icon":resLogo,
-                            "type":type,
+                            "type":tag,
                             "link":link,
                         },
                         success: function (data) {

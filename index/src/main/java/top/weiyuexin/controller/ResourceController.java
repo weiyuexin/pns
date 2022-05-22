@@ -61,6 +61,9 @@ public class ResourceController {
             resource.setTime(date);
             r.setFlag(resourceServer.save(resource));
             r.setMsg("文章发表成功!");
+            //发表成功，积分加5
+            user.setPoints(user.getPoints()+5);
+            userService.updateById(user);
         }else{
             r.setFlag(false);
             r.setMsg("当前未登录，请先前往登录!");
@@ -162,6 +165,10 @@ public class ResourceController {
             resource.setCommentNum(resource.getCommentNum()+1);
             resourceServer.updateById(resource);
 
+            //发表成功，积分加2
+            user.setPoints(user.getPoints()+2);
+            userService.updateById(user);
+
             if(r.getFlag()){
                 r.setMsg("评论成功!");
             }else {
@@ -197,5 +204,33 @@ public class ResourceController {
         map.put("authors",authors);
         map.put("dates",dates);
         return new R(true,map);
+    }
+
+    /**
+     * 点赞资源评论
+     * @param resourceComment
+     * @param session
+     * @return
+     */
+    @PostMapping("/comment/star")
+    @ResponseBody
+    public R starComment(ResourceComment resourceComment,HttpSession session){
+        R r = new R();
+        User user = (User)session.getAttribute("user");
+        if(user!=null){
+            //点赞数加一
+            resourceComment=resourceCommentService.getById(resourceComment.getId());
+            resourceComment.setStar(resourceComment.getStar()+1);
+            //保存
+            r.setFlag(resourceCommentService.updateById(resourceComment));
+            r.setMsg("点赞成功!");
+            //点赞成功，积分加1
+            user.setPoints(user.getPoints()+1);
+            userService.updateById(user);
+        }else {
+            r.setFlag(false);
+            r.setMsg("请登录后再来点赞!");
+        }
+        return r;
     }
 }

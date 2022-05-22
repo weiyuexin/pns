@@ -58,6 +58,9 @@ public class ArticleController {
             article.setTime(date);
             r.setFlag(articleService.save(article));
             r.setMsg("文章发表成功!");
+            //发表成功，积分加5
+            user.setPoints(user.getPoints()+5);
+            userService.updateById(user);
         }else{
             r.setFlag(false);
             r.setMsg("当前未登录，请先前往登录!");
@@ -261,6 +264,10 @@ public class ArticleController {
             article.setCommentNum(article.getCommentNum()+1);
             articleService.updateById(article);
 
+            //发表成功，积分加2
+            user.setPoints(user.getPoints()+2);
+            userService.updateById(user);
+
             if(r.getFlag()){
                 r.setMsg("评论成功!");
             }else {
@@ -308,12 +315,44 @@ public class ArticleController {
     @ResponseBody
     public R starArticle(Article article,HttpSession session){
         R r = new R();
-        if((User)session.getAttribute("user")!=null){
+        User user=(User)session.getAttribute("user");
+        if(user!=null){
             //点赞数加一
             article=articleService.getById(article.getId());
             article.setStar(article.getStar()+1);
+            //点赞成功，积分加1
+            user.setPoints(user.getPoints()+1);
+            userService.updateById(user);
             //保存
             r.setFlag(articleService.updateById(article));
+            r.setMsg("点赞成功!");
+        }else {
+            r.setFlag(false);
+            r.setMsg("请登录后再来点赞!");
+        }
+        return r;
+    }
+
+    /**
+     * 点赞文章评论
+     * @param articleComment
+     * @param session
+     * @return
+     */
+    @PostMapping("/article/comment/star")
+    @ResponseBody
+    public R starComment(ArticleComment articleComment,HttpSession session){
+        R r = new R();
+        User user = (User)session.getAttribute("user");
+        if(user!=null){
+            //点赞数加一
+            articleComment=articleCommentService.getById(articleComment.getId());
+            articleComment.setStar(articleComment.getStar()+1);
+            //点赞成功，积分加1
+            user.setPoints(user.getPoints()+1);
+            userService.updateById(user);
+            //保存
+            r.setFlag(articleCommentService.updateById(articleComment));
             r.setMsg("点赞成功!");
         }else {
             r.setFlag(false);

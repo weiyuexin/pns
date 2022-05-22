@@ -2,6 +2,7 @@ package top.weiyuexin.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import top.weiyuexin.entity.User;
+import top.weiyuexin.entity.vo.R;
 
 import java.util.List;
 
@@ -15,4 +16,5 @@ public interface UserService extends IService<User> {
      * @return
      */
     List<User> getTopUser(Integer num);
+
 }

@@ -261,3 +261,28 @@ function starArticle() {
         }
     });
 }
+
+//点赞评论
+function starComment(id) {
+
+    $.ajax({
+        url: "/article/comment/star",//请求地址
+        dataType: "json",//数据格式
+        type: "POST",//请求方式
+        data:{
+            "id":id
+        },
+        async: false,//是否异步请求
+        success: function (data) {   //如何点赞成功
+            if (data.flag) {//点赞成功
+                layer.msg(data.msg);
+                getComment();
+            } else {
+                layer.msg(data.msg);
+            }
+        },
+        error: function (data) {
+            layer.msg("服务器异常，请联系管理员!");
+        }
+    });
+}
