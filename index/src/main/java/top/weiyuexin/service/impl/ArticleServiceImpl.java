@@ -56,6 +56,14 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         return articles;
     }
 
+    /**
+     * 根据类型查看文章实现
+     * @param currentPage
+     * @param pageSize
+     * @param type
+     * @param article
+     * @return
+     */
     @Override
     public IPage<Article> getPageByType(Integer currentPage,
                                         Integer pageSize,
@@ -66,6 +74,34 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         lqw.like(Article::getIsShow,1);
         lqw.eq(Article::getType,type);
         lqw.orderByDesc(Article::getTime);
+        IPage<Article> page = new Page<>(currentPage,pageSize);
+        articleMapper.selectPage(page,lqw);
+        return page;
+    }
+
+    /**
+     * 查看某个作者所有文章的实现方法
+     * @param currentPage
+     * @param pageSize
+     * @param authorId
+     * @param article
+     * @return
+     */
+    @Override
+    public IPage<Article> getPageByUserId(Integer currentPage,
+                                          Integer pageSize,
+                                          Integer authorId,
+                                          Article article,
+                                          String order) {
+        LambdaQueryWrapper<Article> lqw = new LambdaQueryWrapper<>();
+        //查询条件:文章显示标志为1
+        lqw.like(Article::getIsShow,1);
+        lqw.eq(Article::getAuthorId,authorId);
+        if(order.equals("time")){
+            lqw.orderByDesc(Article::getTime);
+        }else if(order.equals("readNum")){
+            lqw.orderByDesc(Article::getReadNum);
+        }
         IPage<Article> page = new Page<>(currentPage,pageSize);
         articleMapper.selectPage(page,lqw);
         return page;

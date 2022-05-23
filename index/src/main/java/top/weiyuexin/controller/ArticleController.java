@@ -75,7 +75,7 @@ public class ArticleController {
      * @param session
      * @return
      */
-    @DeleteMapping("article/{id}")
+    @DeleteMapping("/article/{id}")
     @ResponseBody
     public Object delete(@PathVariable("id") Integer id, HttpSession session){
         R r = new R();
@@ -89,12 +89,15 @@ public class ArticleController {
         return r;
     }
 
-    @PutMapping("article")
+    /**
+     * 删除文章接口
+     * @param article
+     * @return
+     */
+    @PutMapping("/article/del")
     @ResponseBody
     public Object update(Article article){
-        R r = new R();
-
-        return r;
+        return new R(articleService.removeById(article),"文章删除成功!");
     }
 
     /**
@@ -102,7 +105,7 @@ public class ArticleController {
      * @param id
      * @return
      */
-    @GetMapping("article/{id}")
+    @GetMapping("/article/{id}")
     @ResponseBody
     public ModelAndView getById(@PathVariable("id") Integer id){
         ModelAndView modelAndView = new ModelAndView();
@@ -133,7 +136,7 @@ public class ArticleController {
      * @param article
      * @return
      */
-    @GetMapping("article/{currentPage}/{pageSize}")
+    @GetMapping("/article/{currentPage}/{pageSize}")
     @ResponseBody
     public Object getPage(@PathVariable("currentPage") Integer currentPage,
                           @PathVariable("pageSize") Integer pageSize,
@@ -208,7 +211,7 @@ public class ArticleController {
      * @param article
      * @return
      */
-    @GetMapping("article/{type}/{currentPage}/{pageSize}")
+    @GetMapping("/article/{type}/{currentPage}/{pageSize}")
     @ResponseBody
     public Object getPageByType(@PathVariable("currentPage") Integer currentPage,
                           @PathVariable("pageSize") Integer pageSize,
@@ -218,6 +221,47 @@ public class ArticleController {
         //如果当前页码值大于当前页码值，那么重新执行查询操作，使用最大页码值作为当前页码值
         if(currentPage>page.getPages()){
             page = articleService.getPageByType(currentPage,pageSize,type,article);
+        }
+        //过滤html标签
+        List<Article> articles = page.getRecords();
+        for(int i=0;i<articles.size();i++){
+            String content = articles.get(i).getContent();
+            OutHtml outHtml = new OutHtml();
+            content = outHtml.delHTMLTag(content);
+            if(content.length()>160){
+                content=content.substring(0,160);
+            }
+            articles.get(i).setContent(content);
+            //根据作者id查询作者
+            User user = userService.getById(articles.get(i).getAuthorId());
+            if(user!=null){
+                System.out.println(user.getUsername());
+                articles.get(i).setAuthorName(user.getUsername());
+            }
+        }
+        page.setRecords(articles);
+        return new R(true,page);
+    }
+
+    /**
+     * 分页查询某一作者所有文章
+     * @param currentPage
+     * @param pageSize
+     * @param authorId
+     * @param article
+     * @return
+     */
+    @GetMapping("/article/user/{authorId}/{currentPage}/{pageSize}/{order}")
+    @ResponseBody
+    public R getArticlesByAuthorId(@PathVariable("currentPage") Integer currentPage,
+                                   @PathVariable("pageSize") Integer pageSize,
+                                   @PathVariable("authorId") Integer authorId,
+                                   @PathVariable("order") String order,
+                                   Article article){
+        IPage<Article> page = articleService.getPageByUserId(currentPage,pageSize,authorId,article,order);
+        //如果当前页码值大于当前页码值，那么重新执行查询操作，使用最大页码值作为当前页码值
+        if(currentPage>page.getPages()){
+            page = articleService.getPageByUserId(currentPage,pageSize,authorId,article,order);
         }
         //过滤html标签
         List<Article> articles = page.getRecords();

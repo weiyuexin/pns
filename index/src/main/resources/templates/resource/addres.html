@@ -35,7 +35,7 @@
                         <li><a th:href="@{/}" title="网站首页">首页</a></li>
                         <li><a th:href="@{/resources}" title="编程资源">资源</a></li>
 <!--                        <li><a href="index.html" title="世界">世界</a></li>-->
-                        <li><a th:href="@{ranking}" title="全站热门内容">排行</a></li>
+                        <li><a th:href="@{/rank}" title="全站热门内容">排行</a></li>
                     </ul>
                 </div>
             </div>
@@ -48,14 +48,14 @@
             </div>
             <div class="toolbar-container-right layui-col-md4">
                 <ul class="layui-nav">
-                    <li class="layui-nav-item">
+                    <li class="layui-nav-item create">
                         <a href=""><i class="el-icon-circle-plus"></i>&nbsp;创作</a>
                         <dl class="layui-nav-child">
                             <dd><a th:href="@{/article/write}"><i class="layui-icon layui-icon-edit"></i>&nbsp;写文章</a></dd>
                             <dd><a th:href="@{/resource/add}"><i class="el-icon-upload"></i>&nbsp;上传资源</a></dd>
                         </dl>
                     </li>
-                    <li class="layui-nav-item">
+                    <li class="layui-nav-item message">
                         <a href=""><i class="layui-icon layui-icon-notice"></i>消息
 <!--                            <span class="layui-badge">9</span>-->
                         </a>
@@ -211,7 +211,7 @@
             <div class="mark layui-col-md12">
                 <div class="mark-title layui-col-md12">
                     <h3>积分排行</h3>
-                    <a href="">更多<i class="layui-icon layui-icon-right"></i></a>
+                    <a th:href="@{/rank}">更多<i class="layui-icon layui-icon-right"></i></a>
                 </div>
                 <div class="mark-list layui-col-md12">
                     <ul class="layui-col-md12 userRank">
@@ -223,7 +223,7 @@
             <div class="hot-article layui-col-md12">
                 <div class="hot-title layui-col-md12">
                     <h3>热门文章</h3>
-                    <a href="">更多<i class="layui-icon layui-icon-right"></i></a>
+                    <a th:href="@{/rank}">更多<i class="layui-icon layui-icon-right"></i></a>
                 </div>
                 <div class="hot-list layui-col-md12">
                     <ul class="layui-col-md12 articleRank">
@@ -234,40 +234,11 @@
             <div class="hot-article layui-col-md12">
                 <div class="hot-title layui-col-md12">
                     <h3>热门编程资源</h3>
-                    <a href="">更多<i class="layui-icon layui-icon-right"></i></a>
+                    <a th:href="@{/rank}">更多<i class="layui-icon layui-icon-right"></i></a>
                 </div>
                 <div class="hot-list layui-col-md12">
-                    <ul class="layui-col-md12">
-                        <li class="layui-col-md12">
-                            <span class="hot-list-id layui-col-md1">1</span>
-                            <a href="" class="hot-list-title layui-col-md10">
-                                .NET 百万级 大数据插入、更新 ，支持多种数据库
-                            </a><br>
-                        </li>
-                        <li class="layui-col-md12">
-                            <span class="hot-list-id layui-col-md1">2</span>
-                            <a href="" class="hot-list-title layui-col-md10">
-                                【Golang】基于beego/orm实现相同表结构不同表名的分表方法实现
-                            </a><br>
-                        </li>
-                        <li class="layui-col-md12">
-                            <span class="hot-list-id layui-col-md1">3</span>
-                            <a href="" class="hot-list-title layui-col-md10">
-                                万字解读鸿蒙轻内核物理内存模块
-                            </a><br>
-                        </li>
-                        <li class="layui-col-md12">
-                            <span class="hot-list-id layui-col-md1">4</span>
-                            <a href="" class="hot-list-title layui-col-md10">
-                                C# 从 UTF-8 流中读取字符串的正确方法
-                            </a><br>
-                        </li>
-                        <li class="layui-col-md12">
-                            <span class="hot-list-id layui-col-md1">5</span>
-                            <a href="" class="hot-list-title layui-col-md10">
-                                使用命令模式重构播放器控制条
-                            </a><br>
-                        </li>
+                    <ul class="layui-col-md12 ResRank">
+
                     </ul>
                 </div>
             </div>

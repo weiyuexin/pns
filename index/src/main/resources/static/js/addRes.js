@@ -89,7 +89,30 @@ $(document).ready(function () {
             layer.msg("服务器异常，请联系管理员!");
         }
     });
-
+    /*发送获取热门资源请求*/
+    $.ajax({
+        url: "/resource/topResource/5",//请求地址
+        dataType: "json",//数据格式
+        type: "GET",//请求方式
+        async: false,//是否异步请求
+        success: function (data) {   //如果发送成功
+            var html = "";
+            for (i = 0; i < data.data.length; i++) {
+                var num=i+1;
+                var articleUrl = "/resource/" + data.data[i].id;
+                html+="<li class=\"layui-col-md12\">\n" +
+                    "                            <span class=\"hot-list-id layui-col-md1\">"+num+".</span>\n" +
+                    "                            <a href=\""+articleUrl+"\" target='_blank' class=\"hot-list-title layui-col-md10\">\n" +
+                    "                                "+data.data[i].title+"\n" +
+                    "                            </a><br>\n" +
+                    "                        </li>";
+            }
+            $(".ResRank").html(html);
+        },
+        error: function (data) {
+            layer.msg("服务器异常，请联系管理员!");
+        }
+    });
 
 });
 

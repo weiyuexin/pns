@@ -22,7 +22,7 @@ public class UeditorController {
         response.setContentType("application/json");
         String rootPath = ClassUtils.getDefaultClassLoader().getResource("").getPath() + "static/ueditor/jsp";
 //        String rootPath = "/usr/local/springboot/";
-        System.out.println(rootPath);
+//        System.out.println(rootPath);
         try {
             response.setCharacterEncoding("UTF-8");
             String exec = new ActionEnter(request, rootPath).exec();
