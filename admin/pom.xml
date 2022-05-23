@@ -12,7 +12,7 @@
     </parent>
 
     <groupId>top.weiyuexin</groupId>
-    <artifactId>admin</artifactId>
+    <artifactId>PNS-admin</artifactId>
     <version>1.0.0</version>
 
     <name>admin</name>
