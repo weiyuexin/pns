@@ -14,8 +14,8 @@ $(document).ready(function () {
 
                 //显示用户头像
                 if(data.flag){
-                    if (!data.data.records.photo =="") {
-                        $(".account img").attr('src', data.data.records.photo);
+                    if (!data.data.photo =="") {
+                        $(".account img").attr('src', data.data.photo);
                     } else {
                         $(".account img").attr('src', 'https://wyx-1303917755.cos.ap-beijing.myqcloud.com/img/2022/5/18/2022518f0f23093-5b30-4c45-8e54-cdd71683020a.png');
                     }

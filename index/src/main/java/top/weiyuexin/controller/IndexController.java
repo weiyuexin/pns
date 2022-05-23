@@ -24,8 +24,14 @@ public class IndexController {
         return "resource/resources";
     }
 
+    /**
+     * 热门排行列表
+     * @return
+     */
     @GetMapping("/rank")
     public String rankPage(){
         return "rank";
     }
+
+
 }

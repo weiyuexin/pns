@@ -69,15 +69,15 @@
                     </li>
                     <li class="layui-nav-item account">
                         <a href="">
-                            <img src="https://cdn.jsdelivr.net/gh/weiyuexin/blogimg@latest/img/202112222148419.png" class="layui-nav-img">
+                            <img src="/img/head.png" class="layui-nav-img">
                             <span>我</span>
                         </a>
                         <dl class="layui-nav-child">
-                            <dd><a th:href="@{/user/account(account)}"><i class="fa fa-universal-access"
-                                                                          aria-hidden="true"></i>&nbsp;账号管理</a></dd>
-                            <dd><a th:href="@{/user/account(article)}"><i class="fa fa-arrows-alt"></i>&nbsp;我的博客</a>
+                            <dd><a th:href="@{/user/account/account}" target="_blank"><i class="fa fa-universal-access"
+                                                                                         aria-hidden="true"></i>&nbsp;账号管理</a></dd>
+                            <dd><a th:href="@{/user/account/article}" target="_blank"><i class="fa fa-arrows-alt"></i>&nbsp;我的博客</a>
                             </dd>
-                            <dd><a th:href="@{/user/account(res)}"><i class="fa fa-database"></i>&nbsp;我的分享</a></dd>
+                            <dd><a th:href="@{/user/account/res/}" target="_blank"><i class="fa fa-database"></i>&nbsp;我的分享</a></dd>
                             <dd><a th:href="@{/user/logout}"><i class="fa fa-sign-out"
                                                                 aria-hidden="true"></i>&nbsp;退出</a></dd>
                         </dl>

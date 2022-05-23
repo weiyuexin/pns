@@ -193,4 +193,74 @@ public class UserController {
     }
 
 
+    /**
+     * 账号管理页面
+     * @param t
+     * @return
+     */
+    @GetMapping("/account/{t}")
+    public String accountPage(@PathVariable("t") String t){
+        if(t.equals("account")){
+            return "user/account";
+        }else if(t.equals("article")){
+            return "article/myarticle";
+        }else {
+            return "resource/myres";
+        }
+    }
+
+    /**
+     * 查看session中的用户登录信息
+     * @param session
+     * @return
+     */
+    @GetMapping("/info")
+    @ResponseBody
+    public R getUserInfoFromSession(HttpSession session){
+        R r = new R();
+        User user = (User) session.getAttribute("user");
+        if(user!=null){
+            r.setFlag(true);
+            r.setData(user);
+            r.setMsg("已登录");
+        }else {
+            r.setFlag(false);
+            r.setMsg("还没有登录，请前往登录!");
+        }
+        return r;
+    }
+
+    /**
+     * 修改用户信息接口
+     * @param user
+     * @param session
+     * @return
+     */
+    @PutMapping("/update")
+    @ResponseBody
+    public R updata(User user,HttpSession session){
+        R r = new R();
+        User user1 =(User) session.getAttribute("user");
+        if(session.getAttribute("user")!=null){
+            user.setId(user1.getId());
+            if(user.getPassword()!=null){
+                //加密
+                user.setPassword(DigestUtil.md5Hex(user.getPassword()));
+            }
+            r.setFlag(userService.updateById(user));
+            if(r.getFlag()){
+                r.setMsg("修改成功!");
+                //修改成功，更新session中的信息
+                user = userService.getById(user.getId());
+                session.setAttribute("user",user);
+            }else {
+                r.setMsg("修改失败，请稍后重试!");
+            }
+        }else {
+            r.setFlag(false);
+            r.setMsg("请登录后重试！");
+        }
+        return r;
+    }
+
 }

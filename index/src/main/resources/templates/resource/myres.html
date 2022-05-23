@@ -18,7 +18,7 @@
     <!-- 引入Layui.js -->
     <script th:src="@{/layui/layui.js}"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script th:src="@{/js/vue.js}"></script>
     <!-- 引入样式 -->
     <link rel="stylesheet" href="https://unpkg.zhimg.com/element-ui/lib/theme-chalk/index.css">
     <!-- 引入组件库 -->
@@ -65,10 +65,13 @@
                                 src="https://cdn.jsdelivr.net/gh/weiyuexin/weiyuexin.github.io@latest/images/avatar.jpg"
                                 class="layui-nav-img">我</a>
                         <dl class="layui-nav-child">
-                            <dd><a th:href="@{/user/account(account)}"><i class="fa fa-universal-access" aria-hidden="true"></i>&nbsp;账号管理</a></dd>
-                            <dd><a th:href="@{/user/account(article)}"><i class="fa fa-arrows-alt"></i>&nbsp;我的博客</a></dd>
-                            <dd><a th:href="@{/user/account(res)}"><i class="fa fa-database"></i>&nbsp;我的分享</a></dd>
-                            <dd><a th:href="@{/user/logout}"><i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;退出</a></dd>
+                            <dd><a th:href="@{/user/account/account}" target="_blank"><i class="fa fa-universal-access"
+                                                                                         aria-hidden="true"></i>&nbsp;账号管理</a></dd>
+                            <dd><a th:href="@{/user/account/article}" target="_blank"><i class="fa fa-arrows-alt"></i>&nbsp;我的博客</a>
+                            </dd>
+                            <dd><a th:href="@{/user/account/res/}" target="_blank"><i class="fa fa-database"></i>&nbsp;我的分享</a></dd>
+                            <dd><a th:href="@{/user/logout}"><i class="fa fa-sign-out"
+                                                                aria-hidden="true"></i>&nbsp;退出</a></dd>
                         </dl>
                     </li>
                 </ul>

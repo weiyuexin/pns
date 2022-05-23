@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>资源详情</title>
+    <title th:text="${res.title}"></title>
     <link type="favicon" rel="shortcut icon" th:href="@{/img/pns.png}">
     <link rel="stylesheet" th:href="@{/css/main.css}">
     <link rel="stylesheet" th:href="@{/css/article.css}">
@@ -59,11 +59,11 @@
                     <li class="layui-nav-item account">
                         <a href=""><img th:src="@{/img/head.png}" class="layui-nav-img">我</a>
                         <dl class="layui-nav-child">
-                            <dd><a th:href="@{/user/account(account)}">
-                                <i class="fa fa-universal-access" aria-hidden="true"></i>&nbsp;账号管理</a></dd>
-                            <dd><a th:href="@{/user/account(article)}"><i class="fa fa-arrows-alt"></i>&nbsp;我的博客</a>
+                            <dd><a th:href="@{/user/account/account}" target="_blank"><i class="fa fa-universal-access"
+                                                                                         aria-hidden="true"></i>&nbsp;账号管理</a></dd>
+                            <dd><a th:href="@{/user/account/article}" target="_blank"><i class="fa fa-arrows-alt"></i>&nbsp;我的博客</a>
                             </dd>
-                            <dd><a th:href="@{/user/account(res)}"><i class="fa fa-ase"></i>&nbsp;我的分享</a></dd>
+                            <dd><a th:href="@{/user/account/res/}" target="_blank"><i class="fa fa-database"></i>&nbsp;我的分享</a></dd>
                             <dd><a th:href="@{/user/logout}"><i class="fa fa-sign-out"
                                                                 aria-hidden="true"></i>&nbsp;退出</a></dd>
                         </dl>
@@ -100,7 +100,7 @@
                 </li>
                 <li>
                     <span class="resLeft">链&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接:</span>
-                    <a th:href="${res.link}"><span class="resRight">点我访问或下载资源</span></a>
+                    <a th:href="${res.link}" target="_blank"><span class="resRight">点我访问或下载资源</span></a>
                 </li>
                 <li>
                     <span class="resLeft">发布时间:</span>
