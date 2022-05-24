@@ -1,17 +1,18 @@
 package top.weiyuexin.mapper;
 
-import top.weiyuexin.entity.Articlecomment;
-//@Mapper  //扫描DAO接口到spring容器
+import org.apache.ibatis.annotations.Mapper;
+import top.weiyuexin.entity.ArticleComment;
+@Mapper  //扫描DAO接口到spring容器
 public interface ArticlecommentMapper {
     int deleteByPrimaryKey(Integer id);
 
-    int insert(Articlecomment record);
+    int insert(ArticleComment record);
 
-    int insertSelective(Articlecomment record);
+    int insertSelective(ArticleComment record);
 
-    Articlecomment selectByPrimaryKey(Integer id);
+    ArticleComment selectByPrimaryKey(Integer id);
 
-    int updateByPrimaryKeySelective(Articlecomment record);
+    int updateByPrimaryKeySelective(ArticleComment record);
 
-    int updateByPrimaryKey(Articlecomment record);
+    int updateByPrimaryKey(ArticleComment record);
 }

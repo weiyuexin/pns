@@ -138,7 +138,6 @@ public class UserController {
      * @return
      */
     @GetMapping("/{id}")
-    @ResponseBody
     public ModelAndView getById(@PathVariable("id") Integer id){
         ModelAndView modelAndView = new ModelAndView();
         //查询用户
@@ -148,7 +147,7 @@ public class UserController {
         SimpleDateFormat time=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String date = time.format(user.getTime());
         //设置试图
-        modelAndView.setViewName("/user/author");
+        modelAndView.setViewName("user/author");
         //设置内容
         modelAndView.addObject("user",user);
         modelAndView.addObject("date",date);
