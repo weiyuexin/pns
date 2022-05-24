@@ -4,10 +4,10 @@ import lombok.Data;
 
 import java.util.Date;
 @Data
-public class ArticleComment {
+public class ResourceComment {
     private Integer id;
 
-    private Integer articleId;
+    private Integer resourceId;
 
     private String content;
 
@@ -16,5 +16,6 @@ public class ArticleComment {
     private Date time;
 
     private Integer star;
+
 
 }
