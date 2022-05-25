@@ -81,7 +81,7 @@ public class UserController {
      */
     @PostMapping ("/register.do/{code}")
     @ResponseBody
-    public Object register(@RequestBody User user,
+    public Object register(User user,
                            @PathVariable("code") Integer code,
                            HttpSession session){
         R r = new R();

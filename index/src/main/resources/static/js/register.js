@@ -62,10 +62,15 @@ $(function () {
         } else {
             /*发送验证注册请求*/
             $.ajax({
-                url: "register.do/"+email+"/"+username+"/"+password,//请求地址
+                url: "/user/register.do/"+emailcode,//请求地址
                 dataType: "json",//数据格式
                 type: "POST",//请求方式
                 async: false,//是否异步请求
+                data:{
+                    "email":email,
+                    "username":username,
+                    "password":password
+                },
                 success: function (data) {   //如何发送成功
                     layer.msg(data.msg);
                     //如果注册成功

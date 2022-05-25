@@ -33,7 +33,7 @@ public class FileController {
         if(file == null){
             return new R(false,"图片上传失败,请重试!");
         }else {
-            //发挥的类型是R
+            //返回的类型是R
             return fileServer.upload(file,session);
         }
     }

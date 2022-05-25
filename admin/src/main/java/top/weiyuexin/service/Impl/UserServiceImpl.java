@@ -11,11 +11,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
 
-    /*
-    * 调用DAO层接口，根据id查询用户信息
-    * */
+
     @Override
     public User queryUserById(Integer id) {
-        return userMapper.selectByPrimaryKey(id);
+        return null;
     }
 }
