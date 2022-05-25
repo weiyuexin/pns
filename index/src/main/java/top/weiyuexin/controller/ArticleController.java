@@ -75,7 +75,7 @@ public class ArticleController {
      * @param session
      * @return
      */
-    @DeleteMapping("/article/{id}")
+    @DeleteMapping("/article/del/{id}")
     @ResponseBody
     public Object delete(@PathVariable("id") Integer id, HttpSession session){
         R r = new R();
@@ -90,14 +90,35 @@ public class ArticleController {
     }
 
     /**
-     * 删除文章接口
+     * 编辑修改文章页面
+     * @param id
+     * @return
+     */
+    @GetMapping("/article/edit/{id}")
+    public ModelAndView updatePage(@PathVariable("id") Integer id){
+        ModelAndView modelAndView = new ModelAndView();
+        Article article = articleService.getById(id);
+        modelAndView.setViewName("article/editArticle");
+        modelAndView.addObject("article",article);
+        return modelAndView;
+    }
+
+    /**
+     * uodate article by id
      * @param article
      * @return
      */
-    @PutMapping("/article/del")
+    @PutMapping("/article/edit.do")
     @ResponseBody
-    public Object update(Article article){
-        return new R(articleService.removeById(article),"文章删除成功!");
+    public R update(Article article){
+        R r = new R();
+        r.setFlag(articleService.updateById(article));
+        if(r.getFlag()){
+            r.setMsg("文章修改成功!");
+        }else {
+            r.setMsg("文章修改失败，请稍后重试!");
+        }
+        return r;
     }
 
     /**
