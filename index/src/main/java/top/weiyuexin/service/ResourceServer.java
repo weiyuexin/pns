@@ -25,4 +25,6 @@ public interface ResourceServer extends IService<Resource> {
      * @return
      */
     IPage<Resource> getPageByType(Integer currentPage, Integer pageSize, String type, Resource resource);
+
+    IPage<Resource> getPageByAuthorId(Integer currentPage, Integer pageSize, Integer authorId, Resource resource);
 }

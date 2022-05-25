@@ -486,16 +486,19 @@ function deleteArticleById(id) {
 function deleteResById(id) {
     layer.confirm("资源后文章不可恢复，确认删除吗?", {icon: 3, title: '提示'}, function () {
         $.ajax({
-            url: "/pns/deleteResById/" + id,//请求地址
+            url: "/resource/del",//请求地址
             dataType: "json",//数据格式
-            type: "POST",//请求方式
+            type: "DELETE",//请求方式
             async: false,//是否异步请求
+            data:{
+                "id":id
+            },
             success: function (data) {   //如何删除成功
-                if (data.code == 200) {//删除成功
+                if (data.flag) {//删除成功
                     layer.msg(data.msg);
                     //重新获取文章
                     getResByAuthor();
-                } else if (data.code == 201) {
+                } else {
                     layer.msg(data.msg);
                 }
             },
@@ -508,49 +511,35 @@ function deleteResById(id) {
 }
 //查询作者的资源
 function getResByAuthor() {
-    var username;
-    //1、获取session中的用户信息
-    $.ajax({
-        url: "getAccount",  //请求地址
-        dataType: "json",  //数据格式
-        type: "POST",  //请求方式
-        async: false,
-        success: function (data) {
-            username = data.username;
-        },
-        error: function (data) {
-            layer.msg("服务异常，请联系管理员");
-        }
-    });
     //查询文章
     $.ajax({
-        url: "/pns/getResByAuthor/" + username,  //请求地址
+        url: "/resource/1/10/",  //请求地址
         dataType: "json",  //数据格式
-        type: "POST",  //请求方式
+        type: "GET",  //请求方式
         async: false,
         success: function (data) {
             console.log(data);
             var html = "";
-            for (var i = 0; i < data.length; i++) {
-                //定义文章链接
-                var resUrl = "/pns/resMessage/" + data[i].id;
+            for (var i = 0; i < data.data.records.length; i++) {
+                //定义资源链接
+                var resUrl = "/resource/" + data.data.records[i].id;
                 html += " <li>\n" +
                     "                    <div class=\"layui-panel article\">\n" +
                     "                        <div class=\"article-left layui-col-md9\">\n" +
                     "                            <div class=\"article-title layui-col-md12\">\n" +
-                    "                                <a href=\"" + resUrl + "\" target='_blank'>" + data[i].title + "</a>\n" +
+                    "                                <a href=\"" + resUrl + "\" target='_blank'>" + data.data.records[i].title + "</a>\n" +
                     "                            </div>\n" +
                     "                            <div class=\"article-content\">\n" +
                     "                                简介：\n" +
-                    "                                <span>" + data[i].content + "</span>\n" +
+                    "                                <span>" + data.data.records[i].content + "</span>\n" +
                     "                            </div>\n" +
                     "                            \n" +
                     "                        </div>\n" +
                     "                        <div class=\"article-right layui-col-md3\">\n" +
-                    "                            <div class=\"article-time layui-col-md12\">" + data[i].time + "</div>\n" +
+                    "                            <div class=\"article-time layui-col-md12\">" + data.data.records[i].time + "</div>\n" +
                     "                            <div class=\"article-operation layui-col-md12\">\n" +
                     "                                <a href=\"" + resUrl + "\" target='_blank'>浏览</a>\n" +
-                    "                                <a onclick=\"deleteResById(" + data[i].id + ")\">删除</a>\n" +
+                    "                                <a onclick=\"deleteResById(" + data.data.records[i].id + ")\">删除</a>\n" +
                     "                              \n" +
                     "                            </div>\n" +
                     "                        </div>\n" +
@@ -558,7 +547,7 @@ function getResByAuthor() {
                     "                </li>";
             }
             $("#myRes").html(html);
-            if (data.length > 0) {
+            if (data.data.records.length > 0) {
                 $(".el-empty").hide();
             } else {
                 $(".el-empty").show();

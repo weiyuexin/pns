@@ -2,6 +2,7 @@ package top.weiyuexin.controller;
 
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -230,6 +231,64 @@ public class ResourceController {
         }else {
             r.setFlag(false);
             r.setMsg("请登录后再来点赞!");
+        }
+        return r;
+    }
+
+    /**
+     * 根据资源作者查询资源
+     * @param currentPage
+     * @param pageSize
+     * @param resource
+     * @return
+     */
+    @GetMapping("/{currentPage}/{pageSize}")
+    @ResponseBody
+    public R getPageByAuthorId(@PathVariable("currentPage") Integer currentPage,
+                               @PathVariable("pageSize") Integer pageSize,
+                               Resource resource,HttpSession session){
+        R r = new R();
+        User user = (User) session.getAttribute("user");
+        if(user!=null){
+            IPage<Resource> iPage = resourceServer.getPageByAuthorId(currentPage,pageSize,user.getId(),resource);
+            if(iPage.getPages()>0){
+                r.setFlag(true);
+                r.setData(iPage);
+                r.setMsg("查询成功");
+            }else {
+                r.setFlag(false);
+                r.setMsg("查询失败");
+            }
+        }else {
+            r.setFlag(false);
+            r.setMsg("没有登陆，请先前往登录");
+        }
+
+        return r;
+    }
+
+    /**
+     * 删除资源
+     * @param resource
+     * @param session
+     * @return
+     */
+    @DeleteMapping("/del")
+    @ResponseBody
+    public R deleteResource(Resource resource,HttpSession session){
+        R r = new R();
+        User user = (User) session.getAttribute("user");
+
+        if(user!=null){
+            r.setFlag(resourceServer.removeById(resource));
+            if(r.getFlag()){
+                r.setMsg("删除成功!");
+            }else {
+                r.setMsg("删除失败！");
+            }
+        }else {
+            r.setFlag(false);
+            r.setMsg("请重新登录后再试");
         }
         return r;
     }

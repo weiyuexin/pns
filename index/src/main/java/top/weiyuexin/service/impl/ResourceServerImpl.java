@@ -39,4 +39,15 @@ public class ResourceServerImpl extends ServiceImpl<ResourceMapper, Resource> im
         resourceMapper.selectPage(page,lqw);
         return page;
     }
+
+    @Override
+    public IPage<Resource> getPageByAuthorId(Integer currentPage, Integer pageSize, Integer authorId, Resource resource) {
+        LambdaQueryWrapper<Resource> lqw = new LambdaQueryWrapper<>();
+        //查询条件:文章显示标志为1
+        lqw.eq(Resource::getAuthorId,authorId);
+        lqw.orderByDesc(Resource::getTime);
+        IPage<Resource> page = new Page<>(currentPage,pageSize);
+        resourceMapper.selectPage(page,lqw);
+        return page;
+    }
 }
