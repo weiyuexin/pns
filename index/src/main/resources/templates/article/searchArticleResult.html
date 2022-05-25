@@ -36,7 +36,7 @@
                         <li><a th:href="@{/}" title="网站首页">首页</a></li>
                         <li><a th:href="@{/resources}" title="编程资源">资源</a></li>
 <!--                        <li><a href="index.html" title="世界">世界</a></li>-->
-                        <li><a th:href="@{ranking}" title="全站热门内容">排行</a></li>
+                        <li><a th:href="@{/rank}" title="全站热门内容">排行</a></li>
                     </ul>
                 </div>
             </div>
@@ -52,8 +52,8 @@
                     <li class="layui-nav-item">
                         <a href=""><i class="el-icon-circle-plus"></i>&nbsp;创作</a>
                         <dl class="layui-nav-child">
-                            <dd><a th:href="@{/write}"><i class="layui-icon layui-icon-edit"></i>&nbsp;写文章</a></dd>
-                            <dd><a th:href="@{/addRes}"><i class="el-icon-upload"></i>&nbsp;上传资源</a></dd>
+                            <dd><a th:href="@{/article/write}"><i class="layui-icon layui-icon-edit"></i>&nbsp;写文章</a></dd>
+                            <dd><a th:href="@{/resource/add}"><i class="el-icon-upload"></i>&nbsp;上传资源</a></dd>
                         </dl>
                     </li>
                     <li class="layui-nav-item">
@@ -106,7 +106,7 @@
             <div class="mark layui-col-md12">
                 <div class="mark-title layui-col-md12">
                     <h3>积分排行</h3>
-                    <a th:href="@{/ranking}">更多<i class="layui-icon layui-icon-right"></i></a>
+                    <a th:href="@{/rank}">更多<i class="layui-icon layui-icon-right"></i></a>
                 </div>
                 <div class="mark-list layui-col-md12">
                     <ul class="layui-col-md12 userRank">
@@ -118,7 +118,7 @@
             <div class="hot-article layui-col-md12">
                 <div class="hot-title layui-col-md12">
                     <h3>热门文章</h3>
-                    <a th:href="@{/ranking}">更多<i class="layui-icon layui-icon-right"></i></a>
+                    <a th:href="@{/rank}">更多<i class="layui-icon layui-icon-right"></i></a>
                 </div>
                 <div class="hot-list layui-col-md12">
                     <ul class="layui-col-md12 articleRank">
@@ -129,7 +129,7 @@
             <div class="hot-article layui-col-md12">
                 <div class="hot-title layui-col-md12">
                     <h3>热门编程资源</h3>
-                    <a th:href="@{/ranking}">更多<i class="layui-icon layui-icon-right"></i></a>
+                    <a th:href="@{/rank}">更多<i class="layui-icon layui-icon-right"></i></a>
                 </div>
                 <div class="hot-list layui-col-md12">
                     <ul class="layui-col-md12 ResRank">

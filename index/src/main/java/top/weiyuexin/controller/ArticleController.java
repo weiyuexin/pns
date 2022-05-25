@@ -426,5 +426,18 @@ public class ArticleController {
         return r;
     }
 
+    /**
+     * 搜索页面
+     * @param key
+     * @return
+     */
+    @RequestMapping("/search")
+    public ModelAndView searchPage(String key){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("article/searchArticleResult");
+        modelAndView.addObject(key);
+        return modelAndView;
+    }
+
 
 }

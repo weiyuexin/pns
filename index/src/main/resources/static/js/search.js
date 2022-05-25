@@ -5,32 +5,32 @@ $(document).ready(function () {
     $.ajax({
         url: "/user/check",  //请求地址
         dataType: "json",  //数据格式
-        type:"GET",  //请求方式
+        type: "GET",  //请求方式
         async: false,
-        success:function (data){
-            if(data.flag){ //处于登录状态
+        success: function (data) {
+            if (data.flag) { //处于登录状态
                 //$(".account").css("display","block");
-                $(".LoginAndRegister").css("display","none");
+                $(".LoginAndRegister").css("display", "none");
 
                 //显示用户头像
-                if(data.flag){
-                    if (!data.data.photo =="") {
+                if (data.flag) {
+                    if (!data.data.photo == "") {
                         $(".account img").attr('src', data.data.photo);
                     } else {
                         $(".account img").attr('src', 'https://cdn.jsdelivr.net/gh/weiyuexin/blogimg@latest/img/202112222148419.png');
                     }
-                }else {
+                } else {
                     $(".account img").attr('src', 'https://cdn.jsdelivr.net/gh/weiyuexin/blogimg@latest/img/202112222148419.png');
 
                 }
-            }else {  //没有处于登录状态
-                $(".account").css("display","none");
-                $(".message").css("display","none");
-                $(".create").css("display","none");
+            } else {  //没有处于登录状态
+                $(".account").css("display", "none");
+                $(".message").css("display", "none");
+                $(".create").css("display", "none");
                 // $(".LoginAndRegister").css("display","block");
             }
         },
-        error:function (data) {
+        error: function (data) {
             layer.msg("服务异常，请联系管理员");
         }
 
@@ -44,12 +44,12 @@ $(document).ready(function () {
         success: function (data) {   //如果发送成功
             var html = "";
             for (i = 0; i < data.data.length; i++) {
-                var num=i+1;
+                var num = i + 1;
                 var articleUrl = "/article/" + data.data[i].id;
-                html+="<li class=\"layui-col-md12\">\n" +
-                    "                            <span class=\"hot-list-id layui-col-md1\">"+num+".</span>\n" +
-                    "                            <a href=\""+articleUrl+"\" target='_blank' class=\"hot-list-title layui-col-md10\">\n" +
-                    "                                "+data.data[i].title+"\n" +
+                html += "<li class=\"layui-col-md12\">\n" +
+                    "                            <span class=\"hot-list-id layui-col-md1\">" + num + ".</span>\n" +
+                    "                            <a href=\"" + articleUrl + "\" target='_blank' class=\"hot-list-title layui-col-md10\">\n" +
+                    "                                " + data.data[i].title + "\n" +
                     "                            </a><br>\n" +
                     "                        </li>";
             }
@@ -68,17 +68,17 @@ $(document).ready(function () {
         success: function (data) {   //如何发送成功
             var html = "";
             for (i = 0; i < data.data.length; i++) {
-                if(data.data[i].photo==""){
-                    data.data[i].photo="https://cdn.jsdelivr.net/gh/weiyuexin/blogimg@latest/img/202112222148419.png";
+                if (data.data[i].photo == "") {
+                    data.data[i].photo = "https://cdn.jsdelivr.net/gh/weiyuexin/blogimg@latest/img/202112222148419.png";
                 }
                 html += "<li class=\"layui-col-md12\">\n" +
                     "                            <div class=\"mark-list-logo layui-col-md3\">\n" +
-                    "                                <a target='_blank' href=\"/user/"+data.data[i].id+"\"><img\n" +
-                    "                                        src=\""+data.data[i].photo+"\"\n" +
+                    "                                <a target='_blank' href=\"/user/" + data.data[i].id + "\"><img\n" +
+                    "                                        src=\"" + data.data[i].photo + "\"\n" +
                     "                                        alt=\"\"></a>\n" +
                     "                            </div>\n" +
                     "                            <div class=\"mark-list-desc layui-col-md9\">\n" +
-                    "                                <a target='_blank' href=\"/user/"+data.data[i].id+"\">\n" +
+                    "                                <a target='_blank' href=\"/user/" + data.data[i].id + "\">\n" +
                     "                                    <div class=\"mark-list-desc-name layui-col-md12\">" + data.data[i].username + "</div>\n" +
                     "                                </a>\n" +
                     "                                <div class=\"mark-list-desc-score layui-col-md12\">总积分：<span>" + data.data[i].points + "</span></div>\n" +
@@ -100,12 +100,12 @@ $(document).ready(function () {
         success: function (data) {   //如果发送成功
             var html = "";
             for (i = 0; i < data.data.length; i++) {
-                var num=i+1;
+                var num = i + 1;
                 var articleUrl = "/resource/" + data.data[i].id;
-                html+="<li class=\"layui-col-md12\">\n" +
-                    "                            <span class=\"hot-list-id layui-col-md1\">"+num+".</span>\n" +
-                    "                            <a href=\""+articleUrl+"\" target='_blank' class=\"hot-list-title layui-col-md10\">\n" +
-                    "                                "+data.data[i].title+"\n" +
+                html += "<li class=\"layui-col-md12\">\n" +
+                    "                            <span class=\"hot-list-id layui-col-md1\">" + num + ".</span>\n" +
+                    "                            <a href=\"" + articleUrl + "\" target='_blank' class=\"hot-list-title layui-col-md10\">\n" +
+                    "                                " + data.data[i].title + "\n" +
                     "                            </a><br>\n" +
                     "                        </li>";
             }
@@ -123,54 +123,54 @@ $(document).ready(function () {
         dataType: "json",//数据格式
         type: "POST",//请求方式
         async: false,//是否异步请求
-        data:{"key":keyWord},
+        data: {"key": keyWord},
         success: function (data) {   //如何发送成功
             console.log(data)
             var html = "";
-           if(data.length>0){
-               for (i = 0; i < data.length; i++) {
-                   //定义文章链接
-                   var articleUrl = "/pns/article/" + data[i].id;
-                   html+="<li>\n" +
-                       "                    <div class=\"article\">\n" +
-                       "                        <div class=\"articleTitle layui-col-md12\">\n" +
-                       "                            <a target='_blank' href=\"" + articleUrl + "\">\n" +
-                       "                                <h2>"+data[i].title+"</h2>\n" +
-                       "                            </a>\n" +
-                       "                        </div>\n" +
-                       "                        <div class=\"articleContent layui-col-md9\">\n" +
-                       "                            <div class=\"articleDesc layui-col-md12\">\n" +
-                       "                                <a target='_blank' href=\"" + articleUrl + "\">\n" +
-                       "                                    <p>"+data[i].content+"</p>\n" +
-                       "                                </a>\n" +
-                       "                            </div>\n" +
-                       "                            <div class=\"articleOperation layui-col-md12\">\n" +
-                       "                                <div class=\"author layui-col-md2\">\n" +
-                       "                                    <a href=\"/pns/user/author/"+data[i].author+"\">"+data[i].author+"</a>\n" +
-                       "                                </div>\n" +
-                       "                                <div class=\"star layui-col-md2\">\n" +
-                       "                                    <a href=\"\">\n" +
-                       "                                        <img src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAe9JREFUWEft1j1oFEEUB/D/m82dgqhnEUEQJKKIhVhaqmChKXPeQxvDys5sbeEX2IqITdrb2WCRIrCXFCmEiFhoqY2IhYLkghCwtRCMcvPkCkWS3WN3yWUat915+//N7HwRPD/kOR+1AfPzK/sHg82nIFwWwRpB3Tbm6vOqHaoNSGz2TATTfwKJSBTJdBTxahVELUCS9q6Jk8WcoPXY8NRYASKibNr7JIITeUGBwsko4s9lEZVHwNrejBNZLgrYuwdHZ2d5Y2yAJMleCHApP4A2D7XkADP/HAsgTZePOXF9EckfOaKXse4U4ArIZaXDdl2b3YPgUVGNItzRmp9U+WalOdBNsncAzo4I2CDC9xHvBwK8V8B9rbk/bFcaYG025QRrVXo3ou2XZmPyVBhe/LENYO3S9bxCIXdYHOZ2CACawAVzk19tA3STTPJCSNFjcXJ3pwCBCs5HUfu1N0CzgSNhyF99Ab7Fhlu5k3A3fgER3hjN5/wBgAVj+IY3AAgPYs0PvQEUoaM1L3kDBGriTBTNfPAFcM3G5L7hLugFQIS+0Xz871Vu68429mVIWI01X/EIoLlYd255A/y7AnZ9DhDRSuugtJl5UDwCaa+Te+IF8pF+qdN1TkNRIhSodRO2326tL30hqRNcpuY/wPsI/AaGBu4h5/R1CgAAAABJRU5ErkJggg==\">\n" +
-                       "                                        <p><span>"+data[i].star+"</span>赞</p>\n" +
-                       "                                    </a>\n" +
-                       "                                </div>\n" +
-                       "                                <div class=\"unstar layui-col-md1\">\n" +
-                       "                                    <a href=\"\"><img\n" +
-                       "                                            src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAhxJREFUWEftlj9oFEEUxt+bOU0gaC4EgwQE0cLSQtFC7EKEK5ObsREC680samEZQUSw8E9rEbjdIyRw1+zFpBEhERuxVhLEwjQRFUHbXA4Pbp/MygXR3WT3jtw0Tjs73/dj3jfvLYLlhZb94T/APzdQ9gKKKwsyfEIhzfZQsi2G7J5SxeqfGv0EML4hZ+x8qVR814HoN4AJ3QOt5X17AIiBVuKqTYANrcRZawAA0NRKDCFiFPa+Z8CYcsZPlkrTn6wBAMcr7nWxZg8A2W1XFZ9aA0DAOa3FLWsAgPjKVWLCGgAiftFKnLAGYIxH8nBESrlt5RlGTSjHz7nO9Ns4gJXYiYe4DkS7PbyHqRgdZQiTSsmXqX9IKpVnl9ph+02vxlHdEVoDh+HUzIz8mhqAiJjnL30DoLEeIZoIcFNruRAbwr3Ey34wBwQ3kr4xo5bz3HLSPhG0x8cHNwuFws/EYbQXgO/XL4dErxMBEGtaiWtZbih1CYwoEaHn1zcB4HS8CX7Xqni8M+nSgGQCMIKeV58loMdJ4odyMOY48kca88wZMAdqtecjjZ2dz0QwFGeCkDuj9dTHAwMwwmU/eAQEd/42QYRGfhiOSSmbBwpQrb442mhuvweCqJ/vLsSHrhJ305p3VYKOeKUSXAgJV4ko/zt0NJ8fBldK2e4LgDFZXFwebbXCi5yHW44jP2Qx7qoPdGOw35nMz3A/waz7vwCyr+8hoL9gPwAAAABJRU5ErkJggg==\">\n" +
-                       "                                        <p>踩</p>\n" +
-                       "                                    </a>\n" +
-                       "                                </div>\n" +
-                       "                                <div class=\"more layui-col-md1\">\n" +
-                       "                                    <i class=\"layui-icon layui-icon-more\"></i>\n" +
-                       "                                </div>\n" +
-                       "                            </div>\n" +
-                       "                        </div>\n" +
-                       "                    </div>\n" +
-                       "                    <hr>\n" +
-                       "                </li>";
-                   $(".article-content ul").html(html);
-               }
-           }
+            if (data.length > 0) {
+                for (i = 0; i < data.length; i++) {
+                    //定义文章链接
+                    var articleUrl = "/pns/article/" + data[i].id;
+                    html += "<li>\n" +
+                        "                    <div class=\"article\">\n" +
+                        "                        <div class=\"articleTitle layui-col-md12\">\n" +
+                        "                            <a target='_blank' href=\"" + articleUrl + "\">\n" +
+                        "                                <h2>" + data[i].title + "</h2>\n" +
+                        "                            </a>\n" +
+                        "                        </div>\n" +
+                        "                        <div class=\"articleContent layui-col-md9\">\n" +
+                        "                            <div class=\"articleDesc layui-col-md12\">\n" +
+                        "                                <a target='_blank' href=\"" + articleUrl + "\">\n" +
+                        "                                    <p>" + data[i].content + "</p>\n" +
+                        "                                </a>\n" +
+                        "                            </div>\n" +
+                        "                            <div class=\"articleOperation layui-col-md12\">\n" +
+                        "                                <div class=\"author layui-col-md2\">\n" +
+                        "                                    <a href=\"/pns/user/author/" + data[i].author + "\">" + data[i].author + "</a>\n" +
+                        "                                </div>\n" +
+                        "                                <div class=\"star layui-col-md2\">\n" +
+                        "                                    <a href=\"\">\n" +
+                        "                                        <img src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAe9JREFUWEft1j1oFEEUB/D/m82dgqhnEUEQJKKIhVhaqmChKXPeQxvDys5sbeEX2IqITdrb2WCRIrCXFCmEiFhoqY2IhYLkghCwtRCMcvPkCkWS3WN3yWUat915+//N7HwRPD/kOR+1AfPzK/sHg82nIFwWwRpB3Tbm6vOqHaoNSGz2TATTfwKJSBTJdBTxahVELUCS9q6Jk8WcoPXY8NRYASKibNr7JIITeUGBwsko4s9lEZVHwNrejBNZLgrYuwdHZ2d5Y2yAJMleCHApP4A2D7XkADP/HAsgTZePOXF9EckfOaKXse4U4ArIZaXDdl2b3YPgUVGNItzRmp9U+WalOdBNsncAzo4I2CDC9xHvBwK8V8B9rbk/bFcaYG025QRrVXo3ou2XZmPyVBhe/LENYO3S9bxCIXdYHOZ2CACawAVzk19tA3STTPJCSNFjcXJ3pwCBCs5HUfu1N0CzgSNhyF99Ab7Fhlu5k3A3fgER3hjN5/wBgAVj+IY3AAgPYs0PvQEUoaM1L3kDBGriTBTNfPAFcM3G5L7hLugFQIS+0Xz871Vu68429mVIWI01X/EIoLlYd255A/y7AnZ9DhDRSuugtJl5UDwCaa+Te+IF8pF+qdN1TkNRIhSodRO2326tL30hqRNcpuY/wPsI/AaGBu4h5/R1CgAAAABJRU5ErkJggg==\">\n" +
+                        "                                        <p><span>" + data[i].star + "</span>赞</p>\n" +
+                        "                                    </a>\n" +
+                        "                                </div>\n" +
+                        "                                <div class=\"unstar layui-col-md1\">\n" +
+                        "                                    <a href=\"\"><img\n" +
+                        "                                            src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAhxJREFUWEftlj9oFEEUxt+bOU0gaC4EgwQE0cLSQtFC7EKEK5ObsREC680samEZQUSw8E9rEbjdIyRw1+zFpBEhERuxVhLEwjQRFUHbXA4Pbp/MygXR3WT3jtw0Tjs73/dj3jfvLYLlhZb94T/APzdQ9gKKKwsyfEIhzfZQsi2G7J5SxeqfGv0EML4hZ+x8qVR814HoN4AJ3QOt5X17AIiBVuKqTYANrcRZawAA0NRKDCFiFPa+Z8CYcsZPlkrTn6wBAMcr7nWxZg8A2W1XFZ9aA0DAOa3FLWsAgPjKVWLCGgAiftFKnLAGYIxH8nBESrlt5RlGTSjHz7nO9Ns4gJXYiYe4DkS7PbyHqRgdZQiTSsmXqX9IKpVnl9ph+02vxlHdEVoDh+HUzIz8mhqAiJjnL30DoLEeIZoIcFNruRAbwr3Ey34wBwQ3kr4xo5bz3HLSPhG0x8cHNwuFws/EYbQXgO/XL4dErxMBEGtaiWtZbih1CYwoEaHn1zcB4HS8CX7Xqni8M+nSgGQCMIKeV58loMdJ4odyMOY48kca88wZMAdqtecjjZ2dz0QwFGeCkDuj9dTHAwMwwmU/eAQEd/42QYRGfhiOSSmbBwpQrb442mhuvweCqJ/vLsSHrhJ305p3VYKOeKUSXAgJV4ko/zt0NJ8fBldK2e4LgDFZXFwebbXCi5yHW44jP2Qx7qoPdGOw35nMz3A/waz7vwCyr+8hoL9gPwAAAABJRU5ErkJggg==\">\n" +
+                        "                                        <p>踩</p>\n" +
+                        "                                    </a>\n" +
+                        "                                </div>\n" +
+                        "                                <div class=\"more layui-col-md1\">\n" +
+                        "                                    <i class=\"layui-icon layui-icon-more\"></i>\n" +
+                        "                                </div>\n" +
+                        "                            </div>\n" +
+                        "                        </div>\n" +
+                        "                    </div>\n" +
+                        "                    <hr>\n" +
+                        "                </li>";
+                    $(".article-content ul").html(html);
+                }
+            }
         },
         error: function (data) {
             layer.msg("服务器异常，请联系管理员!");
@@ -178,4 +178,29 @@ $(document).ready(function () {
     });
 
 
+    gotoSearch();
+
 });
+
+function gotoSearch() {
+    $("#searchArticle").click(function () {
+        var keyword = $("#Search").val();
+        if (!keyword) {
+            $("#Search").css('borderColor', 'red');
+        } else {
+            $("#Search").css('borderColor', '');
+            $.ajax({
+                url: "/article/search",//请求地址
+                data: {"keyword": keyword},//搜索值
+                dataType: "json",//数据格式
+                type: "GET",//请求方式
+                async: true,//是否异步请求
+                success: function (data) {
+
+                }, error: function (data) {
+                    layer.msg("服务器异常，请联系管理员!");
+                }
+            })
+        }
+    });
+};

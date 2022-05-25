@@ -18,12 +18,12 @@
     <!-- 引入Layui.js -->
     <script th:src="@{/layui/layui.js}"></script>
 
+    <!--引入VueJs-->
     <script th:src="@{/js/vue.js}"></script>
     <!-- 引入样式 -->
     <link rel="stylesheet" href="https://unpkg.zhimg.com/element-ui/lib/theme-chalk/index.css">
     <!-- 引入组件库 -->
     <script src="https://unpkg.zhimg.com/element-ui/lib/index.js"></script>
-    </script>
     <script th:src="@{/js/commen.js}"></script>
     <!-- <script th:src="@{/js/index.js}"></script>-->
     <script th:src="@{/js/myarticle.js}"></script>
@@ -41,8 +41,8 @@
                     <ul>
                         <li><a th:href="@{/}" title="网站首页">首页</a></li>
                         <li><a th:href="@{/resources}" title="编程资源">资源</a></li>
-<!--                        <li><a th:href="index.html" title="世界">世界</a></li>-->
-                        <li><a th:href="@{ranking}" title="全站热门内容">排行</a></li>
+                        <!--                        <li><a th:href="index.html" title="世界">世界</a></li>-->
+                        <li><a th:href="@{/rank}" title="全站热门内容">排行</a></li>
                     </ul>
                 </div>
             </div>
@@ -55,19 +55,21 @@
             </div>
             <div class="toolbar-container-right layui-col-md4">
                 <ul class="layui-nav">
-                    <li class="layui-nav-item">
-                        <dl class="layui-nav-child">
-                            <dd><a th:href="@{/article/write}"><i class="layui-icon layui-icon-edit"></i>&nbsp;写文章</a></dd>
-                            <dd><a th:href="@{/resource/add}"><i class="el-icon-upload"></i>&nbsp;上传资源</a></dd>
-                        </dl>
-                    </li>
+                    <<li class="layui-nav-item">
+                    <a href=""><i class="el-icon-circle-plus"></i>&nbsp;创作</a>
+                    <dl class="layui-nav-child">
+                        <dd><a th:href="@{/article/write}"><i class="layui-icon layui-icon-edit"></i>&nbsp;写文章</a></dd>
+                        <dd><a th:href="@{/resource/add}"><i class="el-icon-upload"></i>&nbsp;上传资源</a></dd>
+                    </dl>
+                </li>
                     <li class="layui-nav-item">
                         <a href=""><i class="layui-icon layui-icon-notice"></i>消息<span class="layui-badge">9</span></a>
                     </li>
-                    <li class="layui-nav-item">
+                    <li class="layui-nav-item account">
                         <a href="">
-                            <img src="https://cdn.jsdelivr.net/gh/weiyuexin/weiyuexin.github.io@latest/images/avatar.jpg"
-                                class="layui-nav-img">我</a>
+                            <img src="" class="layui-nav-img">
+                            <span>我</span>
+                        </a>
                         <dl class="layui-nav-child">
                             <dd><a th:href="@{/user/account/account}" target="_blank"><i class="fa fa-universal-access"
                                                                                          aria-hidden="true"></i>&nbsp;账号管理</a></dd>
@@ -91,7 +93,7 @@
         </div>
         <ul>
             <li class="li1"><i class="fa fa-universal-access"></i>&nbsp;个人信息</li>
-            <li class="li2 active"><i class="fa fa-arrows-alt"></i>&nbsp;文章管理</li>
+            <li class="active li2"><i class="fa fa-arrows-alt"></i>&nbsp;文章管理</li>
             <li class="li3"><i class="fa fa-database"></i>&nbsp;我的资源</li>
             <li class="li4"><i class="fa fa-unlock-alt" aria-hidden="true"></i>&nbsp;修改密码
             </li>
@@ -106,35 +108,35 @@
             <ul>
                 <li>
                     <span class="account_name">昵&emsp;&emsp;称:</span>
-                    <ss>韦月鑫</ss>
+                    <ss></ss>
                 </li>
                 <li>
                     <span class="account_name">邮&emsp;&emsp;箱:</span>
-                    <ss>3022422894@qq.com</ss>
+                    <ss></ss>
                 </li>
                 <li>
                     <span class="account_name">性&emsp;&emsp;别:</span>
-                    <ss>男</ss>
+                    <ss></ss>
                 </li>
                 <li>
                     <span class="account_name">个人简介:</span>
-                    <ss>我亦无我，不负人民</ss>
+                    <ss></ss>
                 </li>
                 <li>
                     <span class="account_name">注册时间:</span>
-                    <ss>2000-07-29</ss>
+                    <ss></ss>
                 </li>
                 <li>
                     <span class="account_name">积&emsp;&emsp;分:</span>
-                    <ss>5</ss>
+                    <ss></ss>
                 </li>
                 <li>
                     <span class="account_name">电&emsp;&emsp;话:</span>
-                    <ss>18331361148</ss>
+                    <ss></ss>
                 </li>
                 <li>
                     <span class="account_name">现&nbsp;&nbsp;居&nbsp;&nbsp;地:</span>
-                    <ss>河南省开封市</ss>
+                    <ss></ss>
                 </li>
             </ul>
         </div>
@@ -143,7 +145,8 @@
                 <p class="title">我的文章</p>
             </div>
             <div class="articleRank">
-                <span id="RankByReadNum">按阅读量</span><span class="RankActive" id="RankByTime">按发布时间</span><span>排序:</span>
+                <span id="RankByReadNum">按阅读量</span>
+                <span class="RankActive" id="RankByTime">按发布时间</span><span>排序:</span>
             </div>
             <ul id="myArticles">
             </ul>
@@ -153,6 +156,26 @@
             <script type="text/javascript">
                 new Vue({
                     el: '#empty',
+                    data: function () {
+                        return {
+                            visible: false
+                        }
+                    }
+                })
+            </script>
+        </div>
+        <div class="resList">
+            <div class="content-title">
+                <p class="title">我的资源</p>
+            </div>
+            <ul id="myRes">
+            </ul>
+            <ul id="empty2">
+                <el-empty description="暂时还没有文章"></el-empty>
+            </ul>
+            <script type="text/javascript">
+                new Vue({
+                    el: '#empty2',
                     data: function () {
                         return {
                             visible: false
