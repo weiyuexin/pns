@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import top.weiyuexin.entity.Article;
 import top.weiyuexin.entity.Resource;
 import top.weiyuexin.mapper.ResourceMapper;
 import top.weiyuexin.service.ResourceServer;

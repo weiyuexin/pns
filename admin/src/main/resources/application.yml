@@ -1,0 +1,47 @@
+server:
+  port: 8081
+  servlet:
+    context-path: /
+spring:
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/pns?useUnicode=true&characterEncoding=UTF-8&useJDBC49CompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8
+    username: root
+    password: root
+    type: com.alibaba.druid.pool.DruidDataSource  #\u4FEE\u6539\u6570\u636E\u5E93\u8FDE\u63A5\u6C60\u4E3Adruid
+  tencent:
+    secretId: AKIDFJ6dtsb3GCrFMCl34oIWTAajcEZdRzHI
+    secretKey: lFTQ5TbSu50e17vTkjRu61e18yXprc6I
+    bucket: ap-beijing
+    bucketName: wyx-1303917755
+    path: https://wyx-1303917755.cos.ap-beijing.myqcloud.com
+    qianzui: img
+    qianzui-file: file
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 100MB
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+
+# mp\u914D\u7F6E
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: auto
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  #\u65E5\u5FD7\u6253\u5370\u5230\u63A7\u5236\u53F0
+
+
+
+
