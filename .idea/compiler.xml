@@ -9,15 +9,21 @@
         <outputRelativeToContentRoot value="true" />
         <module name="admin" />
         <module name="index" />
+        <module name="PNS-index" />
+        <module name="PNS-admin" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="admin" target="1.8" />
       <module name="index" target="1.8" />
+      <module name="PNS-admin" target="1.8" />
+      <module name="PNS-index" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="PNS-admin" options="-parameters" />
+      <module name="PNS-index" options="-parameters" />
       <module name="admin" options="-parameters" />
       <module name="index" options="-parameters" />
     </option>
