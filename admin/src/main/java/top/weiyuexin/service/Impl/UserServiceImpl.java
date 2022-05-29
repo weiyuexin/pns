@@ -33,5 +33,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return users;
     }
 
+    @Override
+    public User getByUserName(String username) {
+        LambdaQueryWrapper<User> lqw = new LambdaQueryWrapper<>();
+        lqw.like(User::getUsername,username);
+        User user = userMapper.selectOne(lqw);
+        return user;
+    }
+
 
 }

@@ -21,6 +21,9 @@ public class Article {
 
     private Date time;
 
+    @TableField(exist = false)
+    private String date;
+
     private Integer star;
 
     private Integer commentNum;

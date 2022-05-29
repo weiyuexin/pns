@@ -16,4 +16,6 @@ public interface UserService extends IService<User> {
      */
     List<User> getTopUser(Integer num);
 
+    User getByUserName(String username);
+
 }

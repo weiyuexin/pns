@@ -10,6 +10,7 @@ import top.weiyuexin.entity.Article;
 import top.weiyuexin.entity.ArticleComment;
 import top.weiyuexin.entity.User;
 import top.weiyuexin.entity.vo.R;
+import top.weiyuexin.entity.vo.W;
 import top.weiyuexin.service.ArticleCommentService;
 import top.weiyuexin.service.ArticleService;
 import top.weiyuexin.service.UserService;
@@ -121,54 +122,28 @@ public class ArticleController {
         return r;
     }
 
-    /**
-     * 根据id查询单篇文章
-     * @param id
-     * @return
-     */
-    @GetMapping("/article/{id}")
-    @ResponseBody
-    public ModelAndView getById(@PathVariable("id") Integer id){
-        ModelAndView modelAndView = new ModelAndView();
-        //根据id查询文章
-        Article article = articleService.getById(id);
-        //根据作者id查询作者信息
-        User user = userService.getById(article.getAuthorId());
-        //格式化时间
-        SimpleDateFormat time=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String date = time.format(article.getTime());
-
-        modelAndView.setViewName("article/article");
-        modelAndView.addObject("article",article);
-        modelAndView.addObject("author",user);
-        modelAndView.addObject("date",date);
-
-        //文章的阅读量加一
-        article.setReadNum(article.getReadNum()+1);
-        articleService.updateById(article);
-
-        return modelAndView;
-    }
 
     /**
      * 分页查询接口
-     * @param currentPage
-     * @param pageSize
+     * @param page
+     * @param limit
      * @param article
      * @return
      */
-    @GetMapping("/article/{currentPage}/{pageSize}")
+    @GetMapping("/article")
     @ResponseBody
-    public Object getPage(@PathVariable("currentPage") Integer currentPage,
-                          @PathVariable("pageSize") Integer pageSize,
-                          Article article){
-        IPage<Article> page = articleService.getPage(currentPage,pageSize,article);
+    public W getPage(@RequestParam("page") Integer page,
+                     @RequestParam("limit") Integer limit,
+                     Article article){
+
+        System.out.println(article.toString());
+        IPage<Article> Ipage = articleService.getPage(page,limit,article);
         //如果当前页码值大于当前页码值，那么重新执行查询操作，使用最大页码值作为当前页码值
-        if(currentPage>page.getPages()){
-            page = articleService.getPage(currentPage,pageSize,article);
+        if(page>Ipage.getPages()){
+            Ipage = articleService.getPage(page,limit,article);
         }
         //过滤html标签
-        List<Article> articles = page.getRecords();
+        List<Article> articles = Ipage.getRecords();
         for(int i=0;i<articles.size();i++){
             String content = articles.get(i).getContent();
             OutHtml outHtml = new OutHtml();
@@ -183,45 +158,14 @@ public class ArticleController {
                 System.out.println(user.getUsername());
                 articles.get(i).setAuthorName(user.getUsername());
             }
+            //修改时间格式
+            //格式化时间
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String date = sdf.format(articles.get(i).getTime());
+            articles.get(i).setDate(date);
         }
-        page.setRecords(articles);
-        return new R(true,page);
-    }
-    /**
-     * 查询热门文章
-     * @param num
-     * @return
-     */
-    @GetMapping("/article/topArticle/{num}")
-    @ResponseBody
-    public R getTopArticle(@PathVariable("num") Integer num){
-        R r = new R();
-        List<Article> articles = articleService.getTopArticle(num);
-        //过滤html标签
-        for(int i=0;i<articles.size();i++){
-            String content = articles.get(i).getContent();
-            OutHtml outHtml = new OutHtml();
-            content = outHtml.delHTMLTag(content);
-            if(content.length()>20){
-                content=content.substring(0,20);
-            }
-            articles.get(i).setContent(content);
-            //根据作者id查询作者
-            User user = userService.getById(articles.get(i).getAuthorId());
-            if(user!=null){
-                System.out.println(user.getUsername());
-                articles.get(i).setAuthorName(user.getUsername());
-            }
-        }
-        if(articles!=null){
-            r.setFlag(true);
-            r.setData(articles);
-            r.setMsg("查询成功");
-        }else {
-            r.setFlag(false);
-            r.setMsg("查询失败，请稍后重试!");
-        }
-        return r;
+        Ipage.setRecords(articles);
+        return new W(0,(int)Ipage.getTotal(),Ipage.getRecords());
     }
 
     /**
@@ -425,19 +369,5 @@ public class ArticleController {
         }
         return r;
     }
-
-    /**
-     * 搜索页面
-     * @param key
-     * @return
-     */
-    @RequestMapping("/search")
-    public ModelAndView searchPage(String key){
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("article/searchArticleResult");
-        modelAndView.addObject(key);
-        return modelAndView;
-    }
-
 
 }

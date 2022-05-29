@@ -33,13 +33,25 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public IPage<Article> getPage(Integer currentPage, Integer pageSize, Article article) {
         LambdaQueryWrapper<Article> lqw = new LambdaQueryWrapper<>();
-        //查询条件:文章显示标志为1
-        lqw.like(Article::getIsShow,1);
         lqw.orderByDesc(Article::getTime);
         IPage<Article> page = new Page<>(currentPage,pageSize);
         articleMapper.selectPage(page,lqw);
         return page;
     }
+
+    @Override
+    public IPage<Article> getPageSearch(Integer currentPage, Integer pageSize, Article article, Integer authorId, String type, String title) {
+        LambdaQueryWrapper<Article> lqw = new LambdaQueryWrapper<>();
+        //查询条件:文章显示标志为1
+        lqw.orderByDesc(Article::getTime);
+        lqw.like(Article::getAuthorId,authorId);
+        lqw.like(Article::getType,type);
+        lqw.like(Article::getTitle,title);
+        IPage<Article> page = new Page<>(currentPage,pageSize);
+        articleMapper.selectPage(page,lqw);
+        return page;
+    }
+
     /**
      * 查询热门文章实现
      * @param num

@@ -2,6 +2,7 @@ package top.weiyuexin.service;
 
 import org.springframework.web.multipart.MultipartFile;
 import top.weiyuexin.entity.vo.R;
+import top.weiyuexin.entity.vo.W;
 
 import javax.servlet.http.HttpSession;
 
@@ -12,7 +13,7 @@ public interface FileServer {
      * @param file
      * @return
      */
-    R upload(MultipartFile file, HttpSession session);
+    W upload(MultipartFile file, HttpSession session);
     /**
      * 文件上传接口
      * @param file

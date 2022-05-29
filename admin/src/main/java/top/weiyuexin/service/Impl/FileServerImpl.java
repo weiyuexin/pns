@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import top.weiyuexin.entity.Image;
 import top.weiyuexin.entity.User;
 import top.weiyuexin.entity.vo.R;
+import top.weiyuexin.entity.vo.W;
 import top.weiyuexin.service.FileServer;
 import top.weiyuexin.service.ImageService;
 
@@ -51,7 +52,7 @@ public class FileServerImpl implements FileServer {
      * @return
      */
     @Override
-    public R upload(MultipartFile file,HttpSession session) {
+    public W upload(MultipartFile file, HttpSession session) {
         String oldFileName = file.getOriginalFilename();
         String eName = oldFileName.substring(oldFileName.lastIndexOf("."));
         String newFileName = UUID.randomUUID()+eName;
@@ -90,9 +91,9 @@ public class FileServerImpl implements FileServer {
             }
             imageService.save(image);
 
-            return new R(true,this.path + putObjectRequest.getKey(),"图片上传成功！");
+            return new W(1,"图片上传成功！",this.path + putObjectRequest.getKey());
         } catch (IOException e) {
-            return new R(false,"图片上传失败!");
+            return new W(0,"图片上传失败!");
         }finally {
             // 关闭客户端(关闭后台线程)
             cosclient.shutdown();

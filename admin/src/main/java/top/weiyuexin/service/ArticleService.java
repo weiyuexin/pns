@@ -18,6 +18,18 @@ public interface ArticleService extends IService<Article> {
      * @return
      */
     IPage<Article> getPage(Integer currentPage,Integer pageSize,Article article);
+
+    /**
+     * 搜索
+     * @param currentPage
+     * @param pageSize
+     * @param article
+     * @param authorId
+     * @param type
+     * @param title
+     * @return
+     */
+    IPage<Article> getPageSearch(Integer currentPage,Integer pageSize,Article article,Integer authorId,String type,String title);
     /**
      * 查询热门文章
      * @param num

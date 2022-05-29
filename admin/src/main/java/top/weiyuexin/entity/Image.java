@@ -1,5 +1,6 @@
 package top.weiyuexin.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 /**
@@ -12,4 +13,6 @@ public class Image {
     private String url;
     private String time;
     private Integer authorId;
+    @TableField(exist = false)
+    private String authorName;
 }
