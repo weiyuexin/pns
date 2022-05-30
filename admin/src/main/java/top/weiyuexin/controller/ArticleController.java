@@ -229,57 +229,57 @@ public class ArticleController {
     }
 
     /**
-     * 点赞文章
-     * @param article
-     * @param session
+     * 分页查询文章评论
+     * @param page
+     * @param limit
      * @return
      */
-    @PostMapping("/article/star")
+    @GetMapping("/article/comments")
     @ResponseBody
-    public R starArticle(Article article,HttpSession session){
-        R r = new R();
-        User user=(User)session.getAttribute("user");
-        if(user!=null){
-            //点赞数加一
-            article=articleService.getById(article.getId());
-            article.setStar(article.getStar()+1);
-            //点赞成功，积分加1
-            user.setPoints(user.getPoints()+1);
-            userService.updateById(user);
-            //保存
-            r.setFlag(articleService.updateById(article));
-            r.setMsg("点赞成功!");
-        }else {
-            r.setFlag(false);
-            r.setMsg("请登录后再来点赞!");
+    public W getPageComment(@RequestParam("page") Integer page,
+                     @RequestParam("limit") Integer limit){
+
+        IPage<ArticleComment> Ipage = articleCommentService.getPage(page,limit);
+        //如果当前页码值大于当前页码值，那么重新执行查询操作，使用最大页码值作为当前页码值
+        if(page>Ipage.getPages()){
+            Ipage = articleCommentService.getPage(page,limit);
         }
-        return r;
+        //过滤html标签
+        List<ArticleComment> articleComments = Ipage.getRecords();
+        for(int i=0;i<articleComments.size();i++){
+
+            //根据作者id查询作者
+            User user = userService.getById(articleComments.get(i).getAuthorId());
+            if(user!=null){
+                System.out.println(user.getUsername());
+                articleComments.get(i).setAuthorName(user.getUsername());
+            }
+            //修改时间格式
+            //格式化时间
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String date = sdf.format(articleComments.get(i).getTime());
+            articleComments.get(i).setDate(date);
+        }
+        Ipage.setRecords(articleComments);
+        return new W(0,(int)Ipage.getTotal(),Ipage.getRecords());
     }
 
     /**
-     * 点赞文章评论
-     * @param articleComment
+     * 删除评论
+     * @param id
      * @param session
      * @return
      */
-    @PostMapping("/article/comment/star")
+    @DeleteMapping("/article/comment/del/{id}")
     @ResponseBody
-    public R starComment(ArticleComment articleComment,HttpSession session){
+    public Object deleteComment(@PathVariable("id") Integer id, HttpSession session){
         R r = new R();
-        User user = (User)session.getAttribute("user");
-        if(user!=null){
-            //点赞数加一
-            articleComment=articleCommentService.getById(articleComment.getId());
-            articleComment.setStar(articleComment.getStar()+1);
-            //点赞成功，积分加1
-            user.setPoints(user.getPoints()+1);
-            userService.updateById(user);
-            //保存
-            r.setFlag(articleCommentService.updateById(articleComment));
-            r.setMsg("点赞成功!");
+        //判断用户是否登录
+        if(session.getAttribute("user")!=null){
+            r.setFlag(articleCommentService.removeById(id));
+            r.setMsg("评论删除成功");
         }else {
-            r.setFlag(false);
-            r.setMsg("请登录后再来点赞!");
+            r.setData("当前登录状态丢失，请重新登录后再试!");
         }
         return r;
     }
