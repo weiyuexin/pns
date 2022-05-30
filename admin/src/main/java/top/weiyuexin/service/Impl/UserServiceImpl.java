@@ -1,6 +1,8 @@
 package top.weiyuexin.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,4 +44,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
 
+    /**
+     * 分页查询实现
+     * @param currentPage
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public IPage<User> getPage(Integer currentPage, Integer pageSize) {
+        LambdaQueryWrapper<User> lqw = new LambdaQueryWrapper<>();
+        lqw.orderByDesc(User::getId);
+        IPage<User> page = new Page<>(currentPage,pageSize);
+        userMapper.selectPage(page,lqw);
+        return page;
+    }
 }

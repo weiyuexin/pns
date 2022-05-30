@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>layui</title>
+    <title>图片管理</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -46,18 +46,18 @@
 
         <script type="text/html" id="toolbarDemo">
             <div class="layui-btn-container">
-<!--
                 <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
--->
                 <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 批量删除 </button>
             </div>
         </script>
 
         <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
-
+        <script type="text/html" id="viewImage">
+            <img src="{{d.photo}}" lay-event="viewImg" onclick="previewImg(this)">
+        </script>
         <script type="text/html" id="currentTableBar">
-            <a class="layui-btn layui-btn-warm layui-btn-xs data-count-view" lay-event="view">预览</a>
-<!--            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>-->
+            <!--            <a class="layui-btn layui-btn-warm layui-btn-xs data-count-view" lay-event="view">预览</a>-->
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
             <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
         </script>
 
@@ -72,24 +72,26 @@
 
         table.render({
             elem: '#currentTableId',
-            url: '/article',
+            url: '/user/users',
             toolbar: '#toolbarDemo',
             defaultToolbar: ['filter', 'exports', 'print', {
                 title: '提示',
                 layEvent: 'LAYTABLE_TIPS',
                 icon: 'layui-icon-tips'
             }],
-            title:'文章列表',
+            title:'用户列表',
             cols: [[
                 {type: "checkbox", width: 50},
                 {field: 'id', width: 80, title: 'ID', sort: true},
-                {field: 'authorName', width: 120, title: '作者'},
-                {field: 'type', width: 120, title: '标签', sort: true},
-                {field: 'title', width: 200, title: '标题'},
-                {field: 'date', title: '发布时间', minWidth: 120},
-                {field: 'star', width: 100, title: '点赞数', sort: true},
-                {field: 'commentNum', width: 100, title: '评论数', sort: true},
-                {field: 'readNum', width: 100, title: '访问量',sort: true},
+                {field: 'username', width: 130, title: '昵称'},
+                {field: 'email', minWidth: 130, title: '邮箱', sort: true},
+                {field: 'photo', minWidth: 130,templet: '#viewImage', title:'头像',align: "center"},
+                {field: 'sex', minWidth: 50, title: '性别'},
+                {field: 'phone', width: 130, title: '电话'},
+                {field: 'signature', width: 130, title: '个性签名'},
+                {field: 'points', width: 50, title: '积分',sort: true},
+                {field: 'address', width: 100, title: '地址'},
+                {field: 'time', minWidth: 100, title: '注册时间',sort: true},
                 {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
             ]],
             limit: 10,
@@ -125,13 +127,13 @@
         table.on('toolbar(currentTableFilter)', function (obj) {
             if (obj.event === 'add') {  // 监听添加操作
                 var index = layer.open({
-                    title: '添加用户',
+                    title: '上传图片',
                     type: 2,
                     shade: 0.2,
                     maxmin:true,
                     shadeClose: true,
                     area: ['100%', '100%'],
-                    content: '../page/table/add.html',
+                    content: '../page/table/add_user.html',
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
@@ -143,7 +145,7 @@
                     data.forEach(function (item){
                         //向服务器发送删除指令
                         $.ajax({
-                            url: "/article/del/" + item.id,//请求地址
+                            url: "/user/del/" + item.id,//请求地址
                             dataType: "json",//数据格式
                             type: "DELETE",//请求方式
                             async: false,//是否异步请求
@@ -181,7 +183,7 @@
                     maxmin:true,
                     shadeClose: true,
                     area: ['100%', '100%'],
-                    content: '../page/table/edit.html',
+                    content: '../page/table/edit_user.html',
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
@@ -194,7 +196,7 @@
                     layer.close(index);
                     //向服务器发送删除指令
                     $.ajax({
-                        url: "/article/del/" + obj.data.id,//请求地址
+                        url: "/user/del/" + obj.data.id,//请求地址
                         dataType: "json",//数据格式
                         type: "DELETE",//请求方式
                         async: false,//是否异步请求
@@ -212,11 +214,37 @@
 
                 });
             }else if(obj.event === 'view'){
-                window.open("http://pns.weiyuexin.top/article/"+obj.data.id);
+
             }
         });
 
     });
+    /*点击图片预览函数*/
+    function previewImg(obj) {
+        var img = new Image();
+        img.src = obj.src;
+        var height=img.height,width=img.width;
+        if(img.height > 500) {
+            height = '500px';
+            width=(500/(img.height))*(img.width);
+        }
+
+        var imgHtml = "<img src='" + obj.src + "' height='"+height+"' width='"+width+"' />";
+        //弹出层
+        layer.open({
+            type: 1,
+            offset: 'auto',
+            area: [width,'auto'],
+            shadeClose:true,//点击外围关闭弹窗
+            scrollbar: false,//不现实滚动条
+            title: "图片预览", //不显示标题
+            content: imgHtml, //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+            cancel: function () {
+
+            }
+        });
+    }
+
 </script>
 
 </body>

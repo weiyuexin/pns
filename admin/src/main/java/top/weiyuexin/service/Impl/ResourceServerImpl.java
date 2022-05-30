@@ -49,4 +49,19 @@ public class ResourceServerImpl extends ServiceImpl<ResourceMapper, Resource> im
         resourceMapper.selectPage(page,lqw);
         return page;
     }
+
+    /**
+     * 分页查询实现
+     * @param currentPage
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public IPage<Resource> getPage(Integer currentPage, Integer pageSize) {
+        LambdaQueryWrapper<Resource> lqw = new LambdaQueryWrapper<>();
+        lqw.orderByDesc(Resource::getId);
+        IPage<Resource> page = new Page<>(currentPage,pageSize);
+        resourceMapper.selectPage(page,lqw);
+        return page;
+    }
 }

@@ -1,5 +1,6 @@
 package top.weiyuexin.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import top.weiyuexin.entity.User;
 
@@ -18,4 +19,11 @@ public interface UserService extends IService<User> {
 
     User getByUserName(String username);
 
+    /**
+     * 分页查询
+     * @param currentPage
+     * @param pageSize
+     * @return
+     */
+    IPage<User> getPage(Integer currentPage, Integer pageSize);
 }

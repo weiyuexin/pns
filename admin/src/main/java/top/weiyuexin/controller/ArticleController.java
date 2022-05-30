@@ -31,12 +31,6 @@ public class ArticleController {
     @Autowired
     private ArticleCommentService articleCommentService;
 
-    //写文章页面
-    @GetMapping("/article/write")
-    public String writePage(){
-        return "article/write";
-    }
-
     /**
      * 保存文章接口
      * @param article
@@ -168,86 +162,6 @@ public class ArticleController {
         return new W(0,(int)Ipage.getTotal(),Ipage.getRecords());
     }
 
-    /**
-     * 根据类型查询文章
-     * @param currentPage
-     * @param pageSize
-     * @param type
-     * @param article
-     * @return
-     */
-    @GetMapping("/article/{type}/{currentPage}/{pageSize}")
-    @ResponseBody
-    public Object getPageByType(@PathVariable("currentPage") Integer currentPage,
-                          @PathVariable("pageSize") Integer pageSize,
-                          @PathVariable("type") String type,
-                          Article article){
-        IPage<Article> page = articleService.getPageByType(currentPage,pageSize,type,article);
-        //如果当前页码值大于当前页码值，那么重新执行查询操作，使用最大页码值作为当前页码值
-        if(currentPage>page.getPages()){
-            page = articleService.getPageByType(currentPage,pageSize,type,article);
-        }
-        //过滤html标签
-        List<Article> articles = page.getRecords();
-        for(int i=0;i<articles.size();i++){
-            String content = articles.get(i).getContent();
-            OutHtml outHtml = new OutHtml();
-            content = outHtml.delHTMLTag(content);
-            if(content.length()>160){
-                content=content.substring(0,160);
-            }
-            articles.get(i).setContent(content);
-            //根据作者id查询作者
-            User user = userService.getById(articles.get(i).getAuthorId());
-            if(user!=null){
-                System.out.println(user.getUsername());
-                articles.get(i).setAuthorName(user.getUsername());
-            }
-        }
-        page.setRecords(articles);
-        return new R(true,page);
-    }
-
-    /**
-     * 分页查询某一作者所有文章
-     * @param currentPage
-     * @param pageSize
-     * @param authorId
-     * @param article
-     * @return
-     */
-    @GetMapping("/article/user/{authorId}/{currentPage}/{pageSize}/{order}")
-    @ResponseBody
-    public R getArticlesByAuthorId(@PathVariable("currentPage") Integer currentPage,
-                                   @PathVariable("pageSize") Integer pageSize,
-                                   @PathVariable("authorId") Integer authorId,
-                                   @PathVariable("order") String order,
-                                   Article article){
-        IPage<Article> page = articleService.getPageByUserId(currentPage,pageSize,authorId,article,order);
-        //如果当前页码值大于当前页码值，那么重新执行查询操作，使用最大页码值作为当前页码值
-        if(currentPage>page.getPages()){
-            page = articleService.getPageByUserId(currentPage,pageSize,authorId,article,order);
-        }
-        //过滤html标签
-        List<Article> articles = page.getRecords();
-        for(int i=0;i<articles.size();i++){
-            String content = articles.get(i).getContent();
-            OutHtml outHtml = new OutHtml();
-            content = outHtml.delHTMLTag(content);
-            if(content.length()>160){
-                content=content.substring(0,160);
-            }
-            articles.get(i).setContent(content);
-            //根据作者id查询作者
-            User user = userService.getById(articles.get(i).getAuthorId());
-            if(user!=null){
-                System.out.println(user.getUsername());
-                articles.get(i).setAuthorName(user.getUsername());
-            }
-        }
-        page.setRecords(articles);
-        return new R(true,page);
-    }
 
     /**
      * 评论文章

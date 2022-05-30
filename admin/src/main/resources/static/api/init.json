@@ -35,7 +35,7 @@
         },
         {
           "title": "资源管理",
-          "href": "page/table.html",
+          "href": "page/resource_manage.html",
           "icon": "fa fa-file-text",
           "target": "_self"
         },

@@ -87,6 +87,10 @@ public class UserController {
         R r = new R();
         //对密码进行md5加密处理
         user.setPassword(DigestUtil.md5Hex(user.getPassword()));
+        user.setAddress("暂无");
+        user.setSignature("暂无");
+        user.setSex("暂无");
+        user.setPhoto("https://wyx-1303917755.cos.ap-beijing.myqcloud.com/img/2022/5/18/2022518f0f23093-5b30-4c45-8e54-cdd71683020a.png");
         //验证验证码是否输入正确
         System.out.println(code+" " +session.getAttribute("code"));
         if(!code.equals(session.getAttribute("code"))){

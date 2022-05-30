@@ -10,9 +10,11 @@ import top.weiyuexin.entity.Resource;
 import top.weiyuexin.entity.ResourceComment;
 import top.weiyuexin.entity.User;
 import top.weiyuexin.entity.vo.R;
+import top.weiyuexin.entity.vo.W;
 import top.weiyuexin.service.ResourceCommentService;
 import top.weiyuexin.service.ResourceServer;
 import top.weiyuexin.service.UserService;
+import top.weiyuexin.utils.OutHtml;
 
 import javax.servlet.http.HttpSession;
 import java.text.ParseException;
@@ -23,21 +25,15 @@ import java.util.*;
 @RequestMapping("/resource")
 public class ResourceController {
 
+    /**
+     * 注入服务
+     */
     @Autowired
     private ResourceServer resourceServer;
     @Autowired
     private UserService userService;
     @Autowired
     private ResourceCommentService resourceCommentService;
-
-    /**
-     * 发布资源页面
-     * @return
-     */
-    @GetMapping("/add")
-    public String addResourcePage(){
-        return "resource/addres";
-    }
 
     /**
      * 保存资源接口
@@ -73,51 +69,57 @@ public class ResourceController {
 
         return r;
     }
-
     /**
-     * 根据id查询显示资源
-     * @param id
+     * 分页查询
+     * @param page
+     * @param limit
      * @return
      */
-    @GetMapping("/{id}")
-    public ModelAndView getResById(@PathVariable("id") Integer id){
-        ModelAndView modelAndView = new ModelAndView();
-        Resource resource = resourceServer.getById(id);
-        //根据作者id查询作者信息
-        User user = userService.getById(resource.getAuthorId());
-        //格式化时间
-        SimpleDateFormat time=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String date = time.format(resource.getTime());
+    @GetMapping("/resources")
+    @ResponseBody
+    public W getPage(@RequestParam("page") Integer page,
+                     @RequestParam("limit") Integer limit){
 
-        modelAndView.addObject("res",resource);
-        modelAndView.addObject("author",user);
-        modelAndView.addObject("date",date);
-        modelAndView.setViewName("resource/resource");
+        IPage<Resource> Ipage = resourceServer.getPage(page,limit);
+        //如果当前页码值大于当前页码值，那么重新执行查询操作，使用最大页码值作为当前页码值
+        if(page>Ipage.getPages()){
+            Ipage = resourceServer.getPage(page,limit);
+        }
+        List<Resource> resources = Ipage.getRecords();
+        for(int i=0;i<resources.size();i++){
+            //根据作者id查询作者
+            User user = userService.getById(resources.get(i).getAuthorId());
+            if(user!=null){
+                System.out.println(user.getUsername());
+                resources.get(i).setAuthorName(user.getUsername());
+            }
+            //修改时间格式
+            //格式化时间
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String date = sdf.format(resources.get(i).getTime());
+            resources.get(i).setDate(date);
+        }
 
-        //资源浏览量加一
-        resource.setReadNum(resource.getReadNum()+1);
-        resourceServer.updateById(resource);
-
-        return modelAndView;
+        Ipage.setRecords(resources);
+        return new W(0,(int)Ipage.getTotal(),Ipage.getRecords());
     }
 
     /**
-     * 热门资源
-     * @param num
+     * 删除资源接口
+     * @param id
+     * @param session
      * @return
      */
-    @GetMapping("/topResource/{num}")
+    @DeleteMapping("/del/{id}")
     @ResponseBody
-    public R getTopResource(@PathVariable("num") Integer num){
+    public Object delete(@PathVariable("id") Integer id, HttpSession session){
         R r = new R();
-        List<Resource> resources = resourceServer.getTopResource(num);
-        if(resources!=null){
-            r.setFlag(true);
-            r.setData(resources);
-            r.setMsg("资源查询成功!");
+        //判断用户是否登录
+        if(session.getAttribute("user")!=null){
+            r.setFlag(resourceServer.removeById(id));
+            r.setMsg("文章删除成功");
         }else {
-            r.setFlag(false);
-            r.setMsg("资源查询失败，请稍后再试!");
+            r.setData("当前登录状态丢失，请重新登录后再试!");
         }
         return r;
     }
