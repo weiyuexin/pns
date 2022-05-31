@@ -86,7 +86,7 @@
                 {type: "checkbox", width: 50},
                 {field: 'id', width: 80, title: 'ID', sort: true},
                 {field: 'authorName', width: 120, title: '作者'},
-                {field: 'icon', minWidth: 130,templet: '#viewImage', title:'图标',align: "center"},
+                {field: 'icon', minWidth: 130,templet: '#viewImage', title:'LOGO',align: "center"},
                 {field: 'type', width: 100, title: '标签', sort: true},
                 {field: 'title', width: 200, title: '标题'},
                 {field: 'content', width: 200, title: '简介'},
@@ -195,7 +195,7 @@
             } else if (obj.event === 'delete') {
                 layer.confirm('确认删除行吗？', function (index) {
                     //删除对应行（tr）的DOM结构，并更新缓存
-                    obj.del();
+                    table.reload('currentTableId');
                     layer.close(index);
                     //向服务器发送删除指令
                     $.ajax({

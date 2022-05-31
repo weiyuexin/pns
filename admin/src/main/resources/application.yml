@@ -1,5 +1,5 @@
 server:
-  port: 8083
+  port: 8082
   servlet:
     context-path: /
 spring:
@@ -12,7 +12,7 @@ spring:
     url: jdbc:mysql://localhost:3306/pns?useUnicode=true&characterEncoding=UTF-8&useJDBC49CompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8
     username: root
     password: root
-    type: com.alibaba.druid.pool.DruidDataSource  #\u4FEE\u6539\u6570\u636E\u5E93\u8FDE\u63A5\u6C60\u4E3Adruid
+    type: com.alibaba.druid.pool.DruidDataSource
   tencent:
     secretId: AKIDFJ6dtsb3GCrFMCl34oIWTAajcEZdRzHI
     secretKey: lFTQ5TbSu50e17vTkjRu61e18yXprc6I
@@ -40,7 +40,7 @@ mybatis-plus:
     db-config:
       id-type: auto
   configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  #\u65E5\u5FD7\u6253\u5370\u5230\u63A7\u5236\u53F0
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 
 

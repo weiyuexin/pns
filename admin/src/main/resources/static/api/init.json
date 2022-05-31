@@ -30,13 +30,13 @@
         {
           "title": "文章管理",
           "href": "page/article_manage.html",
-          "icon": "fa fa-server",
+          "icon": "fa fa-file-text",
           "target": "_self"
         },
         {
           "title": "资源管理",
           "href": "page/resource_manage.html",
-          "icon": "fa fa-file-text",
+          "icon": "fa fa-server",
           "target": "_self"
         },
         {

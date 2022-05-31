@@ -138,6 +138,12 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
+        <!-- ip地址库查询 -->
+        <dependency>
+            <groupId>net.ipip</groupId>
+            <artifactId>ipdb</artifactId>
+            <version>1.1.3</version>
+        </dependency>
     </dependencies>
 
     <build>
