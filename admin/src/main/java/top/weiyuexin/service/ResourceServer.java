@@ -3,7 +3,6 @@ package top.weiyuexin.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import top.weiyuexin.entity.Article;
 import top.weiyuexin.entity.Resource;
 
 import java.util.List;

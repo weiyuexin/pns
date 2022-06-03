@@ -1,5 +1,9 @@
 
+<<<<<<< HEAD
 package top.weiyuexin.service.impl;
+=======
+package top.weiyuexin.service.Impl;
+>>>>>>> 57b3c4dfe01c7da45003400b0ff8f302b59e465a
 
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.extra.mail.MailUtil;
