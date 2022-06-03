@@ -83,7 +83,7 @@
             cols: [[
                 {type: "checkbox", width: 50},
                 {field: 'id', width: 80, title: 'ID', sort: true},
-                {field: 'articleId', width: 100, title: '文章ID', sort: true},
+                {field: 'resourceId', width: 100, title: '资源ID', sort: true},
                 {field: 'authorName', width: 120, title: '作者'},
                 {field: 'content', width: 300, title: '内容'},
                 {field: 'date', title: '发布时间', minWidth: 120},
@@ -210,7 +210,7 @@
 
                 });
             }else if(obj.event === 'view'){
-                window.open("http://pns.weiyuexin.top/resource/"+obj.data.articleId);
+                window.open("http://pns.weiyuexin.top/resource/"+obj.data.resourceId);
             }
         });
 
