@@ -19,27 +19,21 @@
                 <form class="layui-form layui-form-pane" action="">
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">用户姓名</label>
+                            <label class="layui-form-label">作者</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="username" autocomplete="off" class="layui-input">
+                                <input type="text" name="authorName" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label">用户性别</label>
+                            <label class="layui-form-label">标签</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="sex" autocomplete="off" class="layui-input">
+                                <input type="text" name="type" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label">用户城市</label>
+                            <label class="layui-form-label">标题</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="city" autocomplete="off" class="layui-input">
-                            </div>
-                        </div>
-                        <div class="layui-inline">
-                            <label class="layui-form-label">用户职业</label>
-                            <div class="layui-input-inline">
-                                <input type="text" name="classify" autocomplete="off" class="layui-input">
+                                <input type="text" name="title" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
@@ -52,15 +46,18 @@
 
         <script type="text/html" id="toolbarDemo">
             <div class="layui-btn-container">
-                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
-                <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除 </button>
+                <!--
+                                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
+                -->
+                <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 批量删除 </button>
             </div>
         </script>
 
         <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
 
         <script type="text/html" id="currentTableBar">
-            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-warm layui-btn-xs data-count-view" lay-event="view">预览</a>
+            <!--            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>-->
             <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
         </script>
 
@@ -75,29 +72,28 @@
 
         table.render({
             elem: '#currentTableId',
-            url: '../api/table.json',
+            url: '/resource/comments',
             toolbar: '#toolbarDemo',
             defaultToolbar: ['filter', 'exports', 'print', {
                 title: '提示',
                 layEvent: 'LAYTABLE_TIPS',
                 icon: 'layui-icon-tips'
             }],
+            title:'文章评论列表',
             cols: [[
                 {type: "checkbox", width: 50},
                 {field: 'id', width: 80, title: 'ID', sort: true},
-                {field: 'username', width: 80, title: '用户名'},
-                {field: 'sex', width: 80, title: '性别', sort: true},
-                {field: 'city', width: 80, title: '城市'},
-                {field: 'sign', title: '签名', minWidth: 150},
-                {field: 'experience', width: 80, title: '积分', sort: true},
-                {field: 'score', width: 80, title: '评分', sort: true},
-                {field: 'classify', width: 80, title: '职业'},
-                {field: 'wealth', width: 135, title: '财富', sort: true},
+                {field: 'articleId', width: 100, title: '文章ID', sort: true},
+                {field: 'authorName', width: 120, title: '作者'},
+                {field: 'content', width: 300, title: '内容'},
+                {field: 'date', title: '发布时间', minWidth: 120},
+                {field: 'star', width: 100, title: '点赞数', sort: true},
                 {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
             ]],
-            limits: [10, 15, 20, 25, 50, 100],
-            limit: 15,
-            page: true,
+            limit: 10,
+            page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                layout: ['prev', 'page', 'next', 'skip', 'count']
+            },
             skin: 'line'
         });
 
@@ -141,7 +137,29 @@
             } else if (obj.event === 'delete') {  // 监听删除操作
                 var checkStatus = table.checkStatus('currentTableId')
                     , data = checkStatus.data;
-                layer.alert(JSON.stringify(data));
+                layer.confirm("确认删除所选内容吗?",function (index){
+                    data.forEach(function (item){
+                        //向服务器发送删除指令
+                        $.ajax({
+                            url: "/resource/comment/del/" + item.id,//请求地址
+                            dataType: "json",//数据格式
+                            type: "DELETE",//请求方式
+                            async: false,//是否异步请求
+                            success: function (data) {   //如何删除成功
+                                if (data.flag) {//删除成功
+                                    layer.msg(data.msg);
+                                } else {
+                                    layer.msg(data.msg);
+                                }
+                            },
+                            error: function (data) {
+                                layer.msg("服务器异常，请联系管理员!");
+                            }
+                        });
+                    });
+                    table.reload('currentTableId');
+                    layer.close(index);
+                });
             }
         });
 
@@ -168,10 +186,31 @@
                 });
                 return false;
             } else if (obj.event === 'delete') {
-                layer.confirm('真的删除行么', function (index) {
+                layer.confirm('确认删除行吗？', function (index) {
+                    //删除对应行（tr）的DOM结构，并更新缓存
                     obj.del();
                     layer.close(index);
+                    //向服务器发送删除指令
+                    $.ajax({
+                        url: "/resource/comment/del/" + obj.data.id,//请求地址
+                        dataType: "json",//数据格式
+                        type: "DELETE",//请求方式
+                        async: false,//是否异步请求
+                        success: function (data) {   //如何删除成功
+                            if (data.flag) {//删除成功
+                                layer.msg(data.msg);
+                            } else {
+                                layer.msg(data.msg);
+                            }
+                        },
+                        error: function (data) {
+                            layer.msg("服务器异常，请联系管理员!");
+                        }
+                    });
+
                 });
+            }else if(obj.event === 'view'){
+                window.open("http://pns.weiyuexin.top/resource/"+obj.data.articleId);
             }
         });
 

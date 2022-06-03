@@ -1,5 +1,6 @@
 package top.weiyuexin.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 import java.util.Date;
@@ -13,7 +14,13 @@ public class ResourceComment {
 
     private Integer authorId;
 
+    @TableField(exist = false)
+    private String authorName;
+
     private Date time;
+
+    @TableField(exist = false)
+    private String date;
 
     private Integer star;
 
