@@ -21,6 +21,7 @@ public class ArticleCommentServiceImpl extends ServiceImpl<ArticleCommentMapper,
         List<ArticleComment> articleComments = new ArrayList<>();
         LambdaQueryWrapper<ArticleComment> lqw = new LambdaQueryWrapper<>();
         lqw.eq(ArticleComment::getArticleId,articleId);
+        lqw.orderByDesc(ArticleComment::getId);
         articleComments=articleCommentMapper.selectList(lqw);
         return articleComments;
     }

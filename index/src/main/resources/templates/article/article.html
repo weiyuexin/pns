@@ -89,7 +89,9 @@
                 <h1 th:text="${article.title}"></h1><br>
                 <a class="articleAuthorLink" target="_blank">
                     <span class="article-author" th:text="${author.username}"></span>
-                </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>发布时间:</span>
+                </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>发表于 :</span>
+                <span th:text="${article.ipAddr}"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span>发布时间:</span>
                 <span th:text="${date}"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span>文章标签：</span>
                 <span th:text="${article.type}"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>阅读量:</span>
                 <span th:text="${article.readNum}"></span>

@@ -64,6 +64,11 @@
           "href": "page/image_manage.html",
           "icon": "fa fa-picture-o",
           "target": "_self"
+        },{
+          "title": "登录日志",
+          "href": "page/login_log.html",
+          "icon": "fa fa-list-ul",
+          "target": "_self"
         }
       ]
     }

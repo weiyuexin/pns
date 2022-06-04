@@ -162,7 +162,9 @@
     font-weight: bold;
     font-size: 18px;
 }
-
+.home .article-content .comment .comment_list ul li .author_message .author_mess .ipaddr {
+    font-size: 13px;
+}
 .home .article-content .comment .comment_list ul li .author_message .author_mess .comment_time {
     font-size: 12px;
     color: #9399a6;

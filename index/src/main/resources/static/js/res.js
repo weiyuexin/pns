@@ -207,6 +207,7 @@ function getComment() {
                         "                                </div>\n" +
                         "                                <div class=\"author_mess layui-col-md10\">\n" +
                         "                                    <div class=\"author_name\"> <a href=\"" +"/user/" + data.data.authors[i].id + "\" target='_blank'>" + data.data.authors[i].username + "</a></div>\n" +
+                        "                                     <div class=\"ipaddr\">IP属地：" + data.data.comments[i].ipAddr + "</div>\n" +
                         "                                    <div class=\"comment_time\">" + data.data.comments[i].time + "</div>\n" +
                         "                                </div>\n" +
                         "                                <div class=\"comment_star\" onclick=\"starComment(" + data.data.comments[i].id + ")\">\n" +

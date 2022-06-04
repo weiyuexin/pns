@@ -13,6 +13,8 @@ import top.weiyuexin.entity.vo.R;
 import top.weiyuexin.service.ArticleCommentService;
 import top.weiyuexin.service.ArticleService;
 import top.weiyuexin.service.UserService;
+import top.weiyuexin.utils.IpUtil;
+import top.weiyuexin.utils.IpdbUtil;
 import top.weiyuexin.utils.OutHtml;
 
 import javax.servlet.http.HttpSession;
@@ -56,6 +58,10 @@ public class ArticleController {
             String s= DateUtil.now();
             Date date =  formatter.parse(s);
             article.setTime(date);
+            //设置IP属地
+            String province = Arrays.toString(new String[]{IpdbUtil.find(IpUtil.getOutIPV4(), "CN")[1]});
+            province = province.substring(1,province.length()-1);
+            article.setIpAddr(province);
             r.setFlag(articleService.save(article));
             r.setMsg("文章发表成功!");
             //发表成功，积分加5
@@ -323,6 +329,9 @@ public class ArticleController {
             String s= DateUtil.now();
             Date date =  formatter.parse(s);
             articleComment.setTime(date);
+            String province = Arrays.toString(new String[]{IpdbUtil.find(IpUtil.getOutIPV4(), "CN")[1]});
+            province = province.substring(1,province.length()-1);
+            articleComment.setIpAddr(province);
             r.setFlag(articleCommentService.save(articleComment));
             //设置评论数加一
             Article article = articleService.getById(articleComment.getArticleId());

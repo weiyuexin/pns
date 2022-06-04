@@ -6,13 +6,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import top.weiyuexin.entity.LoginLog;
 import top.weiyuexin.entity.User;
 import top.weiyuexin.entity.vo.R;
 import top.weiyuexin.mapper.UserMapper;
+import top.weiyuexin.service.LoginLogService;
 import top.weiyuexin.service.UserService;
+import top.weiyuexin.utils.IpUtil;
+import top.weiyuexin.utils.IpdbUtil;
 
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -23,6 +29,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private LoginLogService loginLogService;
 
     //登录页面
     @GetMapping("/login")
@@ -55,6 +63,31 @@ public class UserController {
             r.setMsg("登录成功");
             //登录成功，讲用户信息保存到session
             session.setAttribute("user",user);
+            //登录日志
+            LoginLog loginLog = new LoginLog();
+            loginLog.setUserId(user.getId());
+            loginLog.setIp(IpUtil.getOutIPV4());
+            String addr =  Arrays.toString(IpdbUtil.find(IpUtil.getOutIPV4(), "CN"));
+            addr = addr.substring(1,addr.length()-1);
+            loginLog.setAddress(addr);
+
+            String country = Arrays.toString(new String[]{IpdbUtil.find(IpUtil.getOutIPV4(), "CN")[0]});
+            country = country.substring(1,country.length()-1);
+            loginLog.setCountry(country);
+
+            String province = Arrays.toString(new String[]{IpdbUtil.find(IpUtil.getOutIPV4(), "CN")[1]});
+            province = province.substring(1,province.length()-1);
+            loginLog.setProvince(province);
+            String city = Arrays.toString(new String[]{IpdbUtil.find(IpUtil.getOutIPV4(), "CN")[2]});
+            city = city.substring(1,city.length()-1);
+            loginLog.setCity(city);
+            //获取时间
+            java.util.Date time=new Date();
+            SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            System.out.println(sdf.format(time));
+            loginLog.setTime(time);
+            loginLogService.save(loginLog);
+
         }else {  //没有查询到用户
             r.setFlag(false);
             r.setMsg("账号或密码错误，请重试!");

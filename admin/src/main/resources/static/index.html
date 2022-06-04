@@ -23,6 +23,7 @@
     <![endif]-->
     <style id="layuimini-bg-color">
     </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 </head>
 <body class="layui-layout-body layuimini-all">
 <div class="layui-layout layui-layout-admin">
@@ -60,7 +61,7 @@
                     <a href="javascript:;" data-check-screen="full"><i class="fa fa-arrows-alt"></i></a>
                 </li>
                 <li class="layui-nav-item layuimini-setting">
-                    <a href="javascript:;">admin</a>
+                    <a href="javascript:;" id="username"></a>
                     <dl class="layui-nav-child">
                         <dd>
                             <a href="javascript:;" layuimini-content-href="page/user-setting.html" data-title="基本资料"
@@ -74,7 +75,7 @@
                             <hr>
                         </dd>
                         <dd>
-                            <a href="javascript:;" class="login-out">退出登录</a>
+                            <a href="/user/logout" class="login-out">退出登录</a>
                         </dd>
                     </dl>
                 </li>
@@ -131,6 +132,7 @@
 </div>
 <script src="lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
 <script src="js/lay-config.js?v=2.0.0" charset="utf-8"></script>
+<script src="js/admin.js"></script>
 <script>
     layui.use(['jquery', 'layer', 'miniAdmin', 'miniTongji'], function () {
         var $ = layui.jquery,
@@ -160,12 +162,13 @@
                 'layuimini-onepage.99php.cn',
             ],
         });
+        //
+        // $('.login-out').on("click", function () {
+        //     layer.msg('退出登录成功', function () {
+        //         window.location = '/login';
+        //     });
+        // });
 
-        $('.login-out').on("click", function () {
-            layer.msg('退出登录成功', function () {
-                window.location = 'page/login-3.html';
-            });
-        });
     });
 </script>
 </body>

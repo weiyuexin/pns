@@ -12,6 +12,8 @@ import top.weiyuexin.entity.vo.R;
 import top.weiyuexin.service.ResourceCommentService;
 import top.weiyuexin.service.ResourceServer;
 import top.weiyuexin.service.UserService;
+import top.weiyuexin.utils.IpUtil;
+import top.weiyuexin.utils.IpdbUtil;
 
 import javax.servlet.http.HttpSession;
 import java.text.ParseException;
@@ -60,6 +62,9 @@ public class ResourceController {
             String s= DateUtil.now();
             Date date =  formatter.parse(s);
             resource.setTime(date);
+            String province = Arrays.toString(new String[]{IpdbUtil.find(IpUtil.getOutIPV4(), "CN")[1]});
+            province = province.substring(1,province.length()-1);
+            resource.setIpAddr(province);
             r.setFlag(resourceServer.save(resource));
             r.setMsg("文章发表成功!");
             //发表成功，积分加5
@@ -160,6 +165,9 @@ public class ResourceController {
             String s= DateUtil.now();
             Date date =  formatter.parse(s);
             resourceComment.setTime(date);
+            String province = Arrays.toString(new String[]{IpdbUtil.find(IpUtil.getOutIPV4(), "CN")[1]});
+            province = province.substring(1,province.length()-1);
+            resourceComment.setIpAddr(province);
             r.setFlag(resourceCommentService.save(resourceComment));
             //设置评论数加一
             Resource resource = resourceServer.getById(resourceComment.getResourceId());
