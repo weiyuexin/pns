@@ -4,26 +4,19 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 import java.util.Date;
+
 @Data
-public class ArticleComment {
+public class LoginLog {
     private Integer id;
-
-    private Integer articleId;
-
+    private Integer userId;
     @TableField(exist = false)
-    private String authorName;
-
-    private String content;
-
-    private Integer authorId;
-
+    private String username;
     private Date time;
-
     @TableField(exist = false)
     private String date;
-
-    private Integer star;
-
-    private String ipAddr;
-
+    private String ip;
+    private String address;
+    private String country;
+    private String province;
+    private String city;
 }

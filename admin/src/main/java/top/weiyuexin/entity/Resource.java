@@ -34,5 +34,6 @@ public class Resource {
 
     private String icon;
 
+    private String ipAddr;
 
 }

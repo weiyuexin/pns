@@ -8,12 +8,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import top.weiyuexin.entity.Admin;
+import top.weiyuexin.entity.Article;
+import top.weiyuexin.entity.LoginLog;
 import top.weiyuexin.entity.User;
 import top.weiyuexin.entity.vo.R;
 import top.weiyuexin.entity.vo.W;
 import top.weiyuexin.mapper.UserMapper;
 import top.weiyuexin.service.AdminService;
+import top.weiyuexin.service.LoginLogService;
 import top.weiyuexin.service.UserService;
+import top.weiyuexin.utils.OutHtml;
 
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
@@ -29,6 +33,8 @@ public class UserController {
     private UserMapper userMapper;
     @Autowired
     private AdminService adminService;
+    @Autowired
+    private LoginLogService loginLogService;
 
     /**
      * 检查用户登录状态
@@ -168,5 +174,54 @@ public class UserController {
         return r;
     }
 
+    @GetMapping("/logs")
+    @ResponseBody
+    public W getLoginLogByPage(@RequestParam("page") Integer page,
+                     @RequestParam("limit") Integer limit){
+
+        IPage<LoginLog> Ipage = loginLogService.getPage(page,limit);
+        //如果当前页码值大于当前页码值，那么重新执行查询操作，使用最大页码值作为当前页码值
+        if(page>Ipage.getPages()){
+            Ipage = loginLogService.getPage(page,limit);
+        }
+        List<LoginLog> loginLogs = Ipage.getRecords();
+        for(int i=0;i<loginLogs.size();i++){
+            //根据作者id查询作者
+            User user = userService.getById(loginLogs.get(i).getUserId());
+            if(user!=null){
+                System.out.println(user.getUsername());
+                loginLogs.get(i).setUsername(user.getUsername());
+            }
+            //修改时间格式
+            //格式化时间
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String date = sdf.format(loginLogs.get(i).getTime());
+            loginLogs.get(i).setDate(date);
+        }
+        Ipage.setRecords(loginLogs);
+
+        Ipage.setRecords(loginLogs);
+        return new W(0,(int)Ipage.getTotal(),Ipage.getRecords());
+    }
+
+    /**
+     * 删除登录日志接口
+     * @param id
+     * @param session
+     * @return
+     */
+    @DeleteMapping("/log/del/{id}")
+    @ResponseBody
+    public R deleteLoginLog(@PathVariable("id") Integer id, HttpSession session){
+        R r = new R();
+        //判断用户是否登录
+        if(session.getAttribute("user")!=null){
+            r.setFlag(loginLogService.removeById(id));
+            r.setMsg("日志删除成功");
+        }else {
+            r.setData("当前登录状态丢失，请重新登录后再试!");
+        }
+        return r;
+    }
 
 }

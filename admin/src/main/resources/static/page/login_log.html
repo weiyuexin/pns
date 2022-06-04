@@ -46,7 +46,6 @@
 
         <script type="text/html" id="toolbarDemo">
             <div class="layui-btn-container">
-                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
                 <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 批量删除 </button>
             </div>
         </script>
@@ -57,7 +56,7 @@
         </script>
         <script type="text/html" id="currentTableBar">
             <!--            <a class="layui-btn layui-btn-warm layui-btn-xs data-count-view" lay-event="view">预览</a>-->
-            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+<!--            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>-->
             <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
         </script>
 
@@ -72,7 +71,7 @@
 
         table.render({
             elem: '#currentTableId',
-            url: '/user/users',
+            url: '/user/logs',
             toolbar: '#toolbarDemo',
             defaultToolbar: ['filter', 'exports', 'print', {
                 title: '提示',
@@ -83,15 +82,10 @@
             cols: [[
                 {type: "checkbox", width: 50},
                 {field: 'id', width: 80, title: 'ID', sort: true},
-                {field: 'username', width: 130, title: '昵称'},
-                {field: 'email', minWidth: 130, title: '邮箱', sort: true},
-                {field: 'photo', minWidth: 130,templet: '#viewImage', title:'头像',align: "center"},
-                {field: 'sex', minWidth: 50, title: '性别'},
-                {field: 'phone', width: 130, title: '电话'},
-                {field: 'signature', width: 130, title: '个性签名'},
-                {field: 'points', width: 100, title: '积分',sort: true},
-                {field: 'address', width: 100, title: '地址'},
-                {field: 'time', minWidth: 100, title: '注册时间',sort: true},
+                {field: 'username', width: 150, title: '昵称'},
+                {field: 'date', minWidth: 100, title: '登录时间',sort: true},
+                {field: 'ip', width: 130, title: '登录IP'},
+                {field: 'address', width: 150, title: 'IP属地'},
                 {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
             ]],
             limit: 10,
@@ -145,7 +139,7 @@
                     data.forEach(function (item){
                         //向服务器发送删除指令
                         $.ajax({
-                            url: "/user/del/" + item.id,//请求地址
+                            url: "/user/log/del/" + item.id,//请求地址
                             dataType: "json",//数据格式
                             type: "DELETE",//请求方式
                             async: false,//是否异步请求
@@ -196,7 +190,7 @@
                     layer.close(index);
                     //向服务器发送删除指令
                     $.ajax({
-                        url: "/user/del/" + obj.data.id,//请求地址
+                        url: "/user/log/del/" + obj.data.id,//请求地址
                         dataType: "json",//数据格式
                         type: "DELETE",//请求方式
                         async: false,//是否异步请求

@@ -24,5 +24,6 @@ public class ResourceComment {
 
     private Integer star;
 
+    private String ipAddr;
 
 }

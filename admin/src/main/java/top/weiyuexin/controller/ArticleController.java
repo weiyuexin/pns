@@ -84,37 +84,6 @@ public class ArticleController {
         return r;
     }
 
-    /**
-     * 编辑修改文章页面
-     * @param id
-     * @return
-     */
-    @GetMapping("/article/edit/{id}")
-    public ModelAndView updatePage(@PathVariable("id") Integer id){
-        ModelAndView modelAndView = new ModelAndView();
-        Article article = articleService.getById(id);
-        modelAndView.setViewName("article/editArticle");
-        modelAndView.addObject("article",article);
-        return modelAndView;
-    }
-
-    /**
-     * uodate article by id
-     * @param article
-     * @return
-     */
-    @PutMapping("/article/edit.do")
-    @ResponseBody
-    public R update(Article article){
-        R r = new R();
-        r.setFlag(articleService.updateById(article));
-        if(r.getFlag()){
-            r.setMsg("文章修改成功!");
-        }else {
-            r.setMsg("文章修改失败，请稍后重试!");
-        }
-        return r;
-    }
 
 
     /**
@@ -163,45 +132,6 @@ public class ArticleController {
     }
 
 
-    /**
-     * 评论文章
-     * @param articleComment
-     * @param session
-     * @return
-     */
-    @PostMapping("/article/comment/add")
-    @ResponseBody
-    public R addComment(ArticleComment articleComment,HttpSession session) throws ParseException {
-        R r = new R();
-        User user = (User) session.getAttribute("user");
-        if(user!=null){
-            articleComment.setAuthorId(user.getId());
-            //设置发布时间
-            SimpleDateFormat formatter = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss");
-            String s= DateUtil.now();
-            Date date =  formatter.parse(s);
-            articleComment.setTime(date);
-            r.setFlag(articleCommentService.save(articleComment));
-            //设置评论数加一
-            Article article = articleService.getById(articleComment.getArticleId());
-            article.setCommentNum(article.getCommentNum()+1);
-            articleService.updateById(article);
-
-            //发表成功，积分加2
-            user.setPoints(user.getPoints()+2);
-            userService.updateById(user);
-
-            if(r.getFlag()){
-                r.setMsg("评论成功!");
-            }else {
-                r.setMsg("评论失败，请稍后重试!");
-            }
-        }else {
-            r.setFlag(false);
-            r.setMsg("请登录后再来评论");
-        }
-        return r;
-    }
 
     /**
      * 查询评论
