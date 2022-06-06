@@ -25,5 +25,5 @@ public interface UserService extends IService<User> {
      * @param pageSize
      * @return
      */
-    IPage<User> getPage(Integer currentPage, Integer pageSize);
+    IPage<User> getPage(Integer currentPage, Integer pageSize,User user);
 }

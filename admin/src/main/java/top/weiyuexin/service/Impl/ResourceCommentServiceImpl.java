@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.weiyuexin.entity.ArticleComment;
@@ -42,9 +43,12 @@ public class ResourceCommentServiceImpl extends ServiceImpl<ResourceCommentMappe
      * @return
      */
     @Override
-    public IPage<ResourceComment> getPage(Integer currentPage, Integer pageSize) {
+    public IPage<ResourceComment> getPage(Integer currentPage, Integer pageSize,ResourceComment resourceComment) {
         LambdaQueryWrapper<ResourceComment> lqw = new LambdaQueryWrapper<>();
         lqw.orderByDesc(ResourceComment::getId);
+        lqw.like(resourceComment.getAuthorId()!=null,ResourceComment::getAuthorId,resourceComment.getAuthorId());
+        lqw.like(resourceComment.getResourceId()!=null,ResourceComment::getResourceId,resourceComment.getResourceId());
+        lqw.like(Strings.isNotEmpty(resourceComment.getContent()),ResourceComment::getContent,resourceComment.getContent());
         IPage<ResourceComment> page = new Page<>(currentPage,pageSize);
         resourceCommentMapper.selectPage(page,lqw);
         return page;

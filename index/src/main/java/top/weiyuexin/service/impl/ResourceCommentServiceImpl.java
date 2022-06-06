@@ -28,6 +28,7 @@ public class ResourceCommentServiceImpl extends ServiceImpl<ResourceCommentMappe
         List<ResourceComment> resourceComments = new ArrayList<>();
         LambdaQueryWrapper<ResourceComment> lqw = new LambdaQueryWrapper<>();
         lqw.eq(ResourceComment::getResourceId,resourceId);
+        lqw.orderByDesc(ResourceComment::getId);
         resourceComments = resourceCommentMapper.selectList(lqw);
         return resourceComments;
     }

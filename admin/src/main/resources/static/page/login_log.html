@@ -19,21 +19,21 @@
                 <form class="layui-form layui-form-pane" action="">
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">作者</label>
+                            <label class="layui-form-label">用户昵称</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="authorName" autocomplete="off" class="layui-input">
+                                <input type="text" name="username" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label">标签</label>
+                            <label class="layui-form-label">登录IP</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="type" autocomplete="off" class="layui-input">
+                                <input type="text" name="ip" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label">标题</label>
+                            <label class="layui-form-label">IP属地</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="title" autocomplete="off" class="layui-input">
+                                <input type="text" name="address" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
@@ -68,10 +68,10 @@
         var $ = layui.jquery,
             form = layui.form,
             table = layui.table;
-
+        param = "?s&username=&ip=&address=";
         table.render({
             elem: '#currentTableId',
-            url: '/user/logs',
+            url: '/user/logs/'+param,
             toolbar: '#toolbarDemo',
             defaultToolbar: ['filter', 'exports', 'print', {
                 title: '提示',
@@ -98,19 +98,45 @@
         // 监听搜索操作
         form.on('submit(data-search-btn)', function (data) {
             var result = JSON.stringify(data.field);
-            layer.alert(result, {
-                title: '最终的搜索信息'
-            });
+            param = "?s";
+            if(data.field.username==null){
+                data.field.username="";
+            }
+            if(data.field.ip==null){
+                data.field.ip="";
+            }
+            if(data.field.address==null){
+                data.field.address="";
+            }
+            param += "&username="+data.field.username;
+            param += "&ip="+data.field.ip;
+            param += "&address="+data.field.address;
 
-            //执行搜索重载
-            table.reload('currentTableId', {
-                page: {
-                    curr: 1
-                }
-                , where: {
-                    searchParams: result
-                }
-            }, 'data');
+            table.render({
+                elem: '#currentTableId',
+                url: '/user/logs/'+param,
+                toolbar: '#toolbarDemo',
+                defaultToolbar: ['filter', 'exports', 'print', {
+                    title: '提示',
+                    layEvent: 'LAYTABLE_TIPS',
+                    icon: 'layui-icon-tips'
+                }],
+                title:'用户列表',
+                cols: [[
+                    {type: "checkbox", width: 50},
+                    {field: 'id', width: 80, title: 'ID', sort: true},
+                    {field: 'username', width: 150, title: '昵称'},
+                    {field: 'date', minWidth: 100, title: '登录时间',sort: true},
+                    {field: 'ip', width: 130, title: '登录IP'},
+                    {field: 'address', width: 150, title: 'IP属地'},
+                    {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
+                ]],
+                limit: 10,
+                page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                    layout: ['prev', 'page', 'next', 'skip', 'count']
+                },
+                skin: 'line'
+            });
 
             return false;
         });

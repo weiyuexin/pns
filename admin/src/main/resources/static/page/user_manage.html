@@ -19,21 +19,33 @@
                 <form class="layui-form layui-form-pane" action="">
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">作者</label>
+                            <label class="layui-form-label">昵称</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="authorName" autocomplete="off" class="layui-input">
+                                <input type="text" name="username" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label">标签</label>
+                            <label class="layui-form-label">邮箱</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="type" autocomplete="off" class="layui-input">
+                                <input type="text" name="email" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label">标题</label>
+                            <label class="layui-form-label">电话</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="title" autocomplete="off" class="layui-input">
+                                <input type="text" name="phone" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">性别</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="sex" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">地区</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="address" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
@@ -104,19 +116,67 @@
         // 监听搜索操作
         form.on('submit(data-search-btn)', function (data) {
             var result = JSON.stringify(data.field);
-            layer.alert(result, {
-                title: '最终的搜索信息'
-            });
+            param = "?s";
+            if(data.field.username==null){
+                data.field.username="";
+            }
+            if(data.field.email==null){
+                data.field.email="";
+            }
+            if(data.field.sex==null){
+                data.field.sex="";
+            }
+            if(data.field.phone==null){
+                data.field.phone="";
+            }
+            if(data.field.address==null){
+                data.field.address="";
+            }
+            param += "&username="+data.field.username;
+            param += "&email="+data.field.email;
+            param += "&sex="+data.field.sex;
+            param += "&phone="+data.field.phone;
+            param += "&address="+data.field.address;
 
             //执行搜索重载
-            table.reload('currentTableId', {
-                page: {
-                    curr: 1
-                }
-                , where: {
-                    searchParams: result
-                }
-            }, 'data');
+            // table.reload('currentTableId', {
+            //     page: {
+            //         curr: 1
+            //     }
+            //     , where: {
+            //         searchParams: result
+            //     }
+            // }, 'data');
+            table.render({
+                elem: '#currentTableId',
+                url: '/user/users/'+param,
+                toolbar: '#toolbarDemo',
+                defaultToolbar: ['filter', 'exports', 'print', {
+                    title: '提示',
+                    layEvent: 'LAYTABLE_TIPS',
+                    icon: 'layui-icon-tips'
+                }],
+                title:'用户列表',
+                cols: [[
+                    {type: "checkbox", width: 50},
+                    {field: 'id', width: 80, title: 'ID', sort: true},
+                    {field: 'username', width: 130, title: '昵称'},
+                    {field: 'email', minWidth: 130, title: '邮箱', sort: true},
+                    {field: 'photo', minWidth: 130,templet: '#viewImage', title:'头像',align: "center"},
+                    {field: 'sex', minWidth: 50, title: '性别'},
+                    {field: 'phone', width: 130, title: '电话'},
+                    {field: 'signature', width: 130, title: '个性签名'},
+                    {field: 'points', width: 100, title: '积分',sort: true},
+                    {field: 'address', width: 100, title: '地址'},
+                    {field: 'time', minWidth: 100, title: '注册时间',sort: true},
+                    {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
+                ]],
+                limit: 10,
+                page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                    layout: ['prev', 'page', 'next', 'skip', 'count']
+                },
+                skin: 'line'
+            });
 
             return false;
         });

@@ -21,5 +21,5 @@ public interface ResourceCommentService extends IService<ResourceComment> {
      * @param pageSize
      * @return
      */
-    IPage<ResourceComment> getPage(Integer currentPage, Integer pageSize);
+    IPage<ResourceComment> getPage(Integer currentPage, Integer pageSize,ResourceComment resourceComment);
 }

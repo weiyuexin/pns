@@ -133,20 +133,23 @@ public class UserController {
 
 
     /**
-     * 分页查询
+     * 分页条件查询
      * @param page
      * @param limit
+     * @param user
      * @return
      */
     @GetMapping("/users")
     @ResponseBody
     public W getPage(@RequestParam("page") Integer page,
-                     @RequestParam("limit") Integer limit){
+                     @RequestParam("limit") Integer limit,
+                     User user){
 
-        IPage<User> Ipage = userService.getPage(page,limit);
+        System.out.println(user.toString());
+        IPage<User> Ipage = userService.getPage(page,limit,user);
         //如果当前页码值大于当前页码值，那么重新执行查询操作，使用最大页码值作为当前页码值
         if(page>Ipage.getPages()){
-            Ipage = userService.getPage(page,limit);
+            Ipage = userService.getPage(page,limit,user);
         }
         List<User> users = Ipage.getRecords();
 
@@ -174,15 +177,28 @@ public class UserController {
         return r;
     }
 
+    /**
+     * 分页查询登录日志
+     * @param page
+     * @param limit
+     * @return
+     */
     @GetMapping("/logs")
     @ResponseBody
     public W getLoginLogByPage(@RequestParam("page") Integer page,
-                     @RequestParam("limit") Integer limit){
-
-        IPage<LoginLog> Ipage = loginLogService.getPage(page,limit);
+                     @RequestParam("limit") Integer limit, LoginLog loginLog){
+        if(!loginLog.getUsername().equals("")){
+            User user1 = userService.getByUserName(loginLog.getUsername());
+            if(user1!=null){
+                loginLog.setUserId(user1.getId());
+            }else {
+                loginLog.setUserId(-1);
+            }
+        }
+        IPage<LoginLog> Ipage = loginLogService.getPage(page,limit,loginLog);
         //如果当前页码值大于当前页码值，那么重新执行查询操作，使用最大页码值作为当前页码值
         if(page>Ipage.getPages()){
-            Ipage = loginLogService.getPage(page,limit);
+            Ipage = loginLogService.getPage(page,limit,loginLog);
         }
         List<LoginLog> loginLogs = Ipage.getRecords();
         for(int i=0;i<loginLogs.size();i++){

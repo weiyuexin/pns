@@ -25,15 +25,9 @@
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label">标签</label>
+                            <label class="layui-form-label">图片名</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="type" autocomplete="off" class="layui-input">
-                            </div>
-                        </div>
-                        <div class="layui-inline">
-                            <label class="layui-form-label">标题</label>
-                            <div class="layui-input-inline">
-                                <input type="text" name="title" autocomplete="off" class="layui-input">
+                                <input type="text" name="originName" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
@@ -69,10 +63,10 @@
         var $ = layui.jquery,
             form = layui.form,
             table = layui.table;
-
+        param = "?s&authorName=&originName=";
         table.render({
             elem: '#currentTableId',
-            url: '/images',
+            url: '/images/'+param,
             toolbar: '#toolbarDemo',
             defaultToolbar: ['filter', 'exports', 'print', {
                 title: '提示',
@@ -100,19 +94,41 @@
         // 监听搜索操作
         form.on('submit(data-search-btn)', function (data) {
             var result = JSON.stringify(data.field);
-            layer.alert(result, {
-                title: '最终的搜索信息'
+            param = "?s";
+            if(data.field.authorName==null){
+                data.field.authorName="";
+            }
+            if(data.field.originName==null){
+                data.field.originName="";
+            }
+            param += "&authorName="+data.field.authorName;
+            param += "&originName="+data.field.originName;
+            table.render({
+                elem: '#currentTableId',
+                url: '/images/'+param,
+                toolbar: '#toolbarDemo',
+                defaultToolbar: ['filter', 'exports', 'print', {
+                    title: '提示',
+                    layEvent: 'LAYTABLE_TIPS',
+                    icon: 'layui-icon-tips'
+                }],
+                title:'图片列表',
+                cols: [[
+                    {type: "checkbox", width: 50},
+                    {field: 'id', width: 80, title: 'ID', sort: true},
+                    {field: 'authorName', width: 130, title: '作者'},
+                    {field: 'originName', minWidth: 180, title: '图片名', sort: true},
+                    {field: 'url', minWidth: 150,templet: '#viewImage', title:'预览',align: "center"},
+                    {field: 'url', minWidth: 300, title: 'URL'},
+                    {field: 'time', minWidth: 100, title: '上传时间'},
+                    {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
+                ]],
+                limit: 10,
+                page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                    layout: ['prev', 'page', 'next', 'skip', 'count']
+                },
+                skin: 'line'
             });
-
-            //执行搜索重载
-            table.reload('currentTableId', {
-                page: {
-                    curr: 1
-                }
-                , where: {
-                    searchParams: result
-                }
-            }, 'data');
 
             return false;
         });

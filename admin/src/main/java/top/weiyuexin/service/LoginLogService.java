@@ -12,5 +12,5 @@ public interface LoginLogService extends IService<LoginLog> {
      * @param pageSize
      * @return
      */
-    IPage<LoginLog> getPage(Integer currentPage, Integer pageSize);
+    IPage<LoginLog> getPage(Integer currentPage, Integer pageSize,LoginLog loginLog);
 }

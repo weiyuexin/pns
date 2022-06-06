@@ -20,8 +20,8 @@ public class UeditorController {
     @RequestMapping(value = "/config")
     public void config(HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("application/json");
-        String rootPath = ClassUtils.getDefaultClassLoader().getResource("").getPath() + "static/ueditor/jsp";
-//        String rootPath = "/usr/local/springboot/";
+        //String rootPath = ClassUtils.getDefaultClassLoader().getResource("").getPath() + "static/ueditor/jsp";
+        String rootPath = "/usr/local/springboot/";
 //        System.out.println(rootPath);
         try {
             response.setCharacterEncoding("UTF-8");

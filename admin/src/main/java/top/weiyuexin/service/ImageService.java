@@ -10,7 +10,8 @@ public interface ImageService extends IService<Image> {
      * 分页查询
      * @param currentPage
      * @param pageSize
+     * @param image
      * @return
      */
-    IPage<Image> getPage(Integer currentPage, Integer pageSize);
+    IPage<Image> getPage(Integer currentPage, Integer pageSize,Image image);
 }

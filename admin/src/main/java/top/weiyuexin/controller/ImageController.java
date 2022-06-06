@@ -34,12 +34,22 @@ public class ImageController {
     @GetMapping("/images")
     @ResponseBody
     public W getPage(@RequestParam("page") Integer page,
-                     @RequestParam("limit") Integer limit){
-
-        IPage<Image> Ipage = imageService.getPage(page,limit);
+                     @RequestParam("limit") Integer limit,
+                     Image image){
+        if(!image.getAuthorName().equals("")){
+            //查询要查询的作者id
+            System.out.println("author:"+image.getAuthorName());
+            User user1 = userService.getByUserName(image.getAuthorName());
+            if(user1!=null){
+                image.setAuthorId(user1.getId());
+            }else {
+                image.setAuthorId(-1);
+            }
+        }
+        IPage<Image> Ipage = imageService.getPage(page,limit,image);
         //如果当前页码值大于当前页码值，那么重新执行查询操作，使用最大页码值作为当前页码值
         if(page>Ipage.getPages()){
-            Ipage = imageService.getPage(page,limit);
+            Ipage = imageService.getPage(page,limit,image);
         }
         List<Image> images = Ipage.getRecords();
         for(int i=0;i<images.size();i++){

@@ -20,5 +20,5 @@ public interface ArticleCommentService extends IService<ArticleComment> {
      * @param pageSize
      * @return
      */
-    IPage<ArticleComment> getPage(Integer currentPage,Integer pageSize);
+    IPage<ArticleComment> getPage(Integer currentPage,Integer pageSize,ArticleComment articleComment);
 }

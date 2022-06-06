@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.weiyuexin.entity.Resource;
@@ -57,9 +58,12 @@ public class ResourceServerImpl extends ServiceImpl<ResourceMapper, Resource> im
      * @return
      */
     @Override
-    public IPage<Resource> getPage(Integer currentPage, Integer pageSize) {
+    public IPage<Resource> getPage(Integer currentPage, Integer pageSize,Resource resource) {
         LambdaQueryWrapper<Resource> lqw = new LambdaQueryWrapper<>();
         lqw.orderByDesc(Resource::getId);
+        lqw.like(resource.getAuthorId()!=null,Resource::getAuthorId,resource.getAuthorId());
+        lqw.like(Strings.isNotEmpty(resource.getType()),Resource::getType,resource.getType());
+        lqw.like(Strings.isNotEmpty(resource.getTitle()),Resource::getTitle,resource.getTitle());
         IPage<Resource> page = new Page<>(currentPage,pageSize);
         resourceMapper.selectPage(page,lqw);
         return page;

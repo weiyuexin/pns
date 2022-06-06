@@ -3,6 +3,10 @@ package top.weiyuexin.utils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * 去除html代码中的静态资源和标签
+ * @author 韦月鑫
+ */
 public class OutHtml {
     /*去除数据库中取出的文章内容中的图片等静态资源*/
     public String delHTMLTag(String htmlStr){

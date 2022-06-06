@@ -6,6 +6,8 @@ import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import top.weiyuexin.entity.*;
 import top.weiyuexin.entity.vo.R;
@@ -14,7 +16,9 @@ import top.weiyuexin.service.ResourceServer;
 import top.weiyuexin.service.UserService;
 import top.weiyuexin.utils.IpUtil;
 import top.weiyuexin.utils.IpdbUtil;
+import top.weiyuexin.utils.getClentIp;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -50,6 +54,8 @@ public class ResourceController {
     @PostMapping("/add.do")
     @ResponseBody
     public R addResources(Resource resource, HttpSession session) throws ParseException {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+
         R r = new R();
         User user = (User) session.getAttribute("user");
         System.out.println(resource.toString());
@@ -62,7 +68,7 @@ public class ResourceController {
             String s= DateUtil.now();
             Date date =  formatter.parse(s);
             resource.setTime(date);
-            String province = Arrays.toString(new String[]{IpdbUtil.find(IpUtil.getOutIPV4(), "CN")[1]});
+            String province = Arrays.toString(new String[]{IpdbUtil.find(getClentIp.getIpAddr(request), "CN")[1]});
             province = province.substring(1,province.length()-1);
             resource.setIpAddr(province);
             r.setFlag(resourceServer.save(resource));
@@ -156,6 +162,8 @@ public class ResourceController {
     @PostMapping("/comment/add")
     @ResponseBody
     public R addComment(ResourceComment resourceComment, HttpSession session) throws ParseException {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+
         R r = new R();
         User user = (User) session.getAttribute("user");
         if(user!=null){
@@ -165,7 +173,7 @@ public class ResourceController {
             String s= DateUtil.now();
             Date date =  formatter.parse(s);
             resourceComment.setTime(date);
-            String province = Arrays.toString(new String[]{IpdbUtil.find(IpUtil.getOutIPV4(), "CN")[1]});
+            String province = Arrays.toString(new String[]{IpdbUtil.find(getClentIp.getIpAddr(request), "CN")[1]});
             province = province.substring(1,province.length()-1);
             resourceComment.setIpAddr(province);
             r.setFlag(resourceCommentService.save(resourceComment));

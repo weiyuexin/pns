@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import top.weiyuexin.entity.Article;
 import top.weiyuexin.entity.ArticleComment;
@@ -16,7 +18,9 @@ import top.weiyuexin.service.UserService;
 import top.weiyuexin.utils.IpUtil;
 import top.weiyuexin.utils.IpdbUtil;
 import top.weiyuexin.utils.OutHtml;
+import top.weiyuexin.utils.getClentIp;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -47,6 +51,8 @@ public class ArticleController {
     @PostMapping("/article/write.do")
     @ResponseBody
     public R write(Article article,HttpSession session) throws ParseException {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+
         R r = new R();
         User user = (User) session.getAttribute("user");
         //判断用户是否登录
@@ -59,7 +65,7 @@ public class ArticleController {
             Date date =  formatter.parse(s);
             article.setTime(date);
             //设置IP属地
-            String province = Arrays.toString(new String[]{IpdbUtil.find(IpUtil.getOutIPV4(), "CN")[1]});
+            String province = Arrays.toString(new String[]{IpdbUtil.find(getClentIp.getIpAddr(request), "CN")[1]});
             province = province.substring(1,province.length()-1);
             article.setIpAddr(province);
             r.setFlag(articleService.save(article));
@@ -320,6 +326,8 @@ public class ArticleController {
     @PostMapping("/article/comment/add")
     @ResponseBody
     public R addComment(ArticleComment articleComment,HttpSession session) throws ParseException {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+
         R r = new R();
         User user = (User) session.getAttribute("user");
         if(user!=null){
@@ -329,7 +337,7 @@ public class ArticleController {
             String s= DateUtil.now();
             Date date =  formatter.parse(s);
             articleComment.setTime(date);
-            String province = Arrays.toString(new String[]{IpdbUtil.find(IpUtil.getOutIPV4(), "CN")[1]});
+            String province = Arrays.toString(new String[]{IpdbUtil.find(getClentIp.getIpAddr(request), "CN")[1]});
             province = province.substring(1,province.length()-1);
             articleComment.setIpAddr(province);
             r.setFlag(articleCommentService.save(articleComment));

@@ -34,5 +34,5 @@ public interface ResourceServer extends IService<Resource> {
      * @param pageSize
      * @return
      */
-    IPage<Resource> getPage(Integer currentPage, Integer pageSize);
+    IPage<Resource> getPage(Integer currentPage, Integer pageSize,Resource resource);
 }

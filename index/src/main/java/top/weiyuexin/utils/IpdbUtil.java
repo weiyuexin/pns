@@ -6,9 +6,8 @@ import net.ipip.ipdb.City;
 import java.io.IOException;
 
 /**
- * 从城市查询
- *
- * @author lengcz
+ * 从客户端获取的公网IP中获取省份、城市信息
+ * @author 韦月鑫
  */
 public class IpdbUtil {
 
@@ -18,8 +17,8 @@ public class IpdbUtil {
         try {
             //city_DB = new City("F:/IDEA_WorkSpace/Web/springboot-ipdb/ipipfree.ipdb");
 
-            //city_DB = new City("/usr/local/springboot/ipipfree.ipdb");
-            city_DB = new City(new IpdbUtil().getClass().getResource("/").getPath() + "ipipfree.ipdb");
+            city_DB = new City("/usr/local/springboot/ipipfree.ipdb");
+            //city_DB = new City(new IpdbUtil().getClass().getResource("/").getPath() + "ipipfree.ipdb");
         } catch (IOException e) {
             e.printStackTrace();
         }

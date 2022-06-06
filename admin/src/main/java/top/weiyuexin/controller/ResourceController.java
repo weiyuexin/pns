@@ -79,12 +79,22 @@ public class ResourceController {
     @GetMapping("/resources")
     @ResponseBody
     public W getPage(@RequestParam("page") Integer page,
-                     @RequestParam("limit") Integer limit){
-
-        IPage<Resource> Ipage = resourceServer.getPage(page,limit);
+                     @RequestParam("limit") Integer limit,
+                     Resource resource){
+        if(!resource.getAuthorName().equals("")){
+            //查询要查询的作者id
+            System.out.println("author:"+resource.getAuthorName());
+            User user1 = userService.getByUserName(resource.getAuthorName());
+            if(user1!=null){
+                resource.setAuthorId(user1.getId());
+            }else {
+                resource.setAuthorId(-1);
+            }
+        }
+        IPage<Resource> Ipage = resourceServer.getPage(page,limit,resource);
         //如果当前页码值大于当前页码值，那么重新执行查询操作，使用最大页码值作为当前页码值
         if(page>Ipage.getPages()){
-            Ipage = resourceServer.getPage(page,limit);
+            Ipage = resourceServer.getPage(page,limit,resource);
         }
         List<Resource> resources = Ipage.getRecords();
         for(int i=0;i<resources.size();i++){
@@ -306,12 +316,22 @@ public class ResourceController {
     @GetMapping("/comments")
     @ResponseBody
     public W getPageComment(@RequestParam("page") Integer page,
-                            @RequestParam("limit") Integer limit){
-
-        IPage<ResourceComment> Ipage = resourceCommentService.getPage(page,limit);
+                            @RequestParam("limit") Integer limit,
+                            ResourceComment resourceComment){
+        if(!resourceComment.getAuthorName().equals("")){
+            //查询要查询的作者id
+            System.out.println("author:"+resourceComment.getAuthorName());
+            User user1 = userService.getByUserName(resourceComment.getAuthorName());
+            if(user1!=null){
+                resourceComment.setAuthorId(user1.getId());
+            }else {
+                resourceComment.setAuthorId(-1);
+            }
+        }
+        IPage<ResourceComment> Ipage = resourceCommentService.getPage(page,limit,resourceComment);
         //如果当前页码值大于当前页码值，那么重新执行查询操作，使用最大页码值作为当前页码值
         if(page>Ipage.getPages()){
-            Ipage = resourceCommentService.getPage(page,limit);
+            Ipage = resourceCommentService.getPage(page,limit,resourceComment);
         }
         //过滤html标签
         List<ResourceComment> resourceComments = Ipage.getRecords();

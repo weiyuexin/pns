@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import top.weiyuexin.entity.LoginLog;
 import top.weiyuexin.entity.User;
@@ -14,7 +16,9 @@ import top.weiyuexin.service.LoginLogService;
 import top.weiyuexin.service.UserService;
 import top.weiyuexin.utils.IpUtil;
 import top.weiyuexin.utils.IpdbUtil;
+import top.weiyuexin.utils.getClentIp;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -50,6 +54,8 @@ public class UserController {
     public Object login(@PathVariable("username") String username,
                         @PathVariable("password") String password,
                         HttpSession session){
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+
         R r = new R();
         //对密码进行md5加密处理
         password = DigestUtil.md5Hex(password);
@@ -66,19 +72,23 @@ public class UserController {
             //登录日志
             LoginLog loginLog = new LoginLog();
             loginLog.setUserId(user.getId());
-            loginLog.setIp(IpUtil.getOutIPV4());
-            String addr =  Arrays.toString(IpdbUtil.find(IpUtil.getOutIPV4(), "CN"));
+            loginLog.setIp(getClentIp.getIpAddr(request));
+
+            System.out.println(loginLog.getIp());
+
+            String addr =  Arrays.toString(IpdbUtil.find(getClentIp.getIpAddr(request), "CN"));
             addr = addr.substring(1,addr.length()-1);
             loginLog.setAddress(addr);
+            System.out.println(addr);
 
-            String country = Arrays.toString(new String[]{IpdbUtil.find(IpUtil.getOutIPV4(), "CN")[0]});
+            String country = Arrays.toString(new String[]{IpdbUtil.find(getClentIp.getIpAddr(request), "CN")[0]});
             country = country.substring(1,country.length()-1);
             loginLog.setCountry(country);
 
-            String province = Arrays.toString(new String[]{IpdbUtil.find(IpUtil.getOutIPV4(), "CN")[1]});
+            String province = Arrays.toString(new String[]{IpdbUtil.find(getClentIp.getIpAddr(request), "CN")[1]});
             province = province.substring(1,province.length()-1);
             loginLog.setProvince(province);
-            String city = Arrays.toString(new String[]{IpdbUtil.find(IpUtil.getOutIPV4(), "CN")[2]});
+            String city = Arrays.toString(new String[]{IpdbUtil.find(getClentIp.getIpAddr(request), "CN")[2]});
             city = city.substring(1,city.length()-1);
             loginLog.setCity(city);
             //获取时间

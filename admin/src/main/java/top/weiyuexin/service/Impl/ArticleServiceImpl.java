@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.weiyuexin.entity.Article;
@@ -34,6 +35,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public IPage<Article> getPage(Integer currentPage, Integer pageSize, Article article) {
         LambdaQueryWrapper<Article> lqw = new LambdaQueryWrapper<>();
         lqw.orderByDesc(Article::getTime);
+        lqw.like(article.getAuthorId()!=null,Article::getAuthorId,article.getAuthorId());
+        lqw.like(Strings.isNotEmpty(article.getType()),Article::getType,article.getType());
+        lqw.like(Strings.isNotEmpty(article.getTitle()),Article::getTitle,article.getTitle());
         IPage<Article> page = new Page<>(currentPage,pageSize);
         articleMapper.selectPage(page,lqw);
         return page;
