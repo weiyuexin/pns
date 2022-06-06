@@ -11,7 +11,7 @@ import top.weiyuexin.service.UserService;
 @SpringBootTest
 class AdminApplicationTests {
 
-    @Autowired
+   /* @Autowired
     private UserService userService;
     @Autowired
     private ArticleService articleService;
@@ -34,5 +34,5 @@ class AdminApplicationTests {
     @Test
     void articleCommentTset(){
         System.out.println(articleCommentService.getById(40).toString());
-    }
+    }*/
 }

@@ -452,8 +452,47 @@ public class ArticleController {
     public ModelAndView searchPage(String key){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("article/searchArticleResult");
-        modelAndView.addObject(key);
+        modelAndView.addObject("key",key);
         return modelAndView;
+    }
+
+    /**
+     * 搜索
+     * @param currentPage
+     * @param pageSize
+     * @param article
+     * @param key
+     * @return
+     */
+    @GetMapping("/article/search/{key}/{currentPage}/{pageSize}")
+    @ResponseBody
+    public Object getPageSearch(@PathVariable("currentPage") Integer currentPage,
+                          @PathVariable("pageSize") Integer pageSize,
+                          Article article,@PathVariable("key") String key){
+        IPage<Article> page = articleService.getPageSearch(currentPage,pageSize,article,key);
+        //如果当前页码值大于当前页码值，那么重新执行查询操作，使用最大页码值作为当前页码值
+        if(currentPage>page.getPages()){
+            page = articleService.getPageSearch(currentPage,pageSize,article,key);
+        }
+        //过滤html标签
+        List<Article> articles = page.getRecords();
+        for(int i=0;i<articles.size();i++){
+            String content = articles.get(i).getContent();
+            OutHtml outHtml = new OutHtml();
+            content = outHtml.delHTMLTag(content);
+            if(content.length()>160){
+                content=content.substring(0,160);
+            }
+            articles.get(i).setContent(content);
+            //根据作者id查询作者
+            User user = userService.getById(articles.get(i).getAuthorId());
+            if(user!=null){
+                System.out.println(user.getUsername());
+                articles.get(i).setAuthorName(user.getUsername());
+            }
+        }
+        page.setRecords(articles);
+        return new R(true,page);
     }
 
 

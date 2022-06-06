@@ -105,6 +105,67 @@ public class UserController {
         return r;
     }
 
+    /**
+     * 邮箱验证码登录
+     * @param code
+     * @param email
+     * @param session
+     * @return
+     */
+    @PostMapping("/loginByEmail/{email}/{code}")
+    @ResponseBody
+    public R loginByEmail(@PathVariable("code") String code,
+                          @PathVariable("email") String email,
+                          HttpSession session){
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+
+        R r = new R();
+        User user = userService.getByEmail(email);
+        if(user!=null){
+            if(session.getAttribute("code").toString().equals(code)){
+                r.setFlag(true);
+                r.setMsg("登录成功");
+                session.setAttribute("user",user);
+
+                //登录日志
+                LoginLog loginLog = new LoginLog();
+                loginLog.setUserId(user.getId());
+                loginLog.setIp(getClentIp.getIpAddr(request));
+
+                System.out.println(loginLog.getIp());
+
+                String addr =  Arrays.toString(IpdbUtil.find(getClentIp.getIpAddr(request), "CN"));
+                addr = addr.substring(1,addr.length()-1);
+                loginLog.setAddress(addr);
+                System.out.println(addr);
+
+                String country = Arrays.toString(new String[]{IpdbUtil.find(getClentIp.getIpAddr(request), "CN")[0]});
+                country = country.substring(1,country.length()-1);
+                loginLog.setCountry(country);
+
+                String province = Arrays.toString(new String[]{IpdbUtil.find(getClentIp.getIpAddr(request), "CN")[1]});
+                province = province.substring(1,province.length()-1);
+                loginLog.setProvince(province);
+                String city = Arrays.toString(new String[]{IpdbUtil.find(getClentIp.getIpAddr(request), "CN")[2]});
+                city = city.substring(1,city.length()-1);
+                loginLog.setCity(city);
+                //获取时间
+                java.util.Date time=new Date();
+                SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                System.out.println(sdf.format(time));
+                loginLog.setTime(time);
+                loginLogService.save(loginLog);
+            }else {
+                r.setMsg("验证码错误，请重试!");
+                r.setFlag(false);
+            }
+        }else {
+            r.setFlag(false);
+            r.setMsg("该邮箱还未注册,请先前往注册!");
+        }
+
+        return r;
+    }
 
     /**
      * 注册页面

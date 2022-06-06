@@ -10,6 +10,7 @@ import top.weiyuexin.entity.Article;
 import top.weiyuexin.mapper.ArticleMapper;
 import top.weiyuexin.service.ArticleService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 //文章服务实现类
@@ -102,6 +103,18 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         }else if(order.equals("readNum")){
             lqw.orderByDesc(Article::getReadNum);
         }
+        IPage<Article> page = new Page<>(currentPage,pageSize);
+        articleMapper.selectPage(page,lqw);
+        return page;
+    }
+
+    @Override
+    public IPage<Article> getPageSearch(Integer currentPage, Integer pageSize, Article article,String key) {
+        LambdaQueryWrapper<Article> lqw = new LambdaQueryWrapper<>();
+        //查询条件:文章显示标志为1
+        lqw.like(Article::getIsShow,1);
+        lqw.orderByDesc(Article::getTime);
+        lqw.like(Article::getTitle,key);
         IPage<Article> page = new Page<>(currentPage,pageSize);
         articleMapper.selectPage(page,lqw);
         return page;

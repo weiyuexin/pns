@@ -39,6 +39,26 @@ $(document).ready(function () {
 
     });
 
+    $("#searchArticle").click(function () {
+        var keyword = $("#Search").val();
+        if (!keyword) {
+            $("#Search").css('borderColor', 'red');
+        } else {
+            $("#Search").css('borderColor', '');
+            $.ajax({
+                url: "/article/search",//请求地址
+                data: {"keyword": keyword},//搜索值
+                dataType: "json",//数据格式
+                type: "GET",//请求方式
+                async: true,//是否异步请求
+                success: function (data) {
+
+                }, error: function (data) {
+                    layer.msg("服务器异常，请联系管理员!");
+                }
+            })
+        }
+    });
 
     /*发送获取热门文章请求*/
     $.ajax({

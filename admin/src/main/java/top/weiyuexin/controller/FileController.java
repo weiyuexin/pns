@@ -53,7 +53,7 @@ public class FileController {
             r.setMsg("文件上传失败,请重试!");
         }else {
             //发挥的类型是R
-            return fileServer.uploadFile(file);
+            return fileServer.uploadFile(file,session);
         }
         return r;
     }

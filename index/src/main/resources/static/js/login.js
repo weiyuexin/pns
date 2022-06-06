@@ -56,11 +56,10 @@ $(function () {
         var email = $("#email").val();
         /*发送验证码请求*/
         $.ajax({
-            url: "/email/send/",//请求地址
+            url: "/email/send/"+email,//请求地址
             dataType: "json",//数据格式
             type: "post",//请求方式
             async: true,//是否异步请求
-            data: {"email": email},
             success: function (data) {   //如何发送成功
                 console.log(data);
                 layer.msg(data.msg);
@@ -80,23 +79,18 @@ $(function () {
         }else {
             /*发送验证码请求*/
             $.ajax({
-                url: "login",//请求地址
+                url: "/user/loginByEmail/"+email +"/"+emailcode,//请求地址
                 dataType: "json",//数据格式
                 type: "POST",//请求方式
                 async: false,//是否异步请求
-                data: {
-                    "email": email,
-                    "emailcode": emailcode,
-                    "method": "email"
-                },
                 success: function (data) {   //如何发送成功
-                    if(data.code==200){//登录成功
+                    if(data.flag){//登录成功
                         layer.msg(data.msg);
                         layer.msg("正在跳转到首页。。。");
                         window.setTimeout(function () {
-                            location.href = "/pns";
+                            location.href = "/";
                         }, 3000);
-                    }else if(data.code==201){
+                    }else {
                         layer.msg(data.msg);
                     }
                 },

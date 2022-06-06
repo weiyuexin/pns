@@ -44,4 +44,14 @@ public interface ArticleService extends IService<Article> {
      * @return
      */
     IPage<Article> getPageByUserId(Integer currentPage,Integer pageSize,Integer authorId,Article article,String order);
+
+    /**
+     * 搜索
+     * @param currentPage
+     * @param pageSize
+     * @param article
+     * @param key
+     * @return
+     */
+    IPage<Article> getPageSearch(Integer currentPage,Integer pageSize,Article article,String key);
 }

@@ -47,9 +47,9 @@
                 </div>
             </div>
             <div class="toolbar-container-middle layui-col-md4">
-                <form action="search" method="POSt" class="layui-form">
-                    <input type="text" name="word" required lay-verify="required" placeholder="请输入关键字搜索"
-                           autocomplete="off" class="layui-input search-input">
+                <form action="/search" method="POSt" class="layui-form">
+                    <input id="Search" type="text" name="key" required lay-verify="required" placeholder="请输入关键字搜索"
+                           autocomplete="off" list="searchList" class="layui-input search-input">
                     <button type="button" class="layui-btn search">搜索</button>
                 </form>
             </div>

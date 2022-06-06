@@ -34,5 +34,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return users;
     }
 
+    @Override
+    public User getByEmail(String email) {
+        LambdaQueryWrapper<User> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(User::getEmail,email);
+        return userMapper.selectOne(lqw);
+    }
+
 
 }

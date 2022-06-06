@@ -21,6 +21,7 @@ import top.weiyuexin.utils.OutHtml;
 
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -37,13 +38,46 @@ public class UserController {
     private LoginLogService loginLogService;
 
     /**
+     * 添加用户
+     *
+     * @param user
+     * @param session
+     * @return
+     */
+    @PostMapping("/add")
+    @ResponseBody
+    public Object register(User user) {
+        R r = new R();
+        //对密码进行md5加密处理
+        user.setPassword(DigestUtil.md5Hex(user.getPassword()));
+        user.setAddress("暂无");
+        user.setSignature("暂无");
+        user.setPhoto("https://wyx-1303917755.cos.ap-beijing.myqcloud.com/img/2022/5/18/2022518f0f23093-5b30-4c45-8e54-cdd71683020a.png");
+        Date date = new Date();
+        user.setTime(date);
+        //保存到数据库
+        user.setEmail(user.getEmail());
+        user.setUsername(user.getUsername());
+        user.setPassword(user.getPassword());
+        if (userService.save(user)) {
+            r.setFlag(true);
+            r.setMsg("添加成功!");
+        } else {
+            r.setFlag(true);
+            r.setMsg("添加失败,请重试!");
+        }
+        return r;
+    }
+
+    /**
      * 检查用户登录状态
+     *
      * @param session
      * @return
      */
     @GetMapping("/check")
     @ResponseBody
-    public Object checkIsNotLogin(HttpSession session){
+    public Object checkIsNotLogin(HttpSession session) {
         R r = new R();
         //获取session中保存的用户信息
         Admin admin = (Admin) session.getAttribute("user");
@@ -61,31 +95,10 @@ public class UserController {
         return r;
     }
 
-    /**
-     * 根据id查询文章作者信息
-     * @param id
-     * @return
-     */
-    @GetMapping("/{id}")
-    public ModelAndView getById(@PathVariable("id") Integer id){
-        ModelAndView modelAndView = new ModelAndView();
-        //查询用户
-        User user = userService.getById(id);
-
-        //格式化时间
-        SimpleDateFormat time=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String date = time.format(user.getTime());
-        //设置试图
-        modelAndView.setViewName("user/author");
-        //设置内容
-        modelAndView.addObject("user",user);
-        modelAndView.addObject("date",date);
-
-        return modelAndView;
-    }
 
     /**
      * 退出登录
+     *
      * @param session
      * @return
      */
@@ -99,41 +112,66 @@ public class UserController {
 
     /**
      * 修改管理员信息接口
+     *
      * @param admin
      * @param session
      * @return
      */
     @PutMapping("/update")
     @ResponseBody
-    public R updata(Admin admin,HttpSession session){
+    public R updata(Admin admin, HttpSession session) {
         R r = new R();
-        Admin admin1 =(Admin) session.getAttribute("user");
-        if(session.getAttribute("user")!=null){
+        Admin admin1 = (Admin) session.getAttribute("user");
+        if (session.getAttribute("user") != null) {
             admin.setId(admin1.getId());
            /* if(admin.getPassword()!=null){
                 //加密
                 admin.setPassword(DigestUtil.md5Hex(user.getPassword()));
             }*/
             r.setFlag(adminService.updateById(admin));
-            if(r.getFlag()){
+            if (r.getFlag()) {
                 r.setMsg("修改成功!");
                 //修改成功，更新session中的信息
                 admin = adminService.getById(admin.getId());
-                session.setAttribute("user",admin);
-            }else {
+                session.setAttribute("user", admin);
+            } else {
                 r.setMsg("修改失败，请稍后重试!");
             }
-        }else {
+        } else {
             r.setFlag(false);
             r.setMsg("请登录后重试！");
         }
         return r;
     }
 
+    /**
+     * 修改用户信息
+     * @param user
+     * @return
+     */
+    @PutMapping("/edit")
+    @ResponseBody
+    public R updata(User user) {
+        R r = new R();
+
+        System.out.println(user.toString());
+        if (user.getPassword() != null) {
+            //加密
+            user.setPassword(DigestUtil.md5Hex(user.getPassword()));
+        }
+        r.setFlag(userService.updateById(user));
+        if (r.getFlag()) {
+            r.setMsg("用户信息修改成功!");
+        } else {
+            r.setMsg("用户信息修改失败，请稍后重试!");
+        }
+        return r;
+    }
 
 
     /**
      * 分页条件查询
+     *
      * @param page
      * @param limit
      * @param user
@@ -143,35 +181,41 @@ public class UserController {
     @ResponseBody
     public W getPage(@RequestParam("page") Integer page,
                      @RequestParam("limit") Integer limit,
-                     User user){
+                     User user) {
 
         System.out.println(user.toString());
-        IPage<User> Ipage = userService.getPage(page,limit,user);
+        IPage<User> Ipage = userService.getPage(page, limit, user);
         //如果当前页码值大于当前页码值，那么重新执行查询操作，使用最大页码值作为当前页码值
-        if(page>Ipage.getPages()){
-            Ipage = userService.getPage(page,limit,user);
+        if (page > Ipage.getPages()) {
+            Ipage = userService.getPage(page, limit, user);
         }
         List<User> users = Ipage.getRecords();
-
+        for (int i = 0; i < users.size(); i++) {
+            //格式化时间
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String date = sdf.format(users.get(i).getTime());
+            users.get(i).setDate(date);
+        }
         Ipage.setRecords(users);
-        return new W(0,(int)Ipage.getTotal(),Ipage.getRecords());
+        return new W(0, (int) Ipage.getTotal(), Ipage.getRecords());
     }
 
     /**
      * 删除用户接口
+     *
      * @param id
      * @param session
      * @return
      */
     @DeleteMapping("/del/{id}")
     @ResponseBody
-    public Object delete(@PathVariable("id") Integer id, HttpSession session){
+    public Object delete(@PathVariable("id") Integer id, HttpSession session) {
         R r = new R();
         //判断用户是否登录
-        if(session.getAttribute("user")!=null){
+        if (session.getAttribute("user") != null) {
             r.setFlag(userService.removeById(id));
             r.setMsg("用户删除成功");
-        }else {
+        } else {
             r.setData("当前登录状态丢失，请重新登录后再试!");
         }
         return r;
@@ -179,6 +223,7 @@ public class UserController {
 
     /**
      * 分页查询登录日志
+     *
      * @param page
      * @param limit
      * @return
@@ -186,55 +231,56 @@ public class UserController {
     @GetMapping("/logs")
     @ResponseBody
     public W getLoginLogByPage(@RequestParam("page") Integer page,
-                     @RequestParam("limit") Integer limit, LoginLog loginLog){
-        if(!loginLog.getUsername().equals("")){
+                               @RequestParam("limit") Integer limit, LoginLog loginLog) {
+        if (!loginLog.getUsername().equals("")) {
             User user1 = userService.getByUserName(loginLog.getUsername());
-            if(user1!=null){
+            if (user1 != null) {
                 loginLog.setUserId(user1.getId());
-            }else {
+            } else {
                 loginLog.setUserId(-1);
             }
         }
-        IPage<LoginLog> Ipage = loginLogService.getPage(page,limit,loginLog);
+        IPage<LoginLog> Ipage = loginLogService.getPage(page, limit, loginLog);
         //如果当前页码值大于当前页码值，那么重新执行查询操作，使用最大页码值作为当前页码值
-        if(page>Ipage.getPages()){
-            Ipage = loginLogService.getPage(page,limit,loginLog);
+        if (page > Ipage.getPages()) {
+            Ipage = loginLogService.getPage(page, limit, loginLog);
         }
         List<LoginLog> loginLogs = Ipage.getRecords();
-        for(int i=0;i<loginLogs.size();i++){
+        for (int i = 0; i < loginLogs.size(); i++) {
             //根据作者id查询作者
             User user = userService.getById(loginLogs.get(i).getUserId());
-            if(user!=null){
+            if (user != null) {
                 System.out.println(user.getUsername());
                 loginLogs.get(i).setUsername(user.getUsername());
             }
             //修改时间格式
             //格式化时间
-            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String date = sdf.format(loginLogs.get(i).getTime());
             loginLogs.get(i).setDate(date);
         }
         Ipage.setRecords(loginLogs);
 
         Ipage.setRecords(loginLogs);
-        return new W(0,(int)Ipage.getTotal(),Ipage.getRecords());
+        return new W(0, (int) Ipage.getTotal(), Ipage.getRecords());
     }
 
     /**
      * 删除登录日志接口
+     *
      * @param id
      * @param session
      * @return
      */
     @DeleteMapping("/log/del/{id}")
     @ResponseBody
-    public R deleteLoginLog(@PathVariable("id") Integer id, HttpSession session){
+    public R deleteLoginLog(@PathVariable("id") Integer id, HttpSession session) {
         R r = new R();
         //判断用户是否登录
-        if(session.getAttribute("user")!=null){
+        if (session.getAttribute("user") != null) {
             r.setFlag(loginLogService.removeById(id));
             r.setMsg("日志删除成功");
-        }else {
+        } else {
             r.setData("当前登录状态丢失，请重新登录后再试!");
         }
         return r;

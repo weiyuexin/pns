@@ -85,10 +85,7 @@ public class FileServerImpl implements FileServer {
             image.setOriginName(oldFileName);
             image.setUrl(this.path + putObjectRequest.getKey());
             image.setTime(year+"年"+month+"月"+day+"日");
-            User user = (User) session.getAttribute("user");
-            if(user!=null){
-                image.setAuthorId(user.getId());
-            }
+            image.setAuthorId(1);
             imageService.save(image);
 
             return new W(1,"图片上传成功！",this.path + putObjectRequest.getKey());
@@ -106,7 +103,7 @@ public class FileServerImpl implements FileServer {
      * @return
      */
     @Override
-    public R uploadFile(MultipartFile file) {
+    public R uploadFile(MultipartFile file,HttpSession session) {
         String oldFileName = file.getOriginalFilename();
         String eName = oldFileName.substring(oldFileName.lastIndexOf("."));
         String newFileName = UUID.randomUUID()+eName;
@@ -137,6 +134,15 @@ public class FileServerImpl implements FileServer {
             Map<String,String> fileMessage = new HashMap<>();
             fileMessage.put("filename",oldFileName);
             fileMessage.put("url",this.path + putObjectRequest.getKey());
+
+            //将图片信息保存到数据库
+            Image image = new Image();
+            image.setOriginName(oldFileName);
+            image.setUrl(this.path + putObjectRequest.getKey());
+            image.setTime(year+"年"+month+"月"+day+"日");
+            image.setAuthorId(1);
+
+            imageService.save(image);
             return new R(true,fileMessage,"图片上传成功！");
         } catch (IOException e) {
             return new R(false,"图片上传失败!");

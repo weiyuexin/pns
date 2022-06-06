@@ -32,6 +32,7 @@ $(document).ready(function() {
             $(".toTop .layui-icon").show();
         });
     });
+
 });
 
 
@@ -55,16 +56,16 @@ function getCookie(cookieName) {
     //未查找到指定的cookie返回空。
     return "";
 }
-$(function () {
+/*$(function () {
 //注意：选项卡 依赖 element 模块，否则无法进行功能性操作
     layui.use('element', function () {
         var element = layui.element;
 
-        /*搜索框元素改变时发送获取对应数据集请求*/
+        /!*搜索框元素改变时发送获取对应数据集请求*!/
         $("#Search").bind("input propertychange", function () {
             //获取搜索框的值
             var search = $('#Search').val();
-            /*发送模糊查询请求*/
+            /!*发送模糊查询请求*!/
             $.ajax({
                 url: "/pns/searchInformation",//请求地址
                 dataType: "json",//数据格式
@@ -88,4 +89,4 @@ $(function () {
             });
         });
     });
-});
+});*/

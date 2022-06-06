@@ -19,5 +19,5 @@ public interface FileServer {
      * @param file
      * @return
      */
-    R uploadFile(MultipartFile file);
+    R uploadFile(MultipartFile file,HttpSession session);
 }

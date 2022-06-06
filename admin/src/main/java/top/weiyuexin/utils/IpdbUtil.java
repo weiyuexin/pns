@@ -18,8 +18,8 @@ public class IpdbUtil {
         try {
             //city_DB = new City("F:/IDEA_WorkSpace/Web/springboot-ipdb/ipipfree.ipdb");
 
-            //city_DB = new City("/usr/local/springboot/ipipfree.ipdb");
-            city_DB = new City(new IpdbUtil().getClass().getResource("/").getPath() + "ipipfree.ipdb");
+            city_DB = new City("/usr/local/springboot/ipipfree.ipdb");
+            //city_DB = new City(new IpdbUtil().getClass().getResource("/").getPath() + "ipipfree.ipdb");
         } catch (IOException e) {
             e.printStackTrace();
         }

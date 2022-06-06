@@ -103,7 +103,7 @@
                 {field: 'signature', width: 130, title: '个性签名'},
                 {field: 'points', width: 100, title: '积分',sort: true},
                 {field: 'address', width: 100, title: '地址'},
-                {field: 'time', minWidth: 100, title: '注册时间',sort: true},
+                {field: 'date', minWidth: 100, title: '注册时间',sort: true},
                 {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
             ]],
             limit: 10,
@@ -160,15 +160,15 @@
                 cols: [[
                     {type: "checkbox", width: 50},
                     {field: 'id', width: 80, title: 'ID', sort: true},
-                    {field: 'username', width: 130, title: '昵称'},
+                    {field: 'username', width: 120, title: '昵称'},
                     {field: 'email', minWidth: 130, title: '邮箱', sort: true},
                     {field: 'photo', minWidth: 130,templet: '#viewImage', title:'头像',align: "center"},
                     {field: 'sex', minWidth: 50, title: '性别'},
                     {field: 'phone', width: 130, title: '电话'},
                     {field: 'signature', width: 130, title: '个性签名'},
-                    {field: 'points', width: 100, title: '积分',sort: true},
-                    {field: 'address', width: 100, title: '地址'},
-                    {field: 'time', minWidth: 100, title: '注册时间',sort: true},
+                    {field: 'points', width: 50, title: '积分',sort: true},
+                    {field: 'address', width: 80, title: '地址'},
+                    {field: 'date', width: 160, title: '注册时间',sort: true},
                     {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
                 ]],
                 limit: 10,
@@ -187,7 +187,7 @@
         table.on('toolbar(currentTableFilter)', function (obj) {
             if (obj.event === 'add') {  // 监听添加操作
                 var index = layer.open({
-                    title: '上传图片',
+                    title: '添加用户',
                     type: 2,
                     shade: 0.2,
                     maxmin:true,
@@ -244,6 +244,11 @@
                     shadeClose: true,
                     area: ['100%', '100%'],
                     content: '../page/table/edit_user.html',
+                    success: function (layero,index){
+                        var iframe = window['layui-layer-iframe'+index];
+                        //调用子页面的全局函数，向子页面传递参数
+                        iframe.child(data);
+                    }
                 });
                 $(window).on("resize", function () {
                     layer.full(index);

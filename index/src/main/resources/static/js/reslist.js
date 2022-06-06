@@ -38,7 +38,7 @@ $(document).ready(function (){
     });
 
     $.ajax({
-        url: "/resource/书籍/1/10",  //请求地址
+        url: "/resource/书籍/1/8",  //请求地址
         dataType: "json",  //数据格式
         type: "GET",  //请求方式
         async: false,
@@ -63,10 +63,31 @@ $(document).ready(function (){
         }
 
     });
+    //搜索
+    $("#searchArticle").click(function () {
+        var keyword = $("#Search").val();
+        if (!keyword) {
+            $("#Search").css('borderColor', 'red');
+        } else {
+            $("#Search").css('borderColor', '');
+            $.ajax({
+                url: "/article/search",//请求地址
+                data: {"keyword": keyword},//搜索值
+                dataType: "json",//数据格式
+                type: "GET",//请求方式
+                async: true,//是否异步请求
+                success: function (data) {
+
+                }, error: function (data) {
+                    layer.msg("服务器异常，请联系管理员!");
+                }
+            })
+        }
+    });
 
     $("#book").click(function (){
         $.ajax({
-            url: "/resource/书籍/1/10",  //请求地址
+            url: "/resource/书籍/1/8",  //请求地址
             dataType: "json",  //数据格式
             type: "GET",  //请求方式
             async: false,
@@ -94,7 +115,7 @@ $(document).ready(function (){
     });
     $("#course").click(function (){
         $.ajax({
-            url: "/resource/教程/1/10",  //请求地址
+            url: "/resource/教程/1/8",  //请求地址
             dataType: "json",  //数据格式
             type: "GET",  //请求方式
             async: false,
@@ -122,7 +143,7 @@ $(document).ready(function (){
     });
     $("#tool").click(function (){
         $.ajax({
-            url: "/resource/工具/1/10",  //请求地址
+            url: "/resource/工具/1/8",  //请求地址
             dataType: "json",  //数据格式
             type: "GET",  //请求方式
             async: false,
@@ -150,7 +171,7 @@ $(document).ready(function (){
     });
     $("#cpp").click(function (){
         $.ajax({
-            url: "/resource/cpp/1/10",  //请求地址
+            url: "/resource/cpp/1/8",  //请求地址
             dataType: "json",  //数据格式
             type: "GET",  //请求方式
             async: false,
@@ -178,7 +199,7 @@ $(document).ready(function (){
     });
     $("#Java").click(function (){
         $.ajax({
-            url: "/resource/Java/1/10",  //请求地址
+            url: "/resource/Java/1/8",  //请求地址
             dataType: "json",  //数据格式
             type: "GET",  //请求方式
             async: false,
@@ -206,7 +227,7 @@ $(document).ready(function (){
     });
     $("#Python").click(function (){
         $.ajax({
-            url: "/resource/Python/1/10",  //请求地址
+            url: "/resource/Python/1/8",  //请求地址
             dataType: "json",  //数据格式
             type: "GET",  //请求方式
             async: false,
@@ -234,7 +255,7 @@ $(document).ready(function (){
     });
     $("#JavaScript").click(function (){
         $.ajax({
-            url: "/resource/JavaScript/1/10",  //请求地址
+            url: "/resource/JavaScript/1/8",  //请求地址
             dataType: "json",  //数据格式
             type: "GET",  //请求方式
             async: false,
@@ -262,7 +283,7 @@ $(document).ready(function (){
     });
     $("#GO").click(function (){
         $.ajax({
-            url: "/resource/GO/1/10",  //请求地址
+            url: "/resource/GO/1/8",  //请求地址
             dataType: "json",  //数据格式
             type: "GET",  //请求方式
             async: false,
@@ -290,7 +311,7 @@ $(document).ready(function (){
     });
     $("#PHP").click(function (){
         $.ajax({
-            url: "/resource/PHP/1/10",  //请求地址
+            url: "/resource/PHP/1/8",  //请求地址
             dataType: "json",  //数据格式
             type: "GET",  //请求方式
             async: false,
@@ -318,7 +339,7 @@ $(document).ready(function (){
     });
     $("#AI").click(function (){
         $.ajax({
-            url: "/resource/人工智能/1/10",  //请求地址
+            url: "/resource/人工智能/1/8",  //请求地址
             dataType: "json",  //数据格式
             type: "GET",  //请求方式
             async: false,
@@ -346,7 +367,7 @@ $(document).ready(function (){
     });
     $("#HarmonyOS").click(function (){
         $.ajax({
-            url: "/resource/HarmonyOS/1/10",  //请求地址
+            url: "/resource/HarmonyOS/1/8",  //请求地址
             dataType: "json",  //数据格式
             type: "GET",  //请求方式
             async: false,
@@ -374,7 +395,7 @@ $(document).ready(function (){
     });
     $("#yun").click(function (){
         $.ajax({
-            url: "/resource/云计算/1/10",  //请求地址
+            url: "/resource/云计算/1/8",  //请求地址
             dataType: "json",  //数据格式
             type: "GET",  //请求方式
             async: false,
@@ -402,7 +423,7 @@ $(document).ready(function (){
     });
     $("#dataStructure").click(function (){
         $.ajax({
-            url: "/resource/数据结构/1/10",  //请求地址
+            url: "/resource/数据结构/1/8",  //请求地址
             dataType: "json",  //数据格式
             type: "GET",  //请求方式
             async: false,
@@ -430,7 +451,7 @@ $(document).ready(function (){
     });
     $("#os").click(function (){
         $.ajax({
-            url: "/resource/操作系统/1/10",  //请求地址
+            url: "/resource/操作系统/1/8",  //请求地址
             dataType: "json",  //数据格式
             type: "GET",  //请求方式
             async: false,
@@ -458,7 +479,7 @@ $(document).ready(function (){
     });
     $("#net").click(function (){
         $.ajax({
-            url: "/resource/计算机网络/1/10",  //请求地址
+            url: "/resource/计算机网络/1/8",  //请求地址
             dataType: "json",  //数据格式
             type: "GET",  //请求方式
             async: false,
@@ -486,7 +507,7 @@ $(document).ready(function (){
     });
     $("#jcjc").click(function (){
         $.ajax({
-            url: "/resource/基础教程/1/10",  //请求地址
+            url: "/resource/基础教程/1/8",  //请求地址
             dataType: "json",  //数据格式
             type: "GET",  //请求方式
             async: false,
@@ -514,7 +535,7 @@ $(document).ready(function (){
     });
     $("#kuangjia").click(function (){
         $.ajax({
-            url: "/resource/开发框架/1/10",  //请求地址
+            url: "/resource/开发框架/1/8",  //请求地址
             dataType: "json",  //数据格式
             type: "GET",  //请求方式
             async: false,
@@ -542,7 +563,7 @@ $(document).ready(function (){
     });
     $("#lib").click(function (){
         $.ajax({
-            url: "/resource/常用库/1/10",  //请求地址
+            url: "/resource/常用库/1/8",  //请求地址
             dataType: "json",  //数据格式
             type: "GET",  //请求方式
             async: false,
@@ -570,7 +591,7 @@ $(document).ready(function (){
     });
     $("#pack").click(function (){
         $.ajax({
-            url: "/resource/打包工具/1/10",  //请求地址
+            url: "/resource/打包工具/1/8",  //请求地址
             dataType: "json",  //数据格式
             type: "GET",  //请求方式
             async: false,
@@ -598,7 +619,7 @@ $(document).ready(function (){
     });
     $("#fwq").click(function (){
         $.ajax({
-            url: "/resource/云服务器/1/10",  //请求地址
+            url: "/resource/云服务器/1/8",  //请求地址
             dataType: "json",  //数据格式
             type: "GET",  //请求方式
             async: false,
@@ -626,7 +647,7 @@ $(document).ready(function (){
     });
     $("#sjk").click(function (){
         $.ajax({
-            url: "/resource/数据库/1/10",  //请求地址
+            url: "/resource/数据库/1/8",  //请求地址
             dataType: "json",  //数据格式
             type: "GET",  //请求方式
             async: false,
@@ -654,7 +675,7 @@ $(document).ready(function (){
     });
     $("#doc").click(function (){
         $.ajax({
-            url: "/resource/开发文档/1/10",  //请求地址
+            url: "/resource/开发文档/1/8",  //请求地址
             dataType: "json",  //数据格式
             type: "GET",  //请求方式
             async: false,
@@ -682,7 +703,7 @@ $(document).ready(function (){
     });
     $("#data").click(function (){
         $.ajax({
-            url: "/resource/大数据/1/10",  //请求地址
+            url: "/resource/大数据/1/8",  //请求地址
             dataType: "json",  //数据格式
             type: "GET",  //请求方式
             async: false,
@@ -710,7 +731,7 @@ $(document).ready(function (){
     });
     $("#zcyl").click(function (){
         $.ajax({
-            url: "/resource/计算机组成原理/1/10",  //请求地址
+            url: "/resource/计算机组成原理/1/8",  //请求地址
             dataType: "json",  //数据格式
             type: "GET",  //请求方式
             async: false,
